@@ -35,8 +35,8 @@ class GraphsModel {
   factory GraphsModel.fromMap(Map<String, dynamic> map) {
     return GraphsModel(
       id: map['id'] as String,
-      type: map['type'] as GraphType,
-      dependency: map['dependency'] as GraphDependency,
+      type: GraphType.values.where((element) => element == map['type']).first,
+      dependency: GraphDependency.values.where((element) => element == map['dependency']).first,
     );
   }
 
