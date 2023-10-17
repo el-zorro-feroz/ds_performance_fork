@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS Sensors (
     id UUID PRIMARY KEY,
     config_id UUID,
     FOREIGN KEY(config_id) REFERENCES Configs (id),
-    config_id VARCHAR UNIQUE NOT NULL
+    title VARCHAR UNIQUE NOT NULL
 )
 
 CREATE TABLE IF NOT EXISTS Graphs (
@@ -41,14 +41,14 @@ CREATE TABLE IF NOT EXISTS TabSensors(
 
 CREATE TABLE IF NOT EXISTS Rules(
     id UUID PRIMARY KEY,
-    description VARCHAR NOT NULL
+    description VARCHAR UNIQUE NOT NULL
 )
 
 CREATE TABLE IF NOT EXISTS SensorRules(
     sensor_id UUID,
     rule_id UUID,
     FOREIGN KEY(sensor_id) REFERENCES Sensors (id),
-    FOREIGN KEY(rule_id) REFERENCES Sensors (id),
+    FOREIGN KEY(rule_id) REFERENCES Rules (id),
     value real NOT NULL
 )
 
