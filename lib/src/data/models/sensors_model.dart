@@ -3,7 +3,7 @@ class SensorsModel {
   final String configId;
   final String title;
 
-  SensorsModel({
+  const SensorsModel({
     required this.id,
     required this.configId,
     required this.title,

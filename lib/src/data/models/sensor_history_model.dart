@@ -4,7 +4,7 @@ class SensorHistoryModel {
   final DateTime date;
   final double value;
 
-  SensorHistoryModel({
+  const SensorHistoryModel({
     required this.id,
     required this.sensorId,
     required this.date,

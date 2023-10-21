@@ -3,7 +3,7 @@ class TabsModel {
   final String configId;
   final String title;
 
-  TabsModel({
+  const TabsModel({
     required this.id,
     required this.configId,
     required this.title,

@@ -3,7 +3,7 @@ class TabSensorsModel {
   final String sensorId;
   final String tabId;
 
-  TabSensorsModel({
+  const TabSensorsModel({
     required this.id,
     required this.sensorId,
     required this.tabId,

@@ -2,7 +2,7 @@ class ConfigModel {
   final String id;
   final String title;
 
-  ConfigModel({
+  const ConfigModel({
     required this.id,
     required this.title,
   });
