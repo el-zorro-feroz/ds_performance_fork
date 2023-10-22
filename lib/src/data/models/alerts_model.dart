@@ -4,7 +4,7 @@ class AlertsModel {
   final String ruleId;
   final String message;
 
-  AlertsModel({
+  const AlertsModel({
     required this.id,
     required this.sensorId,
     required this.ruleId,
