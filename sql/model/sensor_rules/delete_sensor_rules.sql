@@ -1,1 +1,1 @@
-DELETE SensorRules;
+DELETE FROM SensorRules;
