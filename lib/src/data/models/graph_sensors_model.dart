@@ -1,23 +1,23 @@
 class GraphSensorsModel {
   final String id;
   final String graphsId;
-  final String sensorsId;
+  final String sensorId;
 
-  GraphSensorsModel({
+  const GraphSensorsModel({
     required this.id,
     required this.graphsId,
-    required this.sensorsId,
+    required this.sensorId,
   });
 
   GraphSensorsModel copyWith({
     String? id,
     String? graphsId,
-    String? sensorsId,
+    String? sensorId,
   }) {
     return GraphSensorsModel(
       id: id ?? this.id,
       graphsId: graphsId ?? this.graphsId,
-      sensorsId: sensorsId ?? this.sensorsId,
+      sensorId: sensorId ?? this.sensorId,
     );
   }
 
@@ -25,7 +25,7 @@ class GraphSensorsModel {
     return <String, dynamic>{
       'id': id,
       'graphsId': graphsId,
-      'sensorsId': sensorsId,
+      'sensorId': sensorId,
     };
   }
 
@@ -33,10 +33,10 @@ class GraphSensorsModel {
     return GraphSensorsModel(
       id: map['id'] as String,
       graphsId: map['graphsId'] as String,
-      sensorsId: map['sensorsId'] as String,
+      sensorId: map['sensorId'] as String,
     );
   }
 
   @override
-  String toString() => 'GraphSensors(id: $id, graphsId: $graphsId, sensorsId: $sensorsId)';
+  String toString() => 'GraphSensorsModel(id: $id, graphsId: $graphsId, sensorId: $sensorId)';
 }

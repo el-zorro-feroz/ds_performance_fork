@@ -6,7 +6,7 @@ class GraphsModel {
   final GraphType type;
   final GraphDependency dependency;
 
-  GraphsModel({
+  const GraphsModel({
     required this.id,
     required this.type,
     required this.dependency,

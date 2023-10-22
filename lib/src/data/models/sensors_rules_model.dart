@@ -3,7 +3,7 @@ class SensorRulesModel {
   final String ruleId;
   final double value;
 
-  SensorRulesModel({
+  const SensorRulesModel({
     required this.sensorId,
     required this.ruleId,
     required this.value,

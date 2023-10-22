@@ -2,7 +2,7 @@ class RulesModel {
   final String id;
   final String description;
 
-  RulesModel({
+  const RulesModel({
     required this.id,
     required this.description,
   });
