@@ -1,1 +1,1 @@
-DELETE Rules;
+DELETE FROM Rules;
