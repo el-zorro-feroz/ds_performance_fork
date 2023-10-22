@@ -1,1 +1,1 @@
-DELETE Alerts;
+DELETE FROM Alerts;
