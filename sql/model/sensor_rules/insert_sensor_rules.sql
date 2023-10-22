@@ -1,0 +1,2 @@
+INSERT INTO SensorRules;
+VALUES (?, ?, ?);

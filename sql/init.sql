@@ -67,4 +67,5 @@ CREATE TABLE IF NOT EXISTS Alerts(
     rule_id UUID,
     FOREIGN KEY(sensor_id) REFERENCES Sensors (id),
     FOREIGN KEY(rule_id) REFERENCES Rules (id),
+    message VARCHAR,
 )
