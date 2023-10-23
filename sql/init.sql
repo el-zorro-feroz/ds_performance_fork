@@ -1,3 +1,17 @@
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+CREATE TYPE public.graphtype AS ENUM
+    ('linear', 'columnar', 'spot');
+
+ALTER TYPE public.graphtype
+    OWNER TO postgres;
+	
+CREATE TYPE public.graphdependency AS ENUM
+    ('average', 'minimal', 'maximum', 'addiction', 'scatterPlot', 'sensors');
+
+ALTER TYPE public.graphdependency
+    OWNER TO postgres;
+	
 CREATE TABLE IF NOT EXISTS Configs (
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
     title VARCHAR UNIQUE NOT NULL
@@ -68,15 +82,3 @@ CREATE TABLE IF NOT EXISTS Alerts(
     FOREIGN KEY(rule_id) REFERENCES Rules (id),
     message VARCHAR
 );
-
-CREATE TYPE public.graphtype AS ENUM
-    ('linear', 'columnar', 'spot');
-
-ALTER TYPE public.graphtype
-    OWNER TO postgres;
-	
-CREATE TYPE public.graphdependency AS ENUM
-    ('average', 'minimal', 'maximum', 'addiction', 'scatterPlot', 'sensors');
-
-ALTER TYPE public.graphdependency
-    OWNER TO postgres;
