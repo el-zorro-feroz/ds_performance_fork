@@ -1,5 +1,5 @@
 UPDATE sensors
 -- title VARCHAR
-SET title = 'changed'
+SET title = ?
 -- id uuid
-WHERE id = '26fcee64-568d-4826-98d6-36aa06a66006';
+WHERE id = ?;
