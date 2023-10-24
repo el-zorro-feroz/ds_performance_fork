@@ -11,6 +11,12 @@ CREATE TYPE public.graphdependency AS ENUM
 
 ALTER TYPE public.graphdependency
     OWNER TO postgres;
+
+CREATE TYPE public.sensortype AS ENUM
+    ('humidity','temperature');
+
+ALTER TYPE public.sensortype
+    OWNER TO postgres;
 	
 CREATE TABLE IF NOT EXISTS Configs (
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
@@ -29,6 +35,7 @@ CREATE TABLE IF NOT EXISTS Sensors (
     config_id UUID,
     FOREIGN KEY(config_id) REFERENCES Configs (id),
     title VARCHAR UNIQUE NOT NULL
+    type SensorType NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS Graphs (
