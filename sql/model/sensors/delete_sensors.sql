@@ -1,3 +1,3 @@
 DELETE FROM sensors
 -- id uuid
-WHERE id = ?;
+WHERE id = @id;

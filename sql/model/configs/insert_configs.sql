@@ -1,3 +1,3 @@
 INSERT INTO configs (title)
 -- title VARCHAR  
-VALUES(?);
+VALUES(@title);
