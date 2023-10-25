@@ -1,1 +1,3 @@
-DELETE FROM Rules;
+DELETE FROM rules
+-- id uuid
+WHERE id = @id;

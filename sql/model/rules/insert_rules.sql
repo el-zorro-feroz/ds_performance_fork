@@ -1,2 +1,3 @@
-INSERT INTO Rules
-VALUE (?,?);
+INSERT INTO rules (description)
+ -- description VARCHAR
+VALUE (@description);

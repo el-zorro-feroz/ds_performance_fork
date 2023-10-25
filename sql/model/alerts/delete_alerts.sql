@@ -1,1 +1,3 @@
-DELETE FROM Alerts;
+DELETE FROM alerts
+-- id uuid
+WHERE id = @id;
