@@ -1,1 +1,3 @@
-DELETE FROM Graphs;
+DELETE FROM graphs
+-- id uuid
+WHERE id = @id;

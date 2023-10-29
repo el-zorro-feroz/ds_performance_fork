@@ -66,6 +66,7 @@ CREATE TABLE IF NOT EXISTS Rules(
 );
 
 CREATE TABLE IF NOT EXISTS SensorRules(
+    id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
     sensor_id UUID,
     rule_id UUID,
     FOREIGN KEY(sensor_id) REFERENCES Sensors (id),

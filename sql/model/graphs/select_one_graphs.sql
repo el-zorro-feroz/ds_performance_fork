@@ -1,3 +1,4 @@
-DELETE FROM graphssensors
+SELECT *
+FROM graphs
 -- id uuid
 WHERE id = @id;
