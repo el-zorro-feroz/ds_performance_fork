@@ -1,5 +1,5 @@
 UPDATE sensors
 -- title VARCHAR
-SET title = ?
+SET title = @title
 -- id uuid
-WHERE id = ?;
+WHERE id = @id;

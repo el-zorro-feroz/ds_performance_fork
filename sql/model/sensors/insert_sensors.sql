@@ -1,4 +1,7 @@
-INSERT INTO sensors (config_id, title)
+
+INSERT INTO sensors (config_id, title, type)
 -- 1 pos - config_id uuid
 -- 2 pos - title VARCHAR
-VALUES(@config_id,@title);
+-- 3 pos - type Enum sensortype
+VALUES(@config_id, @title, @type);
+
