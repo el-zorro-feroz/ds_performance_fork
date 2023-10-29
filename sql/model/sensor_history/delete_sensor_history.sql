@@ -1,3 +1,3 @@
 DELETE FROM sensorhistory
 -- id uuid
-WHERE id = ?;
+WHERE id = @id;

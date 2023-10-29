@@ -1,3 +1,3 @@
 DELETE FROM tabsensors
 -- id uuid
-WHERE id = ?;
+WHERE id = @id;

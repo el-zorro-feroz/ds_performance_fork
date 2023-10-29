@@ -1,3 +1,3 @@
 DELETE FROM configs
 -- id uuid
-WHERE id = ?;
+WHERE id = @id;
