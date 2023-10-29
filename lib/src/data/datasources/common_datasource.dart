@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:injectable/injectable.dart';
 import 'package:sensors_monitoring/core/services/services.dart';
 import 'package:sensors_monitoring/src/data/models/configs_model.dart';
@@ -11,7 +13,8 @@ class CommonDatasource {
 
   Future<List<ConfigModel>> selectAllConfigs() async {
     try {
-      List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery("SELECT * FROM configs;");
+      final String query = await File('sql/model/configs/select_all_config.sql').readAsString();
+      List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(query);
       List<ConfigModel> result = [];
       for (var e in request) {
         result.add(ConfigModel.fromMap(e['configs']!));
@@ -25,8 +28,9 @@ class CommonDatasource {
 
   Future<ConfigModel> selectOneConfigsById({required String configId}) async {
     try {
+      final String query = await File('sql/model/configs/select_one_config.sql').readAsString();
       List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(
-        "SELECT * FROM configs WHERE id = @id;",
+        query,
         substitutionValues: {
           'id': configId,
         },
@@ -40,8 +44,9 @@ class CommonDatasource {
 
   Future<Unit> insertConfigs({required String title}) async {
     try {
+      final String query = await File('sql/model/configs/insert_configs.sql').readAsString();
       await PostgresModule.postgreSQLConnection.mappedResultsQuery(
-        "INSERT INTO configs (title) VALUES(@title);",
+        query,
         substitutionValues: {
           'title': title,
         },
@@ -55,8 +60,9 @@ class CommonDatasource {
 
   Future<Unit> deleteConfigs({required String id}) async {
     try {
+      final String query = await File('sql/model/configs/delete_configs.sql').readAsString();
       await PostgresModule.postgreSQLConnection.mappedResultsQuery(
-        "DELETE FROM configs WHERE id = @id;",
+        query,
         substitutionValues: {
           'id': id,
         },
@@ -70,8 +76,9 @@ class CommonDatasource {
 
   Future<Unit> updateConfigs({required String id, required String title}) async {
     try {
+      final String query = await File('sql/model/configs/update_configs.sql').readAsString();
       await PostgresModule.postgreSQLConnection.mappedResultsQuery(
-        "UPDATE configs SET title = @title WHERE id = @id;",
+        query,
         substitutionValues: {
           'id': id,
           'title': title,
