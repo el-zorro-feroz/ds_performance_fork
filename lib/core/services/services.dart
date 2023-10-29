@@ -9,7 +9,10 @@ import 'services.config.dart';
 final GetIt services = GetIt.I;
 
 @InjectableInit()
-Future<void> servicesInit() async => services.init();
+Future<void> servicesInit() async {
+  services.init();
+  await services<PostgresModule>().initPostgres();
+}
 
 @Injectable()
 class PostgresModule {
