@@ -4,6 +4,8 @@ import 'package:injectable/injectable.dart';
 import 'package:sensors_monitoring/core/services/services.dart';
 import 'package:sensors_monitoring/src/data/models/configs_model.dart';
 import 'package:dartz/dartz.dart';
+import 'package:sensors_monitoring/src/data/models/enum/sensor_type.dart';
+import 'package:sensors_monitoring/src/data/models/sensors_model.dart';
 import 'package:sensors_monitoring/src/data/models/tabs_model.dart';
 
 @Injectable()
@@ -13,11 +15,15 @@ class CommonDatasource {
   CommonDatasource({required this.postgresModule});
 
   //! -----Configs-----
-  Future<List<ConfigModel>> selectAllConfigs() async {
+  Future<List<ConfigModel>?> selectAllConfigs() async {
     try {
       final String query = await File('sql/model/configs/select_all_config.sql').readAsString();
-      List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(query);
-      List<ConfigModel> result = [];
+      final List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(query);
+      final List<ConfigModel> result = [];
+
+      if (request.isEmpty) {
+        return null;
+      }
 
       for (var e in request) {
         result.add(ConfigModel.fromMap(e['configs']!));
@@ -29,15 +35,19 @@ class CommonDatasource {
     }
   }
 
-  Future<ConfigModel> selectOneConfigsById({required String id}) async {
+  Future<ConfigModel?> selectOneConfigsById({required String id}) async {
     try {
       final String query = await File('sql/model/configs/select_one_config.sql').readAsString();
-      List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(
+      final List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(
         query,
         substitutionValues: {
           'id': id,
         },
       );
+
+      if (request.isEmpty) {
+        return null;
+      }
 
       return ConfigModel.fromMap(request.first['configs']!);
     } catch (_) {
@@ -95,11 +105,15 @@ class CommonDatasource {
   }
 
   //! -----Tabs-----
-  Future<List<TabsModel>> selectAllTabs() async {
+  Future<List<TabsModel>?> selectAllTabs() async {
     try {
       final String query = await File('sql/model/tabs/select_all_tabs.sql').readAsString();
-      List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(query);
-      List<TabsModel> result = [];
+      final List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(query);
+      final List<TabsModel> result = [];
+
+      if (request.isEmpty) {
+        return null;
+      }
 
       for (var e in request) {
         result.add(TabsModel.fromMap(e['tabs']!));
@@ -111,14 +125,18 @@ class CommonDatasource {
     }
   }
 
-  Future<List<TabsModel>> selectAllTabsByConfigId({required String configId}) async {
+  Future<List<TabsModel>?> selectAllTabsByConfigId({required String configId}) async {
     try {
       final String query = await File('sql/model/tabs/select_all_tabs_by_config_id.sql').readAsString();
-      List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(
+      final List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(
         query,
         substitutionValues: {'config_id': configId},
       );
-      List<TabsModel> result = [];
+      final List<TabsModel> result = [];
+
+      if (request.isEmpty) {
+        return null;
+      }
 
       for (var e in request) {
         result.add(TabsModel.fromMap(e['tabs']!));
@@ -130,13 +148,17 @@ class CommonDatasource {
     }
   }
 
-  Future<TabsModel> selectOneTabsById({required String id}) async {
+  Future<TabsModel?> selectOneTabsById({required String id}) async {
     try {
       final String query = await File('sql/model/tabs/select_one_tabs.sql').readAsString();
-      List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(
+      final List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(
         query,
         substitutionValues: {'id': id},
       );
+
+      if (request.isEmpty) {
+        return null;
+      }
 
       return TabsModel.fromMap(request.first['tabs']!);
     } catch (_) {
@@ -187,6 +209,132 @@ class CommonDatasource {
   Future<Unit> deleteTabs({required String id}) async {
     try {
       final String query = await File('sql/model/tabs/delete_tabs.sql').readAsString();
+      await PostgresModule.postgreSQLConnection.mappedResultsQuery(
+        query,
+        substitutionValues: {
+          'id': id,
+        },
+      );
+
+      return unit;
+    } catch (_) {
+      rethrow;
+    }
+  }
+
+  //! -----Sensors-----
+  Future<List<SensorsModel>?> selectAllSensors() async {
+    try {
+      final String query = await File('sql/model/sensors/select_all_sensors.sql').readAsString();
+      final List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(query);
+      final List<SensorsModel> result = [];
+
+      if (request.isEmpty) {
+        return null;
+      }
+
+      for (var e in request) {
+        result.add(SensorsModel.fromMap(e['sensors']!));
+      }
+
+      return result;
+    } catch (_) {
+      rethrow;
+    }
+  }
+
+  Future<List<SensorsModel>?> selectAllSensorsByConfigId({required String configId}) async {
+    try {
+      final String query = await File('sql/model/sensors/select_all_sensors_by_config_id.sql').readAsString();
+      final List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(
+        query,
+        substitutionValues: {
+          'config_id': configId,
+        },
+      );
+      final List<SensorsModel> result = [];
+
+      if (request.isEmpty) {
+        return null;
+      }
+
+      for (var e in request) {
+        result.add(SensorsModel.fromMap(e['sensors']!));
+      }
+
+      return result;
+    } catch (_) {
+      rethrow;
+    }
+  }
+
+  Future<SensorsModel?> selectOneSensorsById({required String id}) async {
+    try {
+      final String query = await File('sql/model/sensors/select_one_sensors.sql').readAsString();
+      final List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(
+        query,
+        substitutionValues: {
+          'id': id,
+        },
+      );
+
+      if (request.isEmpty) {
+        return null;
+      }
+
+      return SensorsModel.fromMap(request.first['sensors']!);
+    } catch (_) {
+      rethrow;
+    }
+  }
+
+  Future<Unit> insertSensors({
+    required String configId,
+    required String title,
+    required SensorType sensorType,
+  }) async {
+    try {
+      final String query = await File('sql/model/sensors/insert_sensors.sql').readAsString();
+      await PostgresModule.postgreSQLConnection.mappedResultsQuery(
+        query,
+        substitutionValues: {
+          'config_id': configId,
+          'title': title,
+          'type': sensorType.name,
+        },
+      );
+
+      return unit;
+    } catch (_) {
+      rethrow;
+    }
+  }
+
+  Future<Unit> updateSensors({
+    required String id,
+    String? title,
+    SensorType? sensorType,
+  }) async {
+    try {
+      final String query = await File('sql/model/sensors/update_sensors.sql').readAsString();
+      await PostgresModule.postgreSQLConnection.mappedResultsQuery(
+        query,
+        substitutionValues: {
+          'id': id,
+          'title': title,
+          'type': sensorType?.name,
+        },
+      );
+
+      return unit;
+    } catch (_) {
+      rethrow;
+    }
+  }
+
+  Future<Unit> deleteSensors({required String id}) async {
+    try {
+      final String query = await File('sql/model/sensors/delete_sensors.sql').readAsString();
       await PostgresModule.postgreSQLConnection.mappedResultsQuery(
         query,
         substitutionValues: {
