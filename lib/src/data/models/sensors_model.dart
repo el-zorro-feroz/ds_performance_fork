@@ -39,9 +39,9 @@ class SensorsModel {
   factory SensorsModel.fromMap(Map<String, dynamic> map) {
     return SensorsModel(
       id: map['id'] as String,
-      configId: map['configId'] as String,
+      configId: map['config_id'] as String,
       title: map['title'] as String,
-      sensorType: SensorType.values.where((element) => element == map['type']).first,
+      sensorType: SensorType.values.where((element) => element.name == map['type']).first,
     );
   }
 
