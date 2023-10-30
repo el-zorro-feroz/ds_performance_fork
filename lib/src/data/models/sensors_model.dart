@@ -41,7 +41,7 @@ class SensorsModel {
       id: map['id'] as String,
       configId: map['config_id'] as String,
       title: map['title'] as String,
-      sensorType: SensorType.values.where((element) => element.name == map['type']).first,
+      sensorType: SensorType.values.byName(map['type']),
     );
   }
 
