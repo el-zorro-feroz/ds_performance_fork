@@ -32,7 +32,7 @@ class TabsModel {
   factory TabsModel.fromMap(Map<String, dynamic> map) {
     return TabsModel(
       id: map['id'] as String,
-      configId: map['configId'] as String,
+      configId: map['config_id'] as String,
       title: map['title'] as String,
     );
   }
