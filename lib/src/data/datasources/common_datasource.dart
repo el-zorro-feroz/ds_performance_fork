@@ -6,6 +6,7 @@ import 'package:sensors_monitoring/src/data/models/configs_model.dart';
 import 'package:dartz/dartz.dart';
 import 'package:sensors_monitoring/src/data/models/enum/sensor_type.dart';
 import 'package:sensors_monitoring/src/data/models/sensors_model.dart';
+import 'package:sensors_monitoring/src/data/models/tab_sensors_model.dart';
 import 'package:sensors_monitoring/src/data/models/tabs_model.dart';
 
 @Injectable()
@@ -345,6 +346,138 @@ class CommonDatasource {
           'id': id,
         },
       );
+
+      return unit;
+    } catch (_) {
+      rethrow;
+    }
+  }
+
+  //! -----TabSensors-----
+  Future<List<TabSensorsModel>?> selectAllTabSensors() async {
+    try {
+      final String query = await File('sql/model/tab_sensors/select_all_tab_sensors.sql').readAsString();
+      final List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(query);
+      final List<TabSensorsModel> result = [];
+
+      if (request.isEmpty) {
+        return null;
+      }
+
+      for (var e in request) {
+        result.add(TabSensorsModel.fromMap(e['tabsensors']!));
+      }
+
+      return result;
+    } catch (_) {
+      rethrow;
+    }
+  }
+
+  Future<List<TabSensorsModel>?> selectAllTabSensorsBySensorId({required String sensorId}) async {
+    try {
+      final String query = await File('sql/model/tab_sensors/select_all_tab_sensors_by_sensor_id.sql').readAsString();
+      final List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(query, substitutionValues: {
+        'sensor_id': sensorId,
+      });
+      final List<TabSensorsModel> result = [];
+
+      if (request.isEmpty) {
+        return null;
+      }
+
+      for (var e in request) {
+        result.add(TabSensorsModel.fromMap(e['tabsensors']!));
+      }
+
+      return result;
+    } catch (_) {
+      rethrow;
+    }
+  }
+
+  Future<List<TabSensorsModel>?> selectAllTabSensorsByTabId({required String tabId}) async {
+    try {
+      final String query = await File('sql/model/tab_sensors/select_all_tab_sensors_by_tab_id.sql').readAsString();
+      final List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(query, substitutionValues: {
+        'tab_id': tabId,
+      });
+      final List<TabSensorsModel> result = [];
+
+      if (request.isEmpty) {
+        return null;
+      }
+
+      for (var e in request) {
+        result.add(TabSensorsModel.fromMap(e['tabsensors']!));
+      }
+
+      return result;
+    } catch (_) {
+      rethrow;
+    }
+  }
+
+  Future<TabSensorsModel?> selectOneTabSensorsById({required String id}) async {
+    try {
+      final String query = await File('sql/model/tab_sensors/select_one_tab_sensors.sql').readAsString();
+      final List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(query, substitutionValues: {
+        'id': id,
+      });
+
+      if (request.isEmpty) {
+        return null;
+      }
+
+      return TabSensorsModel.fromMap(request.first['tabsensors']!);
+    } catch (_) {
+      rethrow;
+    }
+  }
+
+  Future<Unit> insertTabSensors({
+    required String sensorId,
+    required String tabId,
+  }) async {
+    try {
+      final String query = await File('sql/model/tab_sensors/insert_tab_sensors.sql').readAsString();
+      await PostgresModule.postgreSQLConnection.mappedResultsQuery(query, substitutionValues: {
+        'sensor_id': sensorId,
+        'tab_id': tabId,
+      });
+
+      return unit;
+    } catch (_) {
+      rethrow;
+    }
+  }
+
+  //? Need update query for TabSensors table?
+  Future<Unit> updateTabSensors({
+    required String id,
+    String? sensorId,
+    String? tabId,
+  }) async {
+    try {
+      final String query = await File('sql/model/tab_sensors/update_tab_sensors.sql').readAsString();
+      await PostgresModule.postgreSQLConnection.mappedResultsQuery(query, substitutionValues: {
+        'id': id,
+        'sensor_id': sensorId,
+        'tab_id': tabId,
+      });
+
+      return unit;
+    } catch (_) {
+      rethrow;
+    }
+  }
+
+  Future<Unit> deleteTabSensors({required String id}) async {
+    try {
+      final String query = await File('sql/model/tab_sensors/delete_tab_sensors.sql').readAsString();
+      await PostgresModule.postgreSQLConnection.mappedResultsQuery(query, substitutionValues: {
+        'id': id,
+      });
 
       return unit;
     } catch (_) {
