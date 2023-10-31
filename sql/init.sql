@@ -35,7 +35,8 @@ CREATE TABLE IF NOT EXISTS Sensors (
     config_id UUID,
     FOREIGN KEY(config_id) REFERENCES Configs (id) ON DELETE CASCADE,
     title VARCHAR UNIQUE NOT NULL,
-    type SensorType NOT NULL
+    type SensorType NOT NULL,
+    details VARCHAR NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS Graphs (
