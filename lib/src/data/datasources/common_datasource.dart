@@ -5,6 +5,7 @@ import 'package:sensors_monitoring/core/services/services.dart';
 import 'package:sensors_monitoring/src/data/models/configs_model.dart';
 import 'package:dartz/dartz.dart';
 import 'package:sensors_monitoring/src/data/models/enum/sensor_type.dart';
+import 'package:sensors_monitoring/src/data/models/sensor_history_model.dart';
 import 'package:sensors_monitoring/src/data/models/sensors_model.dart';
 import 'package:sensors_monitoring/src/data/models/tab_sensors_model.dart';
 import 'package:sensors_monitoring/src/data/models/tabs_model.dart';
@@ -20,12 +21,12 @@ class CommonDatasource {
     try {
       final String query = await File('sql/model/configs/select_all_config.sql').readAsString();
       final List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(query);
-      final List<ConfigModel> result = [];
 
       if (request.isEmpty) {
         return null;
       }
 
+      final List<ConfigModel> result = [];
       for (var e in request) {
         result.add(ConfigModel.fromMap(e['configs']!));
       }
@@ -110,12 +111,12 @@ class CommonDatasource {
     try {
       final String query = await File('sql/model/tabs/select_all_tabs.sql').readAsString();
       final List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(query);
-      final List<TabsModel> result = [];
 
       if (request.isEmpty) {
         return null;
       }
 
+      final List<TabsModel> result = [];
       for (var e in request) {
         result.add(TabsModel.fromMap(e['tabs']!));
       }
@@ -133,12 +134,12 @@ class CommonDatasource {
         query,
         substitutionValues: {'config_id': configId},
       );
-      final List<TabsModel> result = [];
 
       if (request.isEmpty) {
         return null;
       }
 
+      final List<TabsModel> result = [];
       for (var e in request) {
         result.add(TabsModel.fromMap(e['tabs']!));
       }
@@ -228,12 +229,12 @@ class CommonDatasource {
     try {
       final String query = await File('sql/model/sensors/select_all_sensors.sql').readAsString();
       final List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(query);
-      final List<SensorsModel> result = [];
 
       if (request.isEmpty) {
         return null;
       }
 
+      final List<SensorsModel> result = [];
       for (var e in request) {
         result.add(SensorsModel.fromMap(e['sensors']!));
       }
@@ -253,12 +254,12 @@ class CommonDatasource {
           'config_id': configId,
         },
       );
-      final List<SensorsModel> result = [];
 
       if (request.isEmpty) {
         return null;
       }
 
+      final List<SensorsModel> result = [];
       for (var e in request) {
         result.add(SensorsModel.fromMap(e['sensors']!));
       }
@@ -358,12 +359,12 @@ class CommonDatasource {
     try {
       final String query = await File('sql/model/tab_sensors/select_all_tab_sensors.sql').readAsString();
       final List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(query);
-      final List<TabSensorsModel> result = [];
 
       if (request.isEmpty) {
         return null;
       }
 
+      final List<TabSensorsModel> result = [];
       for (var e in request) {
         result.add(TabSensorsModel.fromMap(e['tabsensors']!));
       }
@@ -380,12 +381,12 @@ class CommonDatasource {
       final List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(query, substitutionValues: {
         'sensor_id': sensorId,
       });
-      final List<TabSensorsModel> result = [];
 
       if (request.isEmpty) {
         return null;
       }
 
+      final List<TabSensorsModel> result = [];
       for (var e in request) {
         result.add(TabSensorsModel.fromMap(e['tabsensors']!));
       }
@@ -402,12 +403,12 @@ class CommonDatasource {
       final List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(query, substitutionValues: {
         'tab_id': tabId,
       });
-      final List<TabSensorsModel> result = [];
 
       if (request.isEmpty) {
         return null;
       }
 
+      final List<TabSensorsModel> result = [];
       for (var e in request) {
         result.add(TabSensorsModel.fromMap(e['tabsensors']!));
       }
@@ -475,6 +476,151 @@ class CommonDatasource {
   Future<Unit> deleteTabSensors({required String id}) async {
     try {
       final String query = await File('sql/model/tab_sensors/delete_tab_sensors.sql').readAsString();
+      await PostgresModule.postgreSQLConnection.mappedResultsQuery(query, substitutionValues: {
+        'id': id,
+      });
+
+      return unit;
+    } catch (_) {
+      rethrow;
+    }
+  }
+
+  //! -----SensorHistory-----
+  Future<List<SensorHistoryModel>?> selectAllSensorHistory() async {
+    try {
+      final String query = await File('sql/model/sensor_history/select_all_sensor_history.sql').readAsString();
+      final List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(query);
+
+      if (request.isEmpty) {
+        return null;
+      }
+
+      final List<SensorHistoryModel> result = [];
+      for (var e in request) {
+        result.add(SensorHistoryModel.fromMap(e['sensorhistory']!));
+      }
+
+      return result;
+    } catch (_) {
+      rethrow;
+    }
+  }
+
+  Future<List<SensorHistoryModel>?> selectAllSensorHistoryBySensorId({required String sensorId}) async {
+    try {
+      final String query = await File('sql/model/sensor_history/select_all_sensor_history_by_sensor_id.sql').readAsString();
+      final List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(query, substitutionValues: {
+        'sensor_id': sensorId,
+      });
+
+      if (request.isEmpty) {
+        return null;
+      }
+
+      final List<SensorHistoryModel> result = [];
+      for (var e in request) {
+        result.add(SensorHistoryModel.fromMap(e['sensorhistory']!));
+      }
+
+      return result;
+    } catch (_) {
+      rethrow;
+    }
+  }
+
+  Future<List<SensorHistoryModel>?> selectAllSensorHistoryBySensorIdAndPeriod({
+    required String sensorId,
+    required DateTime beginningPeriod,
+    required DateTime endingPeriod,
+  }) async {
+    try {
+      final String query = await File('sql/model/sensor_history/select_all_sensor_history_by_id_and_period.sql').readAsString();
+      final List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(query, substitutionValues: {
+        'sensor_id': sensorId,
+        'beginning_period': beginningPeriod.toIso8601String(),
+        'ending_period': endingPeriod.toIso8601String(),
+      });
+
+      if (request.isEmpty) {
+        return null;
+      }
+
+      final List<SensorHistoryModel> result = [];
+      for (var e in request) {
+        result.add(SensorHistoryModel.fromMap(e['sensorhistory']!));
+      }
+
+      return result;
+    } catch (_) {
+      rethrow;
+    }
+  }
+
+  Future<SensorHistoryModel?> selectOneSensorHistoryById({required String id}) async {
+    try {
+      final String query = await File('sql/model/sensor_history/select_one_sensor_history.sql').readAsString();
+      final List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(query, substitutionValues: {
+        'id': id,
+      });
+
+      if (request.isEmpty) {
+        return null;
+      }
+
+      return SensorHistoryModel.fromMap(request.first['sensorhistory']!);
+    } catch (_) {
+      rethrow;
+    }
+  }
+
+  Future<Unit> insertSensorHistory({
+    required String sensorId,
+    required DateTime date,
+    required double value,
+  }) async {
+    try {
+      final String query = await File('sql/model/sensor_history/insert_sensor_history.sql').readAsString();
+      await PostgresModule.postgreSQLConnection.mappedResultsQuery(query, substitutionValues: {
+        'sensor_id': sensorId,
+        'date': date.toIso8601String(),
+        'value': value,
+      });
+
+      return unit;
+    } catch (_) {
+      rethrow;
+    }
+  }
+
+  //? Need update query for SensorHistory table?
+  Future<Unit> updateSensorHistory({
+    required String id,
+    String? sensorId,
+    DateTime? date,
+    double? value,
+  }) async {
+    try {
+      final String query = await File('sql/model/sensor_history/update_sensor_history.sql').readAsString();
+      await PostgresModule.postgreSQLConnection.mappedResultsQuery(query, substitutionValues: {
+        'id': id,
+        'sensor_id': sensorId,
+        'date': date?.toIso8601String(),
+        'value': value,
+      });
+
+      return unit;
+    } catch (_) {
+      rethrow;
+    }
+  }
+
+  //? Need delete query for SensorHistory table?
+  Future<Unit> deleteSensorHistory({
+    required String id,
+  }) async {
+    try {
+      final String query = await File('sql/model/sensor_history/delete_sensor_history.sql').readAsString();
       await PostgresModule.postgreSQLConnection.mappedResultsQuery(query, substitutionValues: {
         'id': id,
       });
