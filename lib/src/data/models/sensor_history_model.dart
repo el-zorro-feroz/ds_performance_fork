@@ -37,8 +37,8 @@ class SensorHistoryModel {
   factory SensorHistoryModel.fromMap(Map<String, dynamic> map) {
     return SensorHistoryModel(
       id: map['id'] as String,
-      sensorId: map['sensorId'] as String,
-      date: DateTime.parse(map['date']),
+      sensorId: map['sensor_id'] as String,
+      date: map['date'] as DateTime,
       value: map['value'] as double,
     );
   }
