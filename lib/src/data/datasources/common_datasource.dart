@@ -292,6 +292,7 @@ class CommonDatasource {
     required String configId,
     required String title,
     required SensorType sensorType,
+    required String details,
   }) async {
     try {
       final String query = await File('sql/model/sensors/insert_sensors.sql').readAsString();
@@ -301,6 +302,7 @@ class CommonDatasource {
           'config_id': configId,
           'title': title,
           'type': sensorType.name,
+          'details': details,
         },
       );
 
@@ -314,6 +316,7 @@ class CommonDatasource {
     required String id,
     String? title,
     SensorType? sensorType,
+    String? details,
   }) async {
     try {
       final String query = await File('sql/model/sensors/update_sensors.sql').readAsString();
@@ -323,6 +326,7 @@ class CommonDatasource {
           'id': id,
           'title': title,
           'type': sensorType?.name,
+          'details': details,
         },
       );
 
