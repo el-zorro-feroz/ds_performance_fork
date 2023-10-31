@@ -32,8 +32,8 @@ class TabSensorsModel {
   factory TabSensorsModel.fromMap(Map<String, dynamic> map) {
     return TabSensorsModel(
       id: map['id'] as String,
-      sensorId: map['sensorId'] as String,
-      tabId: map['tabId'] as String,
+      sensorId: map['sensor_id'] as String,
+      tabId: map['tab_id'] as String,
     );
   }
 
