@@ -28,17 +28,27 @@ class RootPage extends StatelessWidget {
         title: const Text('Control Panel'),
         body: const SizedBox.shrink(),
       ),
-      PaneItemHeader(
-        header: const Text('Configurations'),
-      ),
+      PaneItemSeparator(),
       PaneItem(
         key: const ValueKey('/config/{ABCD-EFGH-IJKL-MNOP}'),
-        icon: const Icon(FluentIcons.button_control),
+        icon: const Icon(FluentIcons.bank),
         title: const Text('{ABCD-EFGH-IJKL-MNOP}'),
         body: const SizedBox.shrink(),
       ),
       PaneItem(
-        key: const ValueKey('/config/{ABCD-EFGH-IJKL-MNOP}'),
+        key: const ValueKey('/config/{EFGH-ABCD-IJKL-MNOP}'),
+        icon: const Icon(FluentIcons.checkbox_composite),
+        title: const Text('{ABCD-EFGH-IJKL-MNOP}'),
+        body: const SizedBox.shrink(),
+      ),
+      PaneItem(
+        key: const ValueKey('/config/{IJKL-ABCD-EFGH-MNOP}'),
+        icon: const Icon(FluentIcons.checkbox_composite),
+        title: const Text('{ABCD-EFGH-IJKL-MNOP}'),
+        body: const SizedBox.shrink(),
+      ),
+      PaneItem(
+        key: const ValueKey('/config/{MNOP-ABCD-EFGH-IJKL}'),
         icon: const Icon(FluentIcons.checkbox_composite),
         title: const Text('{ABCD-EFGH-IJKL-MNOP}'),
         body: const SizedBox.shrink(),
