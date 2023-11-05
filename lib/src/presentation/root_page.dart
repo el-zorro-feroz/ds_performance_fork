@@ -17,47 +17,40 @@ class RootPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final FocusNode searchFocusNode = FocusNode();
-    // final TextEditingController searchController = TextEditingController();
+    final FocusNode searchFocusNode = FocusNode();
+    final TextEditingController searchTextEditingController = TextEditingController();
 
     //TODO: implement available configurations controller.
-    final navigation = [
+    final items = [
       PaneItem(
         key: const ValueKey('/'),
         icon: const Icon(FluentIcons.home),
-        title: const Text('Control Panel'),
+        title: const Text('Configuration Panel'),
         body: const SizedBox.shrink(),
       ),
       PaneItemSeparator(),
       PaneItem(
         key: const ValueKey('/config/{ABCD-EFGH-IJKL-MNOP}'),
-        icon: const Icon(FluentIcons.bank),
+        icon: const Icon(FluentIcons.database),
         title: const Text('{ABCD-EFGH-IJKL-MNOP}'),
         body: const SizedBox.shrink(),
       ),
       PaneItem(
         key: const ValueKey('/config/{EFGH-ABCD-IJKL-MNOP}'),
-        icon: const Icon(FluentIcons.checkbox_composite),
+        icon: const Icon(FluentIcons.database),
         title: const Text('{ABCD-EFGH-IJKL-MNOP}'),
         body: const SizedBox.shrink(),
       ),
       PaneItem(
         key: const ValueKey('/config/{IJKL-ABCD-EFGH-MNOP}'),
-        icon: const Icon(FluentIcons.checkbox_composite),
+        icon: const Icon(FluentIcons.database),
         title: const Text('{ABCD-EFGH-IJKL-MNOP}'),
         body: const SizedBox.shrink(),
       ),
       PaneItem(
         key: const ValueKey('/config/{MNOP-ABCD-EFGH-IJKL}'),
-        icon: const Icon(FluentIcons.checkbox_composite),
+        icon: const Icon(FluentIcons.database),
         title: const Text('{ABCD-EFGH-IJKL-MNOP}'),
-        body: const SizedBox.shrink(),
-      ),
-      PaneItemSeparator(),
-      PaneItem(
-        key: const ValueKey('/settings'),
-        icon: const Icon(FluentIcons.settings),
-        title: const Text('Settings'),
         body: const SizedBox.shrink(),
       ),
     ].map((e) {
@@ -79,27 +72,67 @@ class RootPage extends StatelessWidget {
       return e;
     }).toList();
 
+    final footerItems = [
+      PaneItemSeparator(),
+      PaneItem(
+        key: const ValueKey('/settings'),
+        icon: const Icon(FluentIcons.settings),
+        title: const Text('Settings'),
+        body: const SizedBox.shrink(),
+      ),
+    ];
+
     return NavigationView(
       key: _navigationViewKey,
       appBar: NavigationAppBar(
         title: Text(
           ServiceApp.serviceName,
-          style: FluentTheme.of(context).typography.bodyStrong,
+          style: FluentTheme.of(context).typography.subtitle,
         ),
         leading: const SizedBox.shrink(),
       ),
       pane: NavigationPane(
         displayMode: PaneDisplayMode.open,
-        // header: const SizedBox(
-        //   height: kOneLineTileHeight,
-        //   child: FlutterLogo(
-        //     style: FlutterLogoStyle.horizontal,
-        //     size: 80.0,
-        //     textColor: Colors.black,
-        //     duration: Duration.zero,
-        //   ),
-        // ),
-        items: navigation,
+        autoSuggestBox: Builder(builder: (context) {
+          return AutoSuggestBox(
+            key: _searchBarKey,
+            focusNode: searchFocusNode,
+            controller: searchTextEditingController,
+            unfocusedColor: Colors.transparent,
+            items: items.whereType<PaneItem>().map((item) {
+              assert(item.title is Text);
+
+              final String text = (item.title as Text).data!;
+              return AutoSuggestBoxItem(
+                label: text,
+                value: text,
+                onSelected: () {
+                  item.onTap?.call();
+
+                  searchTextEditingController.clear();
+                  searchFocusNode.unfocus();
+
+                  final navView = NavigationView.of(context);
+                  if (navView.compactOverlayOpen) {
+                    navView.compactOverlayOpen = false;
+                  } else if (navView.minimalPaneOpen) {
+                    navView.minimalPaneOpen = false;
+                  }
+                },
+              );
+            }).toList(),
+            trailingIcon: IgnorePointer(
+              child: IconButton(
+                onPressed: () {},
+                icon: const Icon(FluentIcons.search),
+              ),
+            ),
+            placeholder: 'Search',
+          );
+        }),
+        autoSuggestBoxReplacement: const Icon(FluentIcons.search),
+        items: items,
+        footerItems: footerItems,
       ),
       paneBodyBuilder: (item, _) {
         final name = item?.key is ValueKey ? (item!.key as ValueKey).value : null;
