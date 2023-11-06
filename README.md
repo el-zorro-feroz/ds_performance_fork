@@ -1,8 +1,10 @@
 # Sensor Monitoring
 
+## Description
+
 Service for monitoring sensors. Student project.
 
-## .devcontainer
+## Docker Container
 
 Run following command to start web session inside container
 ```sh
