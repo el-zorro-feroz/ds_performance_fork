@@ -38,19 +38,19 @@ class RootPage extends StatelessWidget {
       PaneItem(
         key: const ValueKey('/config/{EFGH-ABCD-IJKL-MNOP}'),
         icon: const Icon(FluentIcons.database),
-        title: const Text('{ABCD-EFGH-IJKL-MNOP}'),
+        title: const Text('{EFGH-ABCD-IJKL-MNOP}'),
         body: const SizedBox.shrink(),
       ),
       PaneItem(
         key: const ValueKey('/config/{IJKL-ABCD-EFGH-MNOP}'),
         icon: const Icon(FluentIcons.database),
-        title: const Text('{ABCD-EFGH-IJKL-MNOP}'),
+        title: const Text('{IJKL-ABCD-EFGH-MNOP}'),
         body: const SizedBox.shrink(),
       ),
       PaneItem(
         key: const ValueKey('/config/{MNOP-ABCD-EFGH-IJKL}'),
         icon: const Icon(FluentIcons.database),
-        title: const Text('{ABCD-EFGH-IJKL-MNOP}'),
+        title: const Text('{MNOP-ABCD-EFGH-IJKL}'),
         body: const SizedBox.shrink(),
       ),
     ].map((e) {
@@ -80,7 +80,24 @@ class RootPage extends StatelessWidget {
         title: const Text('Settings'),
         body: const SizedBox.shrink(),
       ),
-    ];
+    ].map((e) {
+      if (e is PaneItem) {
+        return PaneItem(
+          key: e.key,
+          icon: e.icon,
+          title: e.title,
+          body: e.body,
+          onTap: () {
+            final path = (e.key as ValueKey).value;
+            if (GoRouterState.of(context).uri.toString() != path) {
+              context.go(path);
+            }
+            e.onTap?.call();
+          },
+        );
+      }
+      return e;
+    }).toList();
 
     return NavigationView(
       key: _navigationViewKey,

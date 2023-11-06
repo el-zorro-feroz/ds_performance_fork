@@ -1,4 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:sensors_monitoring/core/services/services.dart';
+import 'package:sensors_monitoring/src/presentation/widgets/config/active_tab.dart';
 
 class ConfigPage extends StatelessWidget {
   final String id;
@@ -10,21 +12,34 @@ class ConfigPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var typography = FluentTheme.of(context).typography;
+    final ActiveTab activeTab = services<ActiveTab>();
+    final Typography typography = FluentTheme.of(context).typography;
 
-    return ScaffoldPage.scrollable(
+    final List<Tab> tabs = [
+      Tab(
+        text: const Text('Tab 1'),
+        body: activeTab,
+      ),
+      Tab(
+        text: const Text('Tab 2'),
+        body: activeTab,
+      ),
+      Tab(
+        text: const Text('Tab 3'),
+        body: activeTab,
+      ),
+    ];
+
+    return ScaffoldPage(
       header: PageHeader(
         title: Text(
           'Configuration - $id',
-          style: typography.title,
         ),
       ),
-      children: [
-        Text(
-          'Comming soon',
-          style: typography.subtitle,
-        )
-      ],
+      content: TabView(
+        currentIndex: 0,
+        tabs: tabs,
+      ),
     );
   }
 }
