@@ -11,7 +11,10 @@ class ActiveTabController with ChangeNotifier {
 
   FutureOr<void> loadTab(String id) async {
     log('Loading Tab #($id)', name: runtimeType.toString());
-    Future.delayed(const Duration(seconds: 1), () => _isReady = true);
+    _isReady = false;
+    notifyListeners();
+
+    await Future.delayed(const Duration(seconds: 3), () => _isReady = true);
     notifyListeners();
   }
 }

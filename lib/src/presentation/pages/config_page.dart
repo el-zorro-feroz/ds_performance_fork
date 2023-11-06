@@ -1,5 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:sensors_monitoring/core/services/services.dart';
+import 'package:sensors_monitoring/src/presentation/controllers/active_tab_controller.dart';
 import 'package:sensors_monitoring/src/presentation/widgets/config/active_tab.dart';
 
 class ConfigPage extends StatelessWidget {
@@ -12,8 +13,19 @@ class ConfigPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ActiveTabController activeTabController = services<ActiveTabController>();
+
     final ActiveTab activeTab = services<ActiveTab>();
-    final Typography typography = FluentTheme.of(context).typography;
+    // final Typography typography = FluentTheme.of(context).typography;
+
+    void onChanged(index) async {
+      //TODO: replace tab index with actual tab id (server)
+      activeTabController.loadTab(id);
+    }
+
+    void onNewPressed() async {
+      //TODO: implement tab creation feature
+    }
 
     final List<Tab> tabs = [
       Tab(
@@ -39,6 +51,9 @@ class ConfigPage extends StatelessWidget {
       content: TabView(
         currentIndex: 0,
         tabs: tabs,
+        closeButtonVisibility: CloseButtonVisibilityMode.never,
+        onChanged: onChanged,
+        onNewPressed: onNewPressed,
       ),
     );
   }
