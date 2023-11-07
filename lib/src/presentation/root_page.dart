@@ -3,8 +3,10 @@ import 'package:go_router/go_router.dart';
 import 'package:sensors_monitoring/src/presentation/service_app.dart';
 
 class RootPage extends StatelessWidget {
-  static final GlobalKey _navigationViewKey = GlobalKey(debugLabel: 'Navigation View Global Key');
-  static final GlobalKey _searchBarKey = GlobalKey(debugLabel: 'Search Bar Global Key');
+  static final GlobalKey _navigationViewKey =
+      GlobalKey(debugLabel: 'Navigation View Global Key');
+  static final GlobalKey _searchBarKey =
+      GlobalKey(debugLabel: 'Search Bar Global Key');
 
   final Widget child;
   final BuildContext? shellContext;
@@ -18,17 +20,21 @@ class RootPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final FocusNode searchFocusNode = FocusNode();
-    final TextEditingController searchTextEditingController = TextEditingController();
+    final TextEditingController searchTextEditingController =
+        TextEditingController();
 
     //TODO: implement available configurations controller.
     final items = [
-      PaneItem(
-        key: const ValueKey('/'),
-        icon: const Icon(FluentIcons.home),
-        title: const Text('Configuration Panel'),
-        body: const SizedBox.shrink(),
+      PaneItemHeader(
+        header: const Text('Configurations'),
       ),
-      PaneItemSeparator(),
+      // PaneItem(
+      //   key: const ValueKey('/'),
+      //   icon: const Icon(FluentIcons.home),
+      //   title: const Text('Configuration Panel'),
+      //   body: const SizedBox.shrink(),
+      // ),
+      // PaneItemSeparator(),
       PaneItem(
         key: const ValueKey('/config/{ABCD-EFGH-IJKL-MNOP}'),
         icon: const Icon(FluentIcons.database),
@@ -74,6 +80,12 @@ class RootPage extends StatelessWidget {
 
     final footerItems = [
       PaneItemSeparator(),
+      PaneItem(
+        key: const ValueKey('/add'),
+        icon: const Icon(FluentIcons.add),
+        title: const Text('Add Configuration'),
+        body: const SizedBox.shrink(),
+      ),
       PaneItem(
         key: const ValueKey('/settings'),
         icon: const Icon(FluentIcons.settings),
@@ -152,7 +164,8 @@ class RootPage extends StatelessWidget {
         footerItems: footerItems,
       ),
       paneBodyBuilder: (item, _) {
-        final name = item?.key is ValueKey ? (item!.key as ValueKey).value : null;
+        final name =
+            item?.key is ValueKey ? (item!.key as ValueKey).value : null;
         return FocusTraversalGroup(
           key: ValueKey('paneBody$name'),
           child: child,

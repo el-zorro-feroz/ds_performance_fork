@@ -13,7 +13,10 @@ class ConfigPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ActiveTabController activeTabController = services<ActiveTabController>();
+    final ActiveTabController activeTabController =
+        services<ActiveTabController>();
+
+    void onEditConfigurationPressed() {}
 
     final ActiveTab activeTab = services<ActiveTab>();
     // final Typography typography = FluentTheme.of(context).typography;
@@ -46,6 +49,10 @@ class ConfigPage extends StatelessWidget {
       header: PageHeader(
         title: Text(
           'Configuration - $id',
+        ),
+        commandBar: IconButton(
+          icon: const Icon(FluentIcons.edit),
+          onPressed: onEditConfigurationPressed,
         ),
       ),
       content: TabView(

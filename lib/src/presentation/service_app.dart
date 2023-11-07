@@ -1,5 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:go_router/go_router.dart';
+import 'package:sensors_monitoring/src/presentation/pages/add_confg_page.dart';
 import 'package:sensors_monitoring/src/presentation/pages/config_page.dart';
 import 'package:sensors_monitoring/src/presentation/pages/home_page.dart';
 import 'package:sensors_monitoring/src/presentation/pages/settings_page.dart';
@@ -8,8 +9,10 @@ import 'package:sensors_monitoring/src/presentation/root_page.dart';
 class ServiceApp extends StatelessWidget {
   static const String serviceName = 'Monitoring Service';
 
-  static final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
-  static final GlobalKey<NavigatorState> _shellNavigatorKey = GlobalKey<NavigatorState>();
+  static final GlobalKey<NavigatorState> _rootNavigatorKey =
+      GlobalKey<NavigatorState>();
+  static final GlobalKey<NavigatorState> _shellNavigatorKey =
+      GlobalKey<NavigatorState>();
 
   static final GoRouter _router = GoRouter(
     navigatorKey: _rootNavigatorKey,
@@ -34,6 +37,10 @@ class ServiceApp extends StatelessWidget {
               if (id == null) throw Exception('Config id must not be null');
               return ConfigPage(id: id);
             },
+          ),
+          GoRoute(
+            path: '/add',
+            builder: (context, state) => const AddConfigPage(),
           ),
           GoRoute(
             path: '/settings',
