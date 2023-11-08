@@ -26,7 +26,6 @@ void main() async {
         };
         // Arrange
         final Unit? resultOrNull = await insertConfigs();
-        print(resultOrNull);
         // Assert
         expect(resultOrNull, unit);
       });
@@ -63,7 +62,7 @@ void main() async {
           // Assert
           expect(resultOrNull, null);
         });
-        test('call test', () async {
+        test('correct call test', () async {
           // Act
           await clearTables();
           final CommonDatasource commonDatasource = services<CommonDatasource>();
