@@ -5,18 +5,20 @@ import 'package:postgres/postgres.dart';
 import 'package:sensors_monitoring/core/services/services.dart';
 import 'package:sensors_monitoring/src/data/datasources/common_datasource.dart';
 import 'package:sensors_monitoring/src/data/models/configs_model.dart';
+import 'package:sensors_monitoring/src/data/models/tabs_model.dart';
 
 void main() async {
   await servicesInit();
 
   Future<PostgreSQLResult> clearTables() async => await PostgresModule.postgreSQLConnection.query('DELETE FROM configs;');
 
+  final CommonDatasource commonDatasource = services<CommonDatasource>();
+
   group('Common datasource', () {
-    group('configs', () {
-      test('insert configs correct call test', () async {
+    group('configs:', () {
+      test('insert config correct call test', () async {
         // Act
         await clearTables();
-        final CommonDatasource commonDatasource = services<CommonDatasource>();
         final Future<Unit?> Function() insertConfigs = () async {
           try {
             return await commonDatasource.insertConfigs(title: 'test_call');
@@ -33,7 +35,6 @@ void main() async {
         test('correct call test with empty request', () async {
           // Act
           await clearTables();
-          final CommonDatasource commonDatasource = services<CommonDatasource>();
           // Arrange
           final List<ConfigModel>? resultOrNull = await commonDatasource.selectAllConfigs();
           // Assert
@@ -42,8 +43,10 @@ void main() async {
         test('correct call test', () async {
           // Act
           await clearTables();
-          final CommonDatasource commonDatasource = services<CommonDatasource>();
-          final List<String> correctResultTitles = ['test call 1', 'test call 2'];
+          final List<String> correctResultTitles = [
+            'test call 1',
+            'test call 2',
+          ];
           // Arrange
           await commonDatasource.insertConfigs(title: correctResultTitles.first);
           await commonDatasource.insertConfigs(title: correctResultTitles.last);
@@ -52,11 +55,10 @@ void main() async {
           expect(resultTitlesOrNull, correctResultTitles);
         });
       });
-      group('select one configs by id', () {
+      group('select one config by id', () {
         test('call test with empty request', () async {
           // Act
           await clearTables();
-          final CommonDatasource commonDatasource = services<CommonDatasource>();
           // Arrange
           final ConfigModel? resultOrNull = await commonDatasource.selectOneConfigsById(id: 'eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee');
           // Assert
@@ -65,7 +67,7 @@ void main() async {
         test('correct call test', () async {
           // Act
           await clearTables();
-          final CommonDatasource commonDatasource = services<CommonDatasource>();
+
           final String correctTitle = 'test call';
           await commonDatasource.insertConfigs(title: correctTitle);
           // Arrange
@@ -75,16 +77,18 @@ void main() async {
           expect(resultOrNull?.title, correctTitle);
         });
       });
-      test('update configs correct call test', () async {
+      test('update config correct call test', () async {
         // Act
         await clearTables();
         final String correctTitle = 'test call';
-        final CommonDatasource commonDatasource = services<CommonDatasource>();
         await commonDatasource.insertConfigs(title: 'test');
         final Future<Unit?> Function() updateConfigs = () async {
           try {
             final String? id = (await commonDatasource.selectAllConfigs())?.first.id;
-            return await commonDatasource.updateConfigs(id: id!, title: correctTitle);
+            return await commonDatasource.updateConfigs(
+              id: id!,
+              title: correctTitle,
+            );
           } catch (_) {
             return null;
           }
@@ -96,10 +100,9 @@ void main() async {
         expect(resultOrNull, unit);
         expect(resultTitleOrNull, correctTitle);
       });
-      test('delete configs correct call test', () async {
+      test('delete config correct call test', () async {
         // Act
         await clearTables();
-        final CommonDatasource commonDatasource = services<CommonDatasource>();
         await commonDatasource.insertConfigs(title: 'test');
         final Future<Unit?> Function() deleteConfigs = () async {
           try {
@@ -113,6 +116,189 @@ void main() async {
         final Unit? resultOrNull = await deleteConfigs();
         // Assert
         expect(resultOrNull, unit);
+      });
+    });
+    group('tabs:', () {
+      test('insert tab correct call test', () async {
+        // Act
+        await clearTables();
+        final Future<Unit?> Function() insertTab = () async {
+          try {
+            await commonDatasource.insertConfigs(title: 'config');
+            final String? configId = (await commonDatasource.selectAllConfigs())?.first.id;
+            return await commonDatasource.insertTabs(
+              configId: configId!,
+              title: 'test_tab',
+            );
+          } catch (_) {
+            return null;
+          }
+        };
+        // Arrange
+        final Unit? resultOrNull = await insertTab();
+        // Assert
+        expect(resultOrNull, unit);
+      });
+      group('select all tabs', () {
+        test('correct call test with empty request', () async {
+          // Act
+          await clearTables();
+          // Arrange
+          final List<TabsModel>? resultOrNull = await commonDatasource.selectAllTabs();
+          // Assert
+          expect(resultOrNull, null);
+        });
+        test('correct call test', () async {
+          // Act
+          await clearTables();
+          await commonDatasource.insertConfigs(title: 'config1');
+          await commonDatasource.insertConfigs(title: 'config2');
+
+          final List<String>? configsId = (await commonDatasource.selectAllConfigs())?.map((e) => e.id).toList();
+          final List<String> correctResultTitles = [
+            'tab1',
+            'tab2',
+          ];
+
+          await commonDatasource.insertTabs(
+            configId: configsId!.first,
+            title: correctResultTitles.first,
+          );
+          await commonDatasource.insertTabs(
+            configId: configsId!.last,
+            title: correctResultTitles.last,
+          );
+          // Arrange
+          final List<String>? resultTitlesOrNull = (await commonDatasource.selectAllTabs())?.map((e) => e.title).toList();
+          // Assert
+          expect(resultTitlesOrNull, correctResultTitles);
+        });
+      });
+      group('select all tabs by config id', () {
+        test('correct call test with empty request', () async {
+          // Act
+          await clearTables();
+          await commonDatasource.insertConfigs(title: 'config1');
+          final String? configId = (await commonDatasource.selectAllConfigs())?.first.id;
+          // Arrange
+          final List<TabsModel>? resultOrNull = await commonDatasource.selectAllTabsByConfigId(configId: configId!);
+          // Assert
+          expect(resultOrNull, null);
+        });
+        test('correct call test', () async {
+          // Act
+          await clearTables();
+          await commonDatasource.insertConfigs(title: 'config1');
+          await commonDatasource.insertConfigs(title: 'config2');
+
+          final List<String>? configsId = (await commonDatasource.selectAllConfigs())?.map((e) => e.id).toList();
+          final List<String> correctResultTitles = [
+            'tab1',
+            'tab2',
+            'tab3',
+          ];
+
+          await commonDatasource.insertTabs(
+            configId: configsId!.first,
+            title: correctResultTitles[0],
+          );
+          await commonDatasource.insertTabs(
+            configId: configsId!.first,
+            title: correctResultTitles[1],
+          );
+          await commonDatasource.insertTabs(
+            configId: configsId!.last,
+            title: correctResultTitles[2],
+          );
+          // Arrange
+          final List<String>? resultTitlesOrNullByFisrtConfigId = (await commonDatasource.selectAllTabsByConfigId(configId: configsId!.first))?.map((e) => e.title).toList();
+          final List<String>? resultTitlesOrNullByLastConfigId = (await commonDatasource.selectAllTabsByConfigId(configId: configsId!.last))?.map((e) => e.title).toList();
+          // Assert
+          expect(resultTitlesOrNullByFisrtConfigId, correctResultTitles.sublist(0, 2));
+          expect(resultTitlesOrNullByLastConfigId, correctResultTitles.sublist(2));
+        });
+      });
+      group('select one tab by id', () {
+        test('call test with empty request', () async {
+          // Act
+          await clearTables();
+          // Arrange
+          final TabsModel? resultOrNull = await commonDatasource.selectOneTabsById(id: 'eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee');
+          // Assert
+          expect(resultOrNull, null);
+        });
+        test('correct call test', () async {
+          // Act
+          await clearTables();
+          final String correctTitle = 'tab_test';
+          await commonDatasource.insertConfigs(title: 'config');
+          final String? configId = (await commonDatasource.selectAllConfigs())?.first.id;
+          await commonDatasource.insertTabs(
+            configId: configId!,
+            title: correctTitle,
+          );
+          final String? tabId = (await commonDatasource.selectAllTabs())?.first.id;
+
+          // Arrange
+          final TabsModel? resultOrNull = await commonDatasource.selectOneTabsById(id: tabId!);
+          // Assert
+          expect(resultOrNull?.title, correctTitle);
+        });
+      });
+      test('update tab correct call test', () async {
+        // Act
+        await clearTables();
+        final String correctTitle = 'tab_updated';
+
+        final Future<Unit?> Function() updateTabs = () async {
+          try {
+            await commonDatasource.insertConfigs(title: 'config');
+            final String? configId = (await commonDatasource.selectAllConfigs())?.first.id;
+            await commonDatasource.insertTabs(
+              configId: configId!,
+              title: 'tab',
+            );
+            final String? tabId = (await commonDatasource.selectAllTabs())?.first.id;
+
+            return await commonDatasource.updateTabs(
+              id: tabId!,
+              title: correctTitle,
+            );
+          } catch (_) {
+            return null;
+          }
+        };
+        // Arrange
+        final Unit? resultOrNull = await updateTabs();
+        final String? resultTitleOrNull = (await commonDatasource.selectAllTabs())?.first.title;
+        // Assert
+        expect(resultOrNull, unit);
+        expect(resultTitleOrNull, correctTitle);
+      });
+      test('delete tab correct call test', () async {
+        // Act
+        await clearTables();
+        final Future<Unit?> Function() deleteTabs = () async {
+          try {
+            await commonDatasource.insertConfigs(title: 'config');
+            final String? configId = (await commonDatasource.selectAllConfigs())?.first.id;
+            await commonDatasource.insertTabs(
+              configId: configId!,
+              title: 'tab',
+            );
+            final String? tabId = (await commonDatasource.selectAllTabs())?.first.id;
+
+            return await commonDatasource.deleteTabs(id: tabId!);
+          } catch (_) {
+            return null;
+          }
+        };
+        // Arrange
+        final Unit? resultOrNull = await deleteTabs();
+        final List<TabsModel>? listTabs = await commonDatasource.selectAllTabs();
+        // Assert
+        expect(resultOrNull, unit);
+        expect(listTabs, null);
       });
     });
   });
