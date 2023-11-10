@@ -658,10 +658,15 @@ class CommonDatasource {
     }
   }
 
-  Future<GraphsModel?> selectOneGraphs() async {
+  Future<GraphsModel?> selectOneGraphs({required String id}) async {
     try {
       final String query = await File('C:/fac/sql/model/graphs/select_one_graphs.sql').readAsString();
-      final List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(query);
+      final List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(
+        query,
+        substitutionValues: {
+          'id': id,
+        },
+      );
 
       if (request.isEmpty) {
         return null;
