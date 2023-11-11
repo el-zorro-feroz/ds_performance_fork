@@ -1,20 +1,24 @@
 class SensorRulesModel {
+  final String id;
   final String sensorId;
   final String ruleId;
   final double value;
 
   const SensorRulesModel({
+    required this.id,
     required this.sensorId,
     required this.ruleId,
     required this.value,
   });
 
   SensorRulesModel copyWith({
+    String? id,
     String? sensorId,
     String? ruleId,
     double? value,
   }) {
     return SensorRulesModel(
+      id: id ?? this.id,
       sensorId: sensorId ?? this.sensorId,
       ruleId: ruleId ?? this.ruleId,
       value: value ?? this.value,
@@ -23,6 +27,7 @@ class SensorRulesModel {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
+      'id': id,
       'sensorId': sensorId,
       'ruleId': ruleId,
       'value': value,
@@ -31,6 +36,7 @@ class SensorRulesModel {
 
   factory SensorRulesModel.fromMap(Map<String, dynamic> map) {
     return SensorRulesModel(
+      id: map['id'] as String,
       sensorId: map['sensorId'] as String,
       ruleId: map['ruleId'] as String,
       value: map['value'] as double,
@@ -38,5 +44,5 @@ class SensorRulesModel {
   }
 
   @override
-  String toString() => 'SensorsRules(sensorId: $sensorId, ruleId: $ruleId, value: $value)';
+  String toString() => 'SensorsRules(id: $id, sensorId: $sensorId, ruleId: $ruleId, value: $value)';
 }
