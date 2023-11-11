@@ -3,5 +3,3 @@ INSERT INTO sensorrules (sensor_id, rule_id, value)
 -- rule_id uuid
 -- value real
 VALUES (@sensor_id, @rule_id, @value);
--- id uuid
-WHERE id = @id;
