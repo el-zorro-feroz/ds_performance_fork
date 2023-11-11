@@ -6,12 +6,11 @@ import 'package:sensors_monitoring/core/services/services.dart';
 import 'package:sensors_monitoring/src/data/datasources/common_datasource.dart';
 import 'package:sensors_monitoring/src/data/models/alerts_model.dart';
 import 'package:sensors_monitoring/src/data/models/enum/alert_type.dart';
-import 'package:sensors_monitoring/src/data/models/rules_model.dart';
 
 Future<void> main() async {
   await servicesInit();
 
-  Future<PostgreSQLResult> clearTables() async => await PostgresModule.postgreSQLConnection.query('DELETE FROM rules;');
+  Future<PostgreSQLResult> clearTables() async => await PostgresModule.postgreSQLConnection.query('DELETE FROM alerts;');
 
   final CommonDatasource commonDatasource = services<CommonDatasource>();
 
