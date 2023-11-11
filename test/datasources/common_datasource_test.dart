@@ -1,4 +1,6 @@
 // ignore_for_file: prefer_function_declarations_over_variables
+import 'dart:math';
+
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:postgres/postgres.dart';
@@ -56,7 +58,7 @@ void main() async {
         });
       });
       group('select one config by id', () {
-        test('call test with empty request', () async {
+        test('correct call test with empty request', () async {
           // Act
           await clearTables();
           // Arrange
@@ -76,46 +78,99 @@ void main() async {
           // Assert
           expect(resultOrNull?.title, correctTitle);
         });
+        test('incorrect call test', () async {
+          // Act
+          await clearTables();
+          Future<Either<Unit, ConfigModel?>> Function() selectOneConfigById = () async {
+            try {
+              return Right(await commonDatasource.selectOneConfigsById(id: 'e'));
+            } catch (_) {
+              return Left(unit);
+            }
+          };
+          // Arrange
+          final Either<Unit, ConfigModel?> resultOrLeft = await selectOneConfigById();
+          // Assert
+          expect(resultOrLeft.isLeft(), true);
+        });
       });
-      test('update config correct call test', () async {
-        // Act
-        await clearTables();
-        final String correctTitle = 'test call';
-        await commonDatasource.insertConfigs(title: 'test');
-        final Future<Unit?> Function() updateConfigs = () async {
-          try {
-            final String? id = (await commonDatasource.selectAllConfigs())?.first.id;
-            return await commonDatasource.updateConfigs(
-              id: id!,
-              title: correctTitle,
-            );
-          } catch (_) {
-            return null;
-          }
-        };
-        // Arrange
-        final Unit? resultOrNull = await updateConfigs();
-        final String? resultTitleOrNull = (await commonDatasource.selectAllConfigs())?.first.title;
-        // Assert
-        expect(resultOrNull, unit);
-        expect(resultTitleOrNull, correctTitle);
+
+      group('update config', () {
+        test('correct call test', () async {
+          // Act
+          await clearTables();
+          final String correctTitle = 'test call';
+          await commonDatasource.insertConfigs(title: 'test');
+          final Future<Unit?> Function() updateConfigs = () async {
+            try {
+              final String? id = (await commonDatasource.selectAllConfigs())?.first.id;
+              return await commonDatasource.updateConfigs(
+                id: id!,
+                title: correctTitle,
+              );
+            } catch (_) {
+              return null;
+            }
+          };
+          // Arrange
+          final Unit? resultOrNull = await updateConfigs();
+          final String? resultTitleOrNull = (await commonDatasource.selectAllConfigs())?.first.title;
+          // Assert
+          expect(resultOrNull, unit);
+          expect(resultTitleOrNull, correctTitle);
+        });
+        test('incorrect call test', () async {
+          // Act
+          await clearTables();
+          Future<Either<Unit, Unit?>> Function() updateConfig = () async {
+            try {
+              return Right(await commonDatasource.updateConfigs(
+                id: 'e',
+                title: 'test',
+              ));
+            } catch (_) {
+              return Left(unit);
+            }
+          };
+          // Arrange
+          final Either<Unit, Unit?> resultOrLeft = await updateConfig();
+          // Assert
+          expect(resultOrLeft.isLeft(), true);
+        });
       });
-      test('delete config correct call test', () async {
-        // Act
-        await clearTables();
-        await commonDatasource.insertConfigs(title: 'test');
-        final Future<Unit?> Function() deleteConfigs = () async {
-          try {
-            final String? id = (await commonDatasource.selectAllConfigs())?.first.id;
-            return await commonDatasource.deleteConfigs(id: id!);
-          } catch (_) {
-            return null;
-          }
-        };
-        // Arrange
-        final Unit? resultOrNull = await deleteConfigs();
-        // Assert
-        expect(resultOrNull, unit);
+      group('delete config', () {
+        test('delete config correct call test', () async {
+          // Act
+          await clearTables();
+          await commonDatasource.insertConfigs(title: 'test');
+          final Future<Unit?> Function() deleteConfigs = () async {
+            try {
+              final String? id = (await commonDatasource.selectAllConfigs())?.first.id;
+              return await commonDatasource.deleteConfigs(id: id!);
+            } catch (_) {
+              return null;
+            }
+          };
+          // Arrange
+          final Unit? resultOrNull = await deleteConfigs();
+          // Assert
+          expect(resultOrNull, unit);
+        });
+        test('incorrect call test', () async {
+          // Act
+          await clearTables();
+          Future<Either<Unit, Unit?>> Function() deleteConfigs = () async {
+            try {
+              return Right(await commonDatasource.deleteConfigs(id: 'e'));
+            } catch (_) {
+              return Left(unit);
+            }
+          };
+          // Arrange
+          final Either<Unit, Unit?> resultOrLeft = await deleteConfigs();
+          // Assert
+          expect(resultOrLeft.isLeft(), true);
+        });
       });
     });
     group('tabs:', () {
