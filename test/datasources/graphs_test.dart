@@ -15,13 +15,12 @@ Future<void> main() async {
 
   GraphDependency dependency = GraphDependency.average;
   GraphType type = GraphType.columnar;
-
+  final CommonDatasource commonDatasource = services<CommonDatasource>();
   group('graphs', () async {
     test('insert_graphs call test', () async {
       //!Act
       final Future<Unit?> Function() insertGraphs = () async {
         await clearTables();
-        final CommonDatasource commonDatasource = services<CommonDatasource>();
         try {
           return await commonDatasource.insertGraphs(dependency: dependency, type: type);
         } catch (e) {
@@ -39,7 +38,6 @@ Future<void> main() async {
         //!Act
         final Future<List<GraphsModel>?> Function() selectAll = () async {
           await clearTables();
-          final CommonDatasource commonDatasource = services<CommonDatasource>();
           try {
             return await commonDatasource.selectAllGraphs();
           } catch (e) {
@@ -55,7 +53,6 @@ Future<void> main() async {
         //!Act
         final Future<List<GraphsModel>?> Function() selectAll = () async {
           await clearTables();
-          final CommonDatasource commonDatasource = services<CommonDatasource>();
           try {
             return await commonDatasource.selectAllGraphs();
           } catch (e) {
@@ -74,7 +71,6 @@ Future<void> main() async {
         //!Act
         final Future<GraphsModel?> Function() selectOne = () async {
           await clearTables();
-          final CommonDatasource commonDatasource = services<CommonDatasource>();
           try {
             return await commonDatasource.selectOneGraphs(id: '     fud d  d d d d d d d d');
           } catch (e) {
@@ -89,7 +85,6 @@ Future<void> main() async {
       test('call test', () async {
         //!Act
         await clearTables();
-        final CommonDatasource commonDatasource = services<CommonDatasource>();
         GraphsModel graphsModel = GraphsModel(id: '1', type: type, dependency: dependency);
         await commonDatasource.insertGraphs(dependency: dependency, type: type);
         //!Arrange
@@ -102,7 +97,6 @@ Future<void> main() async {
     test('update graphs correct call test', () async {
       //!Act
       await clearTables();
-      final CommonDatasource commonDatasource = services<CommonDatasource>();
       await commonDatasource.insertGraphs(dependency: dependency, type: type);
       GraphDependency dependencyTest = GraphDependency.sensors;
       final Future<Unit?> Function() updateGraphs = () async {
@@ -125,7 +119,6 @@ Future<void> main() async {
       //!Act
       final Future<Unit?> Function() deleteGraphs = () async {
         await clearTables();
-        final CommonDatasource commonDatasource = services<CommonDatasource>();
         try {
           final String? id = (await commonDatasource.selectAllGraphs())?.first.id;
           if (id == null) {
