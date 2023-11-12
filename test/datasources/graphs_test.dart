@@ -1,4 +1,3 @@
-// ignore_for_file: prefer_function_declarations_over_variables
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:postgres/postgres.dart';
