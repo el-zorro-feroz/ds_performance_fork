@@ -1114,11 +1114,11 @@ class CommonDatasource {
     }
   }
 
-  Future<SensorRulesModel?> selectSensorRulesByRuleId({required String id}) async {
+  Future<SensorRulesModel?> selectSensorRulesByRuleId({required String ruleId}) async {
     try {
       final String query = await File('sql/model/sensor_rules/select_sensor_rules_by_rule_id.sql').readAsString();
       final List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(query, substitutionValues: {
-        'id': id,
+        'rule_id': ruleId,
       });
 
       if (request.isEmpty) {
@@ -1131,11 +1131,11 @@ class CommonDatasource {
     }
   }
 
-  Future<SensorRulesModel?> selectSensorRulesBySensorId({required String id}) async {
+  Future<SensorRulesModel?> selectSensorRulesBySensorId({required String sensorId}) async {
     try {
       final String query = await File('sql/model/sensor_rules/select_sensor_rules_by_sensor_id.sql').readAsString();
       final List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(query, substitutionValues: {
-        'id': id,
+        'sensor_id': sensorId,
       });
 
       if (request.isEmpty) {
