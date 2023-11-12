@@ -13,124 +13,89 @@ Future<void> main() async {
 
   Future<PostgreSQLResult> clearTables() async => await PostgresModule.postgreSQLConnection.query('DELETE FROM graphs;');
 
-  GraphDependency dependency = GraphDependency.average;
-  GraphType type = GraphType.columnar;
+  GraphDependency testDependency1 = GraphDependency.minimal;
+  GraphDependency testDependency2 = GraphDependency.maximum;
+  GraphType testType1 = GraphType.columnar;
+  GraphType testType2 = GraphType.linear;
+
   final CommonDatasource commonDatasource = services<CommonDatasource>();
-  group('graphs', () async {
+  group('graphs', () {
     test('insert_graphs call test', () async {
       //!Act
-      final Future<Unit?> Function() insertGraphs = () async {
-        await clearTables();
-        try {
-          return await commonDatasource.insertGraphs(dependency: dependency, type: type);
-        } catch (e) {
-          return null;
-        }
-      };
-
+      await clearTables();
       //!Arrange
-      final Unit? resultOrNull = await insertGraphs();
+      final Unit resultOrNull = await commonDatasource.insertGraphs(
+        dependency: testDependency1,
+        type: testType1,
+      );
       //!Assert
       expect(resultOrNull, unit);
     });
     group('select all graphs', () {
       test('call select_all empty result test', () async {
         //!Act
-        final Future<List<GraphsModel>?> Function() selectAll = () async {
-          await clearTables();
-          try {
-            return await commonDatasource.selectAllGraphs();
-          } catch (e) {
-            return null;
-          }
-        };
+        await clearTables();
         //!Arrange
-        final List<GraphsModel>? resultOrNull = await selectAll();
+        final List<GraphsModel>? resultOrNull = await commonDatasource.selectAllGraphs();
         //!Assert
         expect(resultOrNull, null);
       });
       test('call select_all result test', () async {
         //!Act
-        final Future<List<GraphsModel>?> Function() selectAll = () async {
-          await clearTables();
-          try {
-            return await commonDatasource.selectAllGraphs();
-          } catch (e) {
-            return null;
-          }
-        };
+        await clearTables();
+
         //!Arrange
-        final List<GraphsModel>? resultOrNull = await selectAll();
+        await commonDatasource.insertGraphs(dependency: testDependency1, type: testType1);
+        await commonDatasource.insertGraphs(dependency: testDependency1, type: testType2);
+
+        List<GraphType>? correctResult = [testType1, testType2];
+
+        final List<GraphType>? resultOrNull = (await commonDatasource.selectAllGraphs())?.map((e) => e.type).toList();
         //!Assert
-        expect(resultOrNull, unit);
+        expect(resultOrNull, correctResult);
       });
     });
 
     group('select one graphs by id', () {
       test('call test with empty request', () async {
         //!Act
-        final Future<GraphsModel?> Function() selectOne = () async {
-          await clearTables();
-          try {
-            return await commonDatasource.selectOneGraphs(id: '     fud d  d d d d d d d d');
-          } catch (e) {
-            return null;
-          }
-        };
+        await clearTables();
         //!Arrange
-        final GraphsModel? resultOrNull = await selectOne();
+        final GraphsModel? resultOrNull = await commonDatasource.selectOneGraphs(id: '87f0a680-815d-11ee-b962-0242ac120002');
         //!Assert
         expect(resultOrNull, null);
       });
       test('call test', () async {
         //!Act
         await clearTables();
-        GraphsModel graphsModel = GraphsModel(id: '1', type: type, dependency: dependency);
-        await commonDatasource.insertGraphs(dependency: dependency, type: type);
+        await commonDatasource.insertGraphs(dependency: testDependency1, type: testType1);
         //!Arrange
         final String? id = (await commonDatasource.selectAllGraphs())?.first.id;
-        final GraphsModel? resultOrNull = await commonDatasource.selectOneGraphs(id: id!);
+        final GraphType? resultOrNull = (await commonDatasource.selectOneGraphs(id: id!))?.type;
         //!Assert
-        expect(resultOrNull, graphsModel);
+        expect(resultOrNull, testType1);
       });
     });
     test('update graphs correct call test', () async {
       //!Act
       await clearTables();
-      await commonDatasource.insertGraphs(dependency: dependency, type: type);
-      GraphDependency dependencyTest = GraphDependency.sensors;
-      final Future<Unit?> Function() updateGraphs = () async {
-        try {
-          final String? id = (await commonDatasource.selectAllGraphs())?.first.id;
-          return await commonDatasource.updateGraphs(id: id!, dependency: GraphDependency.sensors);
-        } catch (_) {
-          return null;
-        }
-      };
+      await commonDatasource.insertGraphs(dependency: testDependency1, type: testType1);
+      final String? id = (await commonDatasource.selectAllGraphs())?.first.id;
+      final Unit resultOrNull = await commonDatasource.updateGraphs(id: id!, dependency: testDependency2);
       //!Arrange
-      final Unit? resultOrNull = await updateGraphs();
       final GraphDependency? resultDepTypeOrNull = (await commonDatasource.selectAllGraphs())?.first.dependency;
       //!Assert
       expect(resultOrNull, unit);
-      expect(resultDepTypeOrNull, dependencyTest);
+      expect(resultDepTypeOrNull, testDependency2);
     });
 
     test('delete_graphs correct call test', () async {
       //!Act
-      final Future<Unit?> Function() deleteGraphs = () async {
-        await clearTables();
-        try {
-          final String? id = (await commonDatasource.selectAllGraphs())?.first.id;
-          if (id == null) {
-            return null;
-          }
-          return await commonDatasource.deleteGraphs(id: id);
-        } catch (e) {
-          return null;
-        }
-      };
+      await clearTables();
+      await commonDatasource.insertGraphs(dependency: testDependency1, type: testType1);
       //!Arrange
-      final Unit? resultOrNull = await deleteGraphs();
+      final String? id = (await commonDatasource.selectAllGraphs())?.first.id;
+      final Unit resultOrNull = await commonDatasource.deleteGraphs(id: id!);
       //!Assert
       expect(resultOrNull, unit);
     });
