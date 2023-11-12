@@ -28,8 +28,8 @@ class SensorRulesModel {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
-      'sensorId': sensorId,
-      'ruleId': ruleId,
+      'sensor_id': sensorId,
+      'rule_id': ruleId,
       'value': value,
     };
   }
@@ -37,8 +37,8 @@ class SensorRulesModel {
   factory SensorRulesModel.fromMap(Map<String, dynamic> map) {
     return SensorRulesModel(
       id: map['id'] as String,
-      sensorId: map['sensorId'] as String,
-      ruleId: map['ruleId'] as String,
+      sensorId: map['sensor_id'] as String,
+      ruleId: map['rule_id'] as String,
       value: map['value'] as double,
     );
   }
