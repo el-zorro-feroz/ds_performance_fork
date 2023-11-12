@@ -737,7 +737,7 @@ class CommonDatasource {
   //! -----Alerts-----
   Future<List<AlertsModel>?> selectAllAlerts() async {
     try {
-      final String query = await File('sql/model/graphs/select_all_graphs.sql').readAsString();
+      final String query = await File('sql/model/alerts/select_all_alerts.sql').readAsString();
       final List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(query);
       final List<AlertsModel> result = [];
 
@@ -773,11 +773,11 @@ class CommonDatasource {
     }
   }
 
-  Future<AlertsModel?> selectAlertByRuleId({required String id}) async {
+  Future<AlertsModel?> selectAlertByRuleId({required String ruleId}) async {
     try {
       final String query = await File('sql/model/alerts/select_alert_by_rule_id.sql').readAsString();
       final List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(query, substitutionValues: {
-        'id': id,
+        'rule_id': ruleId,
       });
 
       if (request.isEmpty) {
@@ -790,11 +790,11 @@ class CommonDatasource {
     }
   }
 
-  Future<AlertsModel?> selectAlertBySensorId({required String id}) async {
+  Future<AlertsModel?> selectAlertBySensorId({required String sensorId}) async {
     try {
       final String query = await File('sql/model/alerts/select_alert_by_sensor_id.sql').readAsString();
       final List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(query, substitutionValues: {
-        'id': id,
+        'sensor_id': sensorId,
       });
 
       if (request.isEmpty) {
@@ -876,7 +876,7 @@ class CommonDatasource {
   //! -----Rules-----
   Future<List<RulesModel>?> selectAllRules() async {
     try {
-      final String query = await File('sql/model/graphs/select_all_rules.sql').readAsString();
+      final String query = await File('sql/model/rules/select_all_rules.sql').readAsString();
       final List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(query);
       final List<RulesModel> result = [];
 
@@ -895,7 +895,7 @@ class CommonDatasource {
 
   Future<RulesModel?> selectOneRules({required String id}) async {
     try {
-      final String query = await File('sql/model/graphs/select_one_rules.sql').readAsString();
+      final String query = await File('sql/model/rules/select_one_rules.sql').readAsString();
       final List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(
         query,
         substitutionValues: {
@@ -917,7 +917,7 @@ class CommonDatasource {
     required String description,
   }) async {
     try {
-      final String query = await File('sql/model/graphs/insert_rules.sql').readAsString();
+      final String query = await File('sql/model/rules/insert_rules.sql').readAsString();
       await PostgresModule.postgreSQLConnection.mappedResultsQuery(
         query,
         substitutionValues: {
@@ -978,7 +978,7 @@ class CommonDatasource {
         return null;
       }
       for (var e in request) {
-        result.add(GraphSensorsModel.fromMap(e['graphssensors']!));
+        result.add(GraphSensorsModel.fromMap(e['graphsensors']!));
       }
       return result;
     } catch (_) {
@@ -986,35 +986,35 @@ class CommonDatasource {
     }
   }
 
-  Future<GraphSensorsModel?> selectGraphSensorsByGraphsId({required String id}) async {
+  Future<GraphSensorsModel?> selectGraphSensorsByGraphsId({required String graphsId}) async {
     try {
       final String query = await File('sql/model/graphs_sensors/select_graph_sensors_by_graphs_id.sql').readAsString();
       final List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(query, substitutionValues: {
-        'id': id,
+        'graphs_id': graphsId,
       });
 
       if (request.isEmpty) {
         return null;
       }
 
-      return GraphSensorsModel.fromMap(request.first['graphssensor']!);
+      return GraphSensorsModel.fromMap(request.first['graphsensors']!);
     } catch (_) {
       rethrow;
     }
   }
 
-  Future<GraphSensorsModel?> selectGraphSensorsBySensorId({required String id}) async {
+  Future<GraphSensorsModel?> selectGraphSensorsBySensorId({required String sensorId}) async {
     try {
       final String query = await File('sql/model/graphs_sensors/select_graph_sensors_by_sensor_id.sql').readAsString();
       final List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(query, substitutionValues: {
-        'id': id,
+        'sensor_id': sensorId,
       });
 
       if (request.isEmpty) {
         return null;
       }
 
-      return GraphSensorsModel.fromMap(request.first['graphssensor']!);
+      return GraphSensorsModel.fromMap(request.first['graphsensors']!);
     } catch (_) {
       rethrow;
     }
@@ -1051,8 +1051,8 @@ class CommonDatasource {
         query,
         substitutionValues: {
           'id': id,
-          'sensor_id': sensorId,
           'graphs_id': graphsId,
+          'sensor_id': sensorId,
         },
       );
 
