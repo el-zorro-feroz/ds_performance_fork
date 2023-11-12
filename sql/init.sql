@@ -17,7 +17,13 @@ CREATE TYPE public.sensortype AS ENUM
 
 ALTER TYPE public.sensortype
     OWNER TO postgres;
-	
+
+CREATE TYPE public.alerttype AS ENUM
+    ('info','warning','error','fatal');    
+
+ALTER TYPE public.alerttype
+    OWNER TO postgres;
+
 CREATE TABLE IF NOT EXISTS Configs (
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
     title VARCHAR UNIQUE NOT NULL
@@ -89,5 +95,6 @@ CREATE TABLE IF NOT EXISTS Alerts(
     rule_id UUID,
     FOREIGN KEY(sensor_id) REFERENCES Sensors (id) ON DELETE CASCADE,
     FOREIGN KEY(rule_id) REFERENCES Rules (id) ON DELETE CASCADE,
+    type AlertType NOT NULL,
     message VARCHAR
 );
