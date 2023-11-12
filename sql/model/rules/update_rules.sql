@@ -1,5 +1,5 @@
-UPDATE Rules
+UPDATE rules
  -- description VARCHAR
-SET description = COALESCE(@description, description),
+SET description = COALESCE(@description, description)
 -- id uuid
 WHERE id = @id;

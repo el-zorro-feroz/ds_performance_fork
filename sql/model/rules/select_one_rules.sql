@@ -1,4 +1,5 @@
 SELECT *
-FROM rules;
+FROM rules
 -- id uuid
 WHERE id = @id;
+

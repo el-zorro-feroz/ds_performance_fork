@@ -1,2 +1,2 @@
 SELECT *
-FROM graphssensors;
+FROM graphsensors;
