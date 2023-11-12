@@ -24,16 +24,16 @@ class GraphSensorsModel {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
-      'graphsId': graphsId,
-      'sensorId': sensorId,
+      'graphs_id': graphsId,
+      'sensor_id': sensorId,
     };
   }
 
   factory GraphSensorsModel.fromMap(Map<String, dynamic> map) {
     return GraphSensorsModel(
       id: map['id'] as String,
-      graphsId: map['graphsId'] as String,
-      sensorId: map['sensorId'] as String,
+      graphsId: map['graphs_id'] as String,
+      sensorId: map['sensor_id'] as String,
     );
   }
 
