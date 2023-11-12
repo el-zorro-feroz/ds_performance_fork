@@ -642,7 +642,7 @@ class CommonDatasource {
   //! -----Graphs-----
   Future<List<GraphsModel>?> selectAllGraphs() async {
     try {
-      final String query = await File('C:/fac/sql/model/graphs/select_all_graphs.sql').readAsString();
+      final String query = await File('sql/model/graphs/select_all_graphs.sql').readAsString();
       final List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(query);
       final List<GraphsModel> result = [];
 
@@ -660,7 +660,7 @@ class CommonDatasource {
 
   Future<GraphsModel?> selectOneGraphs({required String id}) async {
     try {
-      final String query = await File('C:/fac/sql/model/graphs/select_one_graphs.sql').readAsString();
+      final String query = await File('sql/model/graphs/select_one_graphs.sql').readAsString();
       final List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(
         query,
         substitutionValues: {
@@ -683,7 +683,7 @@ class CommonDatasource {
     required GraphType type,
   }) async {
     try {
-      final String query = await File('C:/fac/sql/model/graphs/insert_graphs.sql').readAsString();
+      final String query = await File('sql/model/graphs/insert_graphs.sql').readAsString();
       await PostgresModule.postgreSQLConnection.mappedResultsQuery(
         query,
         substitutionValues: {
@@ -699,7 +699,7 @@ class CommonDatasource {
 
   Future<Unit> deleteGraphs({required String id}) async {
     try {
-      final String query = await File('C:/fac/sql/model/graphs/delete_graphs.sql').readAsString();
+      final String query = await File('sql/model/graphs/delete_graphs.sql').readAsString();
       await PostgresModule.postgreSQLConnection.mappedResultsQuery(
         query,
         substitutionValues: {
@@ -718,7 +718,7 @@ class CommonDatasource {
     GraphType? type,
   }) async {
     try {
-      final String query = await File('C:/fac/sql/model/graphs/update_graphs.sql').readAsString();
+      final String query = await File('sql/model/graphs/update_graphs.sql').readAsString();
       await PostgresModule.postgreSQLConnection.mappedResultsQuery(
         query,
         substitutionValues: {
@@ -737,7 +737,7 @@ class CommonDatasource {
   //! -----Alerts-----
   Future<List<AlertsModel>?> selectAllAlerts() async {
     try {
-      final String query = await File('C:/fac/sql/model/graphs/select_all_graphs.sql').readAsString();
+      final String query = await File('sql/model/graphs/select_all_graphs.sql').readAsString();
       final List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(query);
       final List<AlertsModel> result = [];
 
@@ -755,7 +755,7 @@ class CommonDatasource {
 
   Future<AlertsModel?> selectOneAlerts({required String id}) async {
     try {
-      final String query = await File('C:/fac/sql/model/alerts/select_one_alert.sql').readAsString();
+      final String query = await File('sql/model/alerts/select_one_alert.sql').readAsString();
       final List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(
         query,
         substitutionValues: {
@@ -775,7 +775,7 @@ class CommonDatasource {
 
   Future<AlertsModel?> selectAlertByRuleId({required String id}) async {
     try {
-      final String query = await File('C:/fac/sql/model/alerts/select_alert_by_rule_id.sql').readAsString();
+      final String query = await File('sql/model/alerts/select_alert_by_rule_id.sql').readAsString();
       final List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(query, substitutionValues: {
         'id': id,
       });
@@ -792,7 +792,7 @@ class CommonDatasource {
 
   Future<AlertsModel?> selectAlertBySensorId({required String id}) async {
     try {
-      final String query = await File('C:/fac/sql/model/alerts/select_alert_by_sensor_id.sql').readAsString();
+      final String query = await File('sql/model/alerts/select_alert_by_sensor_id.sql').readAsString();
       final List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(query, substitutionValues: {
         'id': id,
       });
@@ -814,7 +814,7 @@ class CommonDatasource {
     required AlertType type,
   }) async {
     try {
-      final String query = await File('C:/fac/sql/model/alerts/insert_alerts.sql').readAsString();
+      final String query = await File('sql/model/alerts/insert_alerts.sql').readAsString();
       await PostgresModule.postgreSQLConnection.mappedResultsQuery(
         query,
         substitutionValues: {
@@ -839,7 +839,7 @@ class CommonDatasource {
     AlertType? type,
   }) async {
     try {
-      final String query = await File('C:/fac/sql/model/alerts/update_alerts.sql').readAsString();
+      final String query = await File('sql/model/alerts/update_alerts.sql').readAsString();
       await PostgresModule.postgreSQLConnection.mappedResultsQuery(
         query,
         substitutionValues: {
@@ -859,7 +859,7 @@ class CommonDatasource {
 
   Future<Unit> deleteAlerts({required String id}) async {
     try {
-      final String query = await File('C:/fac/sql/model/alerts/delete_alerts.sql').readAsString();
+      final String query = await File('sql/model/alerts/delete_alerts.sql').readAsString();
       await PostgresModule.postgreSQLConnection.mappedResultsQuery(
         query,
         substitutionValues: {
@@ -876,7 +876,7 @@ class CommonDatasource {
   //! -----Rules-----
   Future<List<RulesModel>?> selectAllRules() async {
     try {
-      final String query = await File('C:/fac/sql/model/graphs/select_all_rules.sql').readAsString();
+      final String query = await File('sql/model/graphs/select_all_rules.sql').readAsString();
       final List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(query);
       final List<RulesModel> result = [];
 
@@ -895,7 +895,7 @@ class CommonDatasource {
 
   Future<RulesModel?> selectOneRules({required String id}) async {
     try {
-      final String query = await File('C:/fac/sql/model/graphs/select_one_rules.sql').readAsString();
+      final String query = await File('sql/model/graphs/select_one_rules.sql').readAsString();
       final List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(
         query,
         substitutionValues: {
@@ -917,7 +917,7 @@ class CommonDatasource {
     required String description,
   }) async {
     try {
-      final String query = await File('C:/fac/sql/model/graphs/insert_rules.sql').readAsString();
+      final String query = await File('sql/model/graphs/insert_rules.sql').readAsString();
       await PostgresModule.postgreSQLConnection.mappedResultsQuery(
         query,
         substitutionValues: {
@@ -936,7 +936,7 @@ class CommonDatasource {
     String? description,
   }) async {
     try {
-      final String query = await File('C:/fac/sql/model/rules/update_rules.sql').readAsString();
+      final String query = await File('sql/model/rules/update_rules.sql').readAsString();
       await PostgresModule.postgreSQLConnection.mappedResultsQuery(
         query,
         substitutionValues: {
@@ -953,7 +953,7 @@ class CommonDatasource {
 
   Future<Unit> deleteRules({required String id}) async {
     try {
-      final String query = await File('C:/fac/sql/model/rules/delete_rules.sql').readAsString();
+      final String query = await File('sql/model/rules/delete_rules.sql').readAsString();
       await PostgresModule.postgreSQLConnection.mappedResultsQuery(
         query,
         substitutionValues: {
@@ -970,7 +970,7 @@ class CommonDatasource {
   //! -----GraphsSensor-----
   Future<List<GraphSensorsModel>?> selectAllGraphSensors() async {
     try {
-      final String query = await File('C:/fac/sql/model/graphs_sensors/select_all_graph_sensors.sql').readAsString();
+      final String query = await File('sql/model/graphs_sensors/select_all_graph_sensors.sql').readAsString();
       final List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(query);
       final List<GraphSensorsModel> result = [];
 
@@ -988,7 +988,7 @@ class CommonDatasource {
 
   Future<GraphSensorsModel?> selectGraphSensorsByGraphsId({required String id}) async {
     try {
-      final String query = await File('C:/fac/sql/model/graphs_sensors/select_graph_sensors_by_graphs_id.sql').readAsString();
+      final String query = await File('sql/model/graphs_sensors/select_graph_sensors_by_graphs_id.sql').readAsString();
       final List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(query, substitutionValues: {
         'id': id,
       });
@@ -1005,7 +1005,7 @@ class CommonDatasource {
 
   Future<GraphSensorsModel?> selectGraphSensorsBySensorId({required String id}) async {
     try {
-      final String query = await File('C:/fac/sql/model/graphs_sensors/select_graph_sensors_by_sensor_id.sql').readAsString();
+      final String query = await File('sql/model/graphs_sensors/select_graph_sensors_by_sensor_id.sql').readAsString();
       final List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(query, substitutionValues: {
         'id': id,
       });
@@ -1025,7 +1025,7 @@ class CommonDatasource {
     required String graphsId,
   }) async {
     try {
-      final String query = await File('C:/fac/sql/model/graphs_sensors/insert_graph_sensors.sql').readAsString();
+      final String query = await File('sql/model/graphs_sensors/insert_graph_sensors.sql').readAsString();
       await PostgresModule.postgreSQLConnection.mappedResultsQuery(
         query,
         substitutionValues: {
@@ -1046,7 +1046,7 @@ class CommonDatasource {
     String? graphsId,
   }) async {
     try {
-      final String query = await File('C:/fac/sql/model/graphs_sensors/update_graph_sensors.sql').readAsString();
+      final String query = await File('sql/model/graphs_sensors/update_graph_sensors.sql').readAsString();
       await PostgresModule.postgreSQLConnection.mappedResultsQuery(
         query,
         substitutionValues: {
@@ -1064,7 +1064,7 @@ class CommonDatasource {
 
   Future<Unit> deleteGraphSensors({required String id}) async {
     try {
-      final String query = await File('C:/fac/sql/model/graphs_sensors/delete_graph_sensors.sql').readAsString();
+      final String query = await File('sql/model/graphs_sensors/delete_graph_sensors.sql').readAsString();
       await PostgresModule.postgreSQLConnection.mappedResultsQuery(
         query,
         substitutionValues: {
@@ -1081,7 +1081,7 @@ class CommonDatasource {
   //! -----SensorRules-----
   Future<List<SensorRulesModel>?> selectAllSensorRules() async {
     try {
-      final String query = await File('C/fac/sql/model/sensor_rules/select_all_sensor_rules.sql').readAsString();
+      final String query = await File('sql/model/sensor_rules/select_all_sensor_rules.sql').readAsString();
       final List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(query);
       final List<SensorRulesModel> result = [];
 
@@ -1099,7 +1099,7 @@ class CommonDatasource {
 
   Future<SensorRulesModel?> selectOneSensorRules({required String id}) async {
     try {
-      final String query = await File('C:/fac/sql/model/sensor_rules/select_one_sensor_rules.sql').readAsString();
+      final String query = await File('sql/model/sensor_rules/select_one_sensor_rules.sql').readAsString();
       final List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(query, substitutionValues: {
         'id': id,
       });
@@ -1116,7 +1116,7 @@ class CommonDatasource {
 
   Future<SensorRulesModel?> selectSensorRulesByRuleId({required String id}) async {
     try {
-      final String query = await File('C:/fac/sql/model/sensor_rules/select_sensor_rules_by_rule_id.sql').readAsString();
+      final String query = await File('sql/model/sensor_rules/select_sensor_rules_by_rule_id.sql').readAsString();
       final List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(query, substitutionValues: {
         'id': id,
       });
@@ -1133,7 +1133,7 @@ class CommonDatasource {
 
   Future<SensorRulesModel?> selectSensorRulesBySensorId({required String id}) async {
     try {
-      final String query = await File('C:/fac/sql/model/sensor_rules/select_sensor_rules_by_sensor_id.sql').readAsString();
+      final String query = await File('sql/model/sensor_rules/select_sensor_rules_by_sensor_id.sql').readAsString();
       final List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(query, substitutionValues: {
         'id': id,
       });
@@ -1154,7 +1154,7 @@ class CommonDatasource {
     required String sensorId,
   }) async {
     try {
-      final String query = await File('C:/fac/sql/model/sensor_rules/insert_sensor_rules.sql').readAsString();
+      final String query = await File('sql/model/sensor_rules/insert_sensor_rules.sql').readAsString();
       await PostgresModule.postgreSQLConnection.mappedResultsQuery(
         query,
         substitutionValues: {
@@ -1177,7 +1177,7 @@ class CommonDatasource {
     String? sensorId,
   }) async {
     try {
-      final String query = await File('C:/fac/sql/model/sensor_rules/udate_sensor_rules.sql').readAsString();
+      final String query = await File('sql/model/sensor_rules/udate_sensor_rules.sql').readAsString();
       await PostgresModule.postgreSQLConnection.mappedResultsQuery(
         query,
         substitutionValues: {
@@ -1196,7 +1196,7 @@ class CommonDatasource {
 
   Future<Unit> deleteSensorRules({required String id}) async {
     try {
-      final String query = await File('C:/fac/sql/model/sensor_rules/delete_sensor_rules.sql').readAsString();
+      final String query = await File('sql/model/sensor_rules/delete_sensor_rules.sql').readAsString();
       await PostgresModule.postgreSQLConnection.mappedResultsQuery(
         query,
         substitutionValues: {
