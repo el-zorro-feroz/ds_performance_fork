@@ -119,11 +119,14 @@ extension TabsensorsDatasource on CommonDatasource {
   }) async {
     try {
       final String query = await File('sql/model/tab_sensors/update_tab_sensors.sql').readAsString();
-      await PostgresModule.postgreSQLConnection.mappedResultsQuery(query, substitutionValues: {
-        'id': id,
-        'sensor_id': sensorId,
-        'tab_id': tabId,
-      });
+      await PostgresModule.postgreSQLConnection.mappedResultsQuery(
+        query,
+        substitutionValues: {
+          'id': id,
+          'sensor_id': sensorId,
+          'tab_id': tabId,
+        },
+      );
 
       return unit;
     } catch (_) {
