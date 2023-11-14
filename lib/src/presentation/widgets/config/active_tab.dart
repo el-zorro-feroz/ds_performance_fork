@@ -6,13 +6,15 @@ import 'package:sensors_monitoring/src/presentation/controllers/active_tab_contr
 
 @Singleton()
 class ActiveTab extends StatelessWidget {
-  static final GlobalKey _activeTabKey = GlobalKey(debugLabel: 'Active Tab Global Key');
+  static final GlobalKey _activeTabKey =
+      GlobalKey(debugLabel: 'Active Tab Global Key');
 
   ActiveTab() : super(key: _activeTabKey);
 
   @override
   Widget build(BuildContext context) {
-    final ActiveTabController activeTabController = services<ActiveTabController>();
+    final ActiveTabController activeTabController =
+        services<ActiveTabController>();
 
     return ChangeNotifierProvider.value(
       value: activeTabController,

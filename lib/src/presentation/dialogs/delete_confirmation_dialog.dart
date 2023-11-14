@@ -1,7 +1,8 @@
 import 'package:fluent_ui/fluent_ui.dart';
 
 const String _defaultTitle = 'Delete permanently?';
-const String _defaultDescription = 'If you delete this, you won\'t be able to recover it. Do you want to delete it?';
+const String _defaultDescription =
+    'If you delete this, you won\'t be able to recover it. Do you want to delete it?';
 
 Future<bool> deleteConfirmationDialog(
   BuildContext context, {
