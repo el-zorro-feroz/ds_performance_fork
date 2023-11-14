@@ -10,15 +10,83 @@ class HomePage extends StatelessWidget {
     return ScaffoldPage.scrollable(
       header: PageHeader(
         title: Text(
-          'Control Panel',
+          'Quick Overview',
           style: typography.title,
         ),
       ),
       children: [
-        Text(
-          'Comming soon',
-          style: typography.subtitle,
-        )
+        Row(
+          children: [
+            Expanded(
+              flex: 2,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 24.0,
+                      vertical: 12.0,
+                    ),
+                    child: Text(
+                      'Notifications',
+                      style: typography.subtitle,
+                    ),
+                  ),
+                  ListTile.selectable(
+                    autofocus: true,
+                    leading: Icon(
+                      FluentIcons.error,
+                      color: Colors.orange,
+                    ),
+                    title: const Text(
+                      'Temperature value is to high - 98C (Normal - 75C)',
+                    ),
+                    subtitle: const Text('Configuration {ABCD-...} - Sensor {DABC-...}'),
+                  ),
+                  ListTile.selectable(
+                    autofocus: true,
+                    leading: Icon(
+                      FluentIcons.alert_settings,
+                      color: Colors.blue,
+                    ),
+                    title: const Text(
+                      'Sensor configuration updated',
+                    ),
+                    subtitle: const Text('Configuration {ABCD-...} - Sensor {DABC-...}'),
+                  ),
+                  ListTile.selectable(
+                    autofocus: true,
+                    leading: Icon(
+                      FluentIcons.error,
+                      color: Colors.red,
+                    ),
+                    title: const Text(
+                      'Unexpected logic. Sensor was disconnected. Trying to reconnect.',
+                    ),
+                    subtitle: const Text('Configuration {ABCD-...} - Sensor {DABC-...}'),
+                  ),
+                  ListTile.selectable(
+                    autofocus: true,
+                    leading: Icon(
+                      FluentIcons.warning,
+                      color: Colors.red,
+                    ),
+                    title: const Text(
+                      'Sensor unreachable. Configuration disabled.',
+                    ),
+                    subtitle: const Text('Configuration {ABCD-...} - Sensor {DABC-...}'),
+                  ),
+                ],
+              ),
+            ),
+            const Expanded(
+              flex: 1,
+              child: Text(
+                'child',
+              ),
+            ),
+          ],
+        ),
       ],
     );
   }
