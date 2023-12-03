@@ -1,13 +1,13 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 CREATE TYPE public.graphtype AS ENUM
-    ('linear', 'columnar', 'spot');
+    ('curve', 'columnar', 'sensors');
 
 ALTER TYPE public.graphtype
     OWNER TO postgres;
 	
 CREATE TYPE public.graphdependency AS ENUM
-    ('average', 'minimal', 'maximum', 'addiction', 'scatterPlot', 'sensors');
+    ('average', 'minimal', 'maximum', 'none');
 
 ALTER TYPE public.graphdependency
     OWNER TO postgres;
