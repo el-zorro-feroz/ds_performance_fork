@@ -15,7 +15,7 @@ Future<void> main() async {
   GraphDependency testDependency1 = GraphDependency.minimal;
   GraphDependency testDependency2 = GraphDependency.maximum;
   GraphType testType1 = GraphType.columnar;
-  GraphType testType2 = GraphType.linear;
+  GraphType testType2 = GraphType.curve;
 
   final CommonDatasource commonDatasource = services<CommonDatasource>();
   group('graphs', () {
