@@ -1,6 +1,6 @@
-/// [linear] - линейный график, [columnar] - столбчатая диаграмма, [spot] - точечный график
+/// [curve] - кривая, [columnar] - столбчатая диаграмма, [sensors] - датчик от датчика
 enum GraphType {
-  linear,
+  curve,
   columnar,
-  spot,
+  sensors,
 }
