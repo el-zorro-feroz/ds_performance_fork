@@ -14,12 +14,14 @@ Future<void> servicesInit() async {
   await services<PostgresModule>().initPostgres();
 }
 
-@Injectable()
+@Singleton()
 class PostgresModule {
   static late PostgreSQLConnection postgreSQLConnection;
 
   FutureOr<void> initPostgres() async {
     postgreSQLConnection = PostgreSQLConnection("127.0.0.1", 5432, "postgres", username: "postgres", password: "1");
-    await postgreSQLConnection.open();
+    if (postgreSQLConnection.isClosed) {
+      await postgreSQLConnection.open();
+    }
   }
 }
