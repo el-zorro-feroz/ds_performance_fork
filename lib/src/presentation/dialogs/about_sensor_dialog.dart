@@ -3,7 +3,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 Future<void> showAboutSensorDialog(BuildContext context) async {
   final Typography typography = FluentTheme.of(context).typography;
 
-  showDialog(
+  await showDialog(
       context: context,
       builder: (_) {
         return ContentDialog(

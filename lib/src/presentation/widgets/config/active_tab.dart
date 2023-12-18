@@ -29,7 +29,7 @@ class ActiveTab extends StatelessWidget {
         return GridView.builder(
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 3,
-            childAspectRatio: 12 / 4,
+            childAspectRatio: 2,
           ),
           itemCount: 20,
           itemBuilder: (_, __) => const SensorCard(),

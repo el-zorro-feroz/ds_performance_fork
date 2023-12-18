@@ -36,7 +36,7 @@ class SensorCard extends StatelessWidget {
               child: Container(
                 width: double.infinity,
                 margin: const EdgeInsets.symmetric(vertical: 8.0),
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                padding: const EdgeInsets.all(8.0),
                 decoration: BoxDecoration(
                   borderRadius: const BorderRadius.all(Radius.circular(8.0)),
                   color: FluentTheme.of(context).micaBackgroundColor,
