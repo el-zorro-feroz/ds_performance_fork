@@ -1,5 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:go_router/go_router.dart';
+import 'package:sensors_monitoring/src/presentation/alert_manager.dart';
 import 'package:sensors_monitoring/src/presentation/service_app.dart';
 
 class RootPage extends StatelessWidget {
@@ -168,7 +169,15 @@ class RootPage extends StatelessWidget {
             item?.key is ValueKey ? (item!.key as ValueKey).value : null;
         return FocusTraversalGroup(
           key: ValueKey('paneBody$name'),
-          child: child,
+          child: Row(
+            children: [
+              Expanded(flex: 4, child: child),
+              const SizedBox(
+                width: kOpenNavigationPaneWidth,
+                child: AlertManager(),
+              )
+            ],
+          ),
         );
       },
     );

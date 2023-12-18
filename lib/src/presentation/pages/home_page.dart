@@ -41,6 +41,7 @@ class HomePage extends StatelessWidget {
                     title: const Text(
                       'Temperature value is to high - 98C (Normal - 75C)',
                     ),
+                    trailing: const Text('2023-02-02 20:20'),
                     subtitle: const Text(
                         'Configuration {ABCD-...} - Sensor {DABC-...}'),
                   ),
@@ -53,6 +54,7 @@ class HomePage extends StatelessWidget {
                     title: const Text(
                       'Sensor configuration updated',
                     ),
+                    trailing: const Text('2023-02-02 20:20'),
                     subtitle: const Text(
                         'Configuration {ABCD-...} - Sensor {DABC-...}'),
                   ),
@@ -65,6 +67,7 @@ class HomePage extends StatelessWidget {
                     title: const Text(
                       'Unexpected logic. Sensor was disconnected. Trying to reconnect.',
                     ),
+                    trailing: const Text('2023-02-02 20:20'),
                     subtitle: const Text(
                         'Configuration {ABCD-...} - Sensor {DABC-...}'),
                   ),
@@ -77,16 +80,11 @@ class HomePage extends StatelessWidget {
                     title: const Text(
                       'Sensor unreachable. Configuration disabled.',
                     ),
+                    trailing: const Text('2023-02-02 20:20'),
                     subtitle: const Text(
                         'Configuration {ABCD-...} - Sensor {DABC-...}'),
                   ),
                 ],
-              ),
-            ),
-            const Expanded(
-              flex: 1,
-              child: Text(
-                'child',
               ),
             ),
           ],
