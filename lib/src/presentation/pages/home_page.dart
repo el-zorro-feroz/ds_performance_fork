@@ -5,7 +5,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var typography = FluentTheme.of(context).typography;
+    final Typography typography = FluentTheme.of(context).typography;
 
     return ScaffoldPage.scrollable(
       header: PageHeader(
@@ -41,7 +41,8 @@ class HomePage extends StatelessWidget {
                     title: const Text(
                       'Temperature value is to high - 98C (Normal - 75C)',
                     ),
-                    subtitle: const Text('Configuration {ABCD-...} - Sensor {DABC-...}'),
+                    subtitle: const Text(
+                        'Configuration {ABCD-...} - Sensor {DABC-...}'),
                   ),
                   ListTile.selectable(
                     autofocus: true,
@@ -52,7 +53,8 @@ class HomePage extends StatelessWidget {
                     title: const Text(
                       'Sensor configuration updated',
                     ),
-                    subtitle: const Text('Configuration {ABCD-...} - Sensor {DABC-...}'),
+                    subtitle: const Text(
+                        'Configuration {ABCD-...} - Sensor {DABC-...}'),
                   ),
                   ListTile.selectable(
                     autofocus: true,
@@ -63,7 +65,8 @@ class HomePage extends StatelessWidget {
                     title: const Text(
                       'Unexpected logic. Sensor was disconnected. Trying to reconnect.',
                     ),
-                    subtitle: const Text('Configuration {ABCD-...} - Sensor {DABC-...}'),
+                    subtitle: const Text(
+                        'Configuration {ABCD-...} - Sensor {DABC-...}'),
                   ),
                   ListTile.selectable(
                     autofocus: true,
@@ -74,7 +77,8 @@ class HomePage extends StatelessWidget {
                     title: const Text(
                       'Sensor unreachable. Configuration disabled.',
                     ),
-                    subtitle: const Text('Configuration {ABCD-...} - Sensor {DABC-...}'),
+                    subtitle: const Text(
+                        'Configuration {ABCD-...} - Sensor {DABC-...}'),
                   ),
                 ],
               ),

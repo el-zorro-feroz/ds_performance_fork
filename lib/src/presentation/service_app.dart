@@ -2,6 +2,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sensors_monitoring/src/presentation/pages/add_confg_page.dart';
 import 'package:sensors_monitoring/src/presentation/pages/config_page.dart';
+import 'package:sensors_monitoring/src/presentation/pages/sensor_page.dart';
 import 'package:sensors_monitoring/src/presentation/pages/home_page.dart';
 import 'package:sensors_monitoring/src/presentation/pages/settings_page.dart';
 import 'package:sensors_monitoring/src/presentation/root_page.dart';
@@ -34,8 +35,30 @@ class ServiceApp extends StatelessWidget {
             path: '/config/:id',
             builder: (context, state) {
               final String? id = state.pathParameters['id'];
-              if (id == null) throw Exception('Config id must not be null');
+              if (id == null) {
+                throw Exception(
+                  'Config id must not be null',
+                );
+              }
+
               return ConfigPage(id: id);
+            },
+          ),
+          GoRoute(
+            path: '/config/:id/:sensor',
+            builder: (context, state) {
+              final String? id = state.pathParameters['id'];
+              final String? sensor = state.pathParameters['sensor'];
+              if (id == null || sensor == null) {
+                throw Exception(
+                  'Both config id and sensor id must not be null',
+                );
+              }
+
+              return SensorDataPage(
+                configID: id,
+                sensorID: sensor,
+              );
             },
           ),
           GoRoute(
