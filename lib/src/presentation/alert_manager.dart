@@ -1,5 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:intl/intl.dart';
 import 'package:sensors_monitoring/core/services/services.dart';
+import 'package:sensors_monitoring/src/domain/entities/notification_data.dart';
 import 'package:sensors_monitoring/src/presentation/controllers/notification_controller.dart';
 
 class AlertManager extends StatelessWidget {
@@ -20,18 +22,24 @@ class AlertManager extends StatelessWidget {
         }
 
         return ListView.builder(
-          itemCount: 13,
-          itemBuilder: (_, __) {
+          itemCount: notificationController.notifications.length,
+          itemBuilder: (context, index) {
+            final NotificationData notificationData = notificationController.notifications.elementAt(index);
+
             return Card(
               child: Column(
                 children: [
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Padding(
-                        padding: EdgeInsets.all(4.0),
+                      Padding(
+                        padding: const EdgeInsets.all(4.0),
                         child: Icon(
-                          FluentIcons.report_alert,
+                          <NotificationType, IconData>{
+                            NotificationType.info: FluentIcons.info,
+                            NotificationType.error: FluentIcons.warning,
+                            NotificationType.warning: FluentIcons.report_alert,
+                          }[notificationData.type],
                         ),
                       ),
                       const SizedBox(width: 8.0),
@@ -48,32 +56,45 @@ class AlertManager extends StatelessWidget {
                                   horizontal: 8.0,
                                   vertical: 4.0,
                                 ),
-                                decoration: const BoxDecoration(
-                                  borderRadius: BorderRadius.all(
+                                decoration: BoxDecoration(
+                                  borderRadius: const BorderRadius.all(
                                     Radius.circular(32.0),
                                   ),
-                                  color: Color(0xFFFF6655),
+                                  color: <NotificationType, Color>{
+                                    NotificationType.info: const Color(0xFF5566FF),
+                                    NotificationType.error: const Color(0xFFFF9955),
+                                    NotificationType.warning: const Color(0xFFFF6655),
+                                  }[notificationData.type],
+                                  // color: Color(0xFFFF6655),
                                 ),
                                 child: Text(
-                                  'Temperature alert',
+                                  <NotificationType, String>{
+                                        NotificationType.info: 'Info',
+                                        NotificationType.error: 'Error',
+                                        NotificationType.warning: 'Warning',
+                                      }[notificationData.type] ??
+                                      'Report',
                                   style: typography.caption,
                                 ),
                               ),
                               const SizedBox(width: 8.0),
                               Text(
-                                '2023-02-02 10:20',
+                                // '2023-02-02 10:20',
+                                DateFormat('yyyy-MM-DD HH:mm').format(notificationData.datetime),
                                 style: typography.bodyStrong,
                               ),
                             ],
                           ),
                           const SizedBox(height: 8.0),
                           Text(
-                            'Configuration {ABCD-EFGH}',
+                            // 'Configuration {ABCD-EFGH}',
+                            notificationData.title,
                             style: typography.body,
                           ),
                           const SizedBox(height: 4.0),
                           Text(
-                            'Sensor {ABCD-EFGH}',
+                            // 'Sensor {ABCD-EFGH}',
+                            notificationData.description,
                             style: typography.body,
                           ),
                         ],
