@@ -35,15 +35,57 @@ class AddConfigPage extends StatelessWidget {
           ],
         ),
       ),
-      children: const [
-        TextBox(
+      children: [
+        const TextBox(
           placeholder: 'Configuration title',
         ),
-        PageHeader(
-          title: Text('Sensors'),
+        const Padding(
+          padding: EdgeInsets.symmetric(vertical: 8.0),
+          child: Divider(),
         ),
-        TextBox(
-          placeholder: 'Configuration title',
+        Column(
+          children: List.generate(
+            5,
+            (_) {
+              return Expander(
+                trailing: Row(
+                  children: [
+                    IconButton(
+                      icon: const Icon(FluentIcons.edit),
+                      onPressed: () => null,
+                    ),
+                    IconButton(
+                      icon: const Icon(FluentIcons.delete),
+                      onPressed: () => null,
+                    ),
+                  ],
+                ),
+                header: Text('Sensor $_'),
+                content: Text('Sensor $_ options list'),
+              );
+            },
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(
+            vertical: 8.0,
+            horizontal: 16.0,
+          ),
+          child: CommandBar(
+            primaryItems: <CommandBarItem>[
+              CommandBarBuilderItem(
+                builder: (context, mode, w) => Tooltip(
+                  message: "Add new Sensor to Configuration",
+                  child: w,
+                ),
+                wrappedItem: CommandBarButton(
+                  icon: const Icon(FluentIcons.add),
+                  label: const Text('Add Sensor'),
+                  onPressed: () {},
+                ),
+              ),
+            ],
+          ),
         ),
       ],
     );
