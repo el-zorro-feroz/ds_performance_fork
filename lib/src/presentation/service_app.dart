@@ -2,6 +2,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sensors_monitoring/src/presentation/pages/add_confg_page.dart';
 import 'package:sensors_monitoring/src/presentation/pages/config_page.dart';
+import 'package:sensors_monitoring/src/presentation/pages/tab_options_page.dart';
 import 'package:sensors_monitoring/src/presentation/pages/sensor_page.dart';
 import 'package:sensors_monitoring/src/presentation/pages/home_page.dart';
 import 'package:sensors_monitoring/src/presentation/pages/settings_page.dart';
@@ -10,10 +11,8 @@ import 'package:sensors_monitoring/src/presentation/root_page.dart';
 class ServiceApp extends StatelessWidget {
   static const String serviceName = 'Monitoring Service';
 
-  static final GlobalKey<NavigatorState> _rootNavigatorKey =
-      GlobalKey<NavigatorState>();
-  static final GlobalKey<NavigatorState> _shellNavigatorKey =
-      GlobalKey<NavigatorState>();
+  static final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
+  static final GlobalKey<NavigatorState> _shellNavigatorKey = GlobalKey<NavigatorState>();
 
   static final GoRouter _router = GoRouter(
     navigatorKey: _rootNavigatorKey,
@@ -42,6 +41,19 @@ class ServiceApp extends StatelessWidget {
               }
 
               return ConfigPage(id: id);
+            },
+          ),
+          GoRoute(
+            path: '/taboptions/:id',
+            builder: (context, state) {
+              final String? id = state.pathParameters['id'];
+              if (id == null) {
+                throw Exception(
+                  'Config id must not be null',
+                );
+              }
+
+              return TabOptionsPage(id: id);
             },
           ),
           GoRoute(
