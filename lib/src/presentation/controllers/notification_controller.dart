@@ -20,6 +20,8 @@ class NotificationController with ChangeNotifier {
 
   void fetchNotifications() {
     const Duration duration = Duration(minutes: 1);
+
+    _updateNotifications();
     timer = Timer.periodic(duration, (timer) {
       _updateNotifications();
     });
