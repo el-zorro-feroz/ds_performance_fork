@@ -1,4 +1,5 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sensors_monitoring/core/services/services.dart';
 import 'package:sensors_monitoring/src/presentation/controllers/active_tab_controller.dart';
 import 'package:sensors_monitoring/src/presentation/widgets/config/active_tab.dart';
@@ -13,8 +14,7 @@ class ConfigPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ActiveTabController activeTabController =
-        services<ActiveTabController>();
+    final ActiveTabController activeTabController = services<ActiveTabController>();
 
     void onEditConfigurationPressed() {}
 
@@ -27,7 +27,7 @@ class ConfigPage extends StatelessWidget {
     }
 
     void onNewPressed() async {
-      //TODO: implement tab creation feature
+      GoRouter.of(context).go('/taboptions/$id');
     }
 
     final List<Tab> tabs = [
