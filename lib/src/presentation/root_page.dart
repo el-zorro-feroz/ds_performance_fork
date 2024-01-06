@@ -4,10 +4,8 @@ import 'package:sensors_monitoring/src/presentation/alert_manager.dart';
 import 'package:sensors_monitoring/src/presentation/service_app.dart';
 
 class RootPage extends StatelessWidget {
-  static final GlobalKey _navigationViewKey =
-      GlobalKey(debugLabel: 'Navigation View Global Key');
-  static final GlobalKey _searchBarKey =
-      GlobalKey(debugLabel: 'Search Bar Global Key');
+  static final GlobalKey _navigationViewKey = GlobalKey(debugLabel: 'Navigation View Global Key');
+  static final GlobalKey _searchBarKey = GlobalKey(debugLabel: 'Search Bar Global Key');
 
   final Widget child;
   final BuildContext? shellContext;
@@ -21,8 +19,7 @@ class RootPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final FocusNode searchFocusNode = FocusNode();
-    final TextEditingController searchTextEditingController =
-        TextEditingController();
+    final TextEditingController searchTextEditingController = TextEditingController();
 
     //TODO: implement available configurations controller.
     final items = [
@@ -87,12 +84,12 @@ class RootPage extends StatelessWidget {
         title: const Text('Add Configuration'),
         body: const SizedBox.shrink(),
       ),
-      PaneItem(
-        key: const ValueKey('/settings'),
-        icon: const Icon(FluentIcons.settings),
-        title: const Text('Settings'),
-        body: const SizedBox.shrink(),
-      ),
+      // PaneItem(
+      //   key: const ValueKey('/settings'),
+      //   icon: const Icon(FluentIcons.settings),
+      //   title: const Text('Settings'),
+      //   body: const SizedBox.shrink(),
+      // ),
     ].map((e) {
       if (e is PaneItem) {
         return PaneItem(
@@ -165,8 +162,7 @@ class RootPage extends StatelessWidget {
         footerItems: footerItems,
       ),
       paneBodyBuilder: (item, _) {
-        final name =
-            item?.key is ValueKey ? (item!.key as ValueKey).value : null;
+        final name = item?.key is ValueKey ? (item!.key as ValueKey).value : null;
         return FocusTraversalGroup(
           key: ValueKey('paneBody$name'),
           child: Row(
