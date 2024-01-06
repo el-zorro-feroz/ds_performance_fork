@@ -25,7 +25,7 @@ class SensorCard extends StatelessWidget {
           children: [
             Text(
               'Sensor Title',
-              style: typography.subtitle,
+              style: typography.bodyLarge,
             ),
             const SizedBox(height: 8.0),
             Text(
