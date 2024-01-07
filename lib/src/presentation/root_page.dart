@@ -37,24 +37,28 @@ class RootPage extends StatelessWidget {
         key: const ValueKey('/config/{ABCD-EFGH-IJKL-MNOP}'),
         icon: const Icon(FluentIcons.database),
         title: const Text('{ABCD-EFGH-IJKL-MNOP}'),
+        trailing: IconButton(icon: Icon(FluentIcons.edit), onPressed: () => GoRouter.of(context).go('/add')),
         body: const SizedBox.shrink(),
       ),
       PaneItem(
         key: const ValueKey('/config/{EFGH-ABCD-IJKL-MNOP}'),
         icon: const Icon(FluentIcons.database),
         title: const Text('{EFGH-ABCD-IJKL-MNOP}'),
+        trailing: IconButton(icon: Icon(FluentIcons.edit), onPressed: () => null),
         body: const SizedBox.shrink(),
       ),
       PaneItem(
         key: const ValueKey('/config/{IJKL-ABCD-EFGH-MNOP}'),
         icon: const Icon(FluentIcons.database),
         title: const Text('{IJKL-ABCD-EFGH-MNOP}'),
+        trailing: IconButton(icon: Icon(FluentIcons.edit), onPressed: () => null),
         body: const SizedBox.shrink(),
       ),
       PaneItem(
         key: const ValueKey('/config/{MNOP-ABCD-EFGH-IJKL}'),
         icon: const Icon(FluentIcons.database),
         title: const Text('{MNOP-ABCD-EFGH-IJKL}'),
+        trailing: IconButton(icon: Icon(FluentIcons.edit), onPressed: () => null),
         body: const SizedBox.shrink(),
       ),
     ].map((e) {
@@ -63,6 +67,7 @@ class RootPage extends StatelessWidget {
           key: e.key,
           icon: e.icon,
           title: e.title,
+          trailing: e.trailing,
           body: e.body,
           onTap: () {
             final path = (e.key as ValueKey).value;
