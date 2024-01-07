@@ -13,6 +13,13 @@ abstract class NotificationRepository {
 class UnimplementedNotificationRepository implements NotificationRepository {
   @override
   Future<Either<Failure, Iterable<NotificationData>>> get({required int count}) async {
+    // Test Right Example
+    return Right([
+      NotificationData(type: NotificationType.error, title: 'Test Error', description: 'Test Error Description', datetime: DateTime.now()),
+      NotificationData(type: NotificationType.info, title: 'Test Info', description: 'Test Info Description', datetime: DateTime.now()),
+      NotificationData(type: NotificationType.warning, title: 'Test Warning', description: 'Test Warning Description', datetime: DateTime.now()),
+    ]);
+
     return const Left(Failure(message: 'Unimplemented [NotificationRepository] logic'));
   }
 }
