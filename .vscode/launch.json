@@ -1,0 +1,15 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "sensors_monitoring",
+            "request": "launch",
+            "type": "dart",
+            "args": [
+                "-d", "web-server",
+                "--web-hostname", "0.0.0.0",
+                "--web-port", "8080",
+            ]
+        }
+    ]
+}
