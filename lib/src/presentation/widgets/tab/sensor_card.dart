@@ -1,6 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:go_router/go_router.dart';
-import 'package:syncfusion_flutter_charts/sparkcharts.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 
 class SensorCard extends StatelessWidget {
   const SensorCard({super.key});
@@ -41,11 +41,12 @@ class SensorCard extends StatelessWidget {
                   borderRadius: const BorderRadius.all(Radius.circular(8.0)),
                   color: FluentTheme.of(context).micaBackgroundColor,
                 ),
-                child: SfSparkLineChart(
-                  width: 1.0,
-                  axisLineWidth: 0.0,
-                  data: List.generate(80, (_) => (_ * _) << _),
-                ),
+                // child: SfSparkLineChart(
+                //   width: 1.0,
+                //   axisLineWidth: 0.0,
+                //   data: List.generate(80, (_) => (_ * _) << _),
+                // ),
+                child: const SfCartesianChart(),
               ),
             ),
           ],
