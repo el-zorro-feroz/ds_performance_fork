@@ -41,17 +41,41 @@ class AddConfigPage extends StatelessWidget {
           ],
         ),
       ),
-      bottomBar: Container(
-        alignment: Alignment.bottomRight,
-        padding: const EdgeInsets.all(8.0),
-        child: FilledButton(
-          style: ButtonStyle(
-            backgroundColor: ButtonState.all(
-              const Color(0xFFFF6655),
+      bottomBar: Padding(
+        padding: const EdgeInsets.only(
+          left: 24.0,
+          right: 24.0,
+          bottom: 24.0,
+        ),
+        child: Column(
+          children: [
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 8.0),
+              child: Divider(),
             ),
-          ),
-          child: const Text('DELETE CONFIGURATION КРОВЬ'),
-          onPressed: () => null,
+            Button(
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(
+                  vertical: 8.0,
+                ),
+                child: Wrap(
+                  alignment: WrapAlignment.center,
+                  spacing: 8.0,
+                  children: [
+                    const Icon(
+                      FluentIcons.delete,
+                    ),
+                    Text(
+                      'Remove Configuration',
+                      style: typography.body,
+                    ),
+                  ],
+                ),
+              ),
+              onPressed: () => null,
+            ),
+          ],
         ),
       ),
       children: [
@@ -178,26 +202,27 @@ class AddConfigPage extends StatelessWidget {
             },
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(
-            vertical: 8.0,
-            horizontal: 16.0,
-          ),
-          child: CommandBar(
-            primaryItems: <CommandBarItem>[
-              CommandBarBuilderItem(
-                builder: (context, mode, w) => Tooltip(
-                  message: "Add new Sensor to Configuration",
-                  child: w,
+        Button(
+          child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(
+              vertical: 8.0,
+            ),
+            child: Wrap(
+              alignment: WrapAlignment.center,
+              spacing: 8.0,
+              children: [
+                const Icon(
+                  FluentIcons.add,
                 ),
-                wrappedItem: CommandBarButton(
-                  icon: const Icon(FluentIcons.add),
-                  label: const Text('Add Sensor'),
-                  onPressed: () {},
+                Text(
+                  'Add Sensor',
+                  style: typography.body,
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
+          onPressed: () => null,
         ),
       ],
     );
