@@ -16,10 +16,12 @@ class ConfigPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final ActiveTabController activeTabController = services<ActiveTabController>();
 
-    void onEditConfigurationPressed() {}
+    void onEditConfigurationPressed() {
+      GoRouter.of(context).go('/add');
+    }
 
     final ActiveTab activeTab = services<ActiveTab>();
-    // final Typography typography = FluentTheme.of(context).typography;
+    // final Typography typography = FluentTheme.of(context).typog  raphy;
 
     void onChanged(index) async {
       //TODO: replace tab index with actual tab id (server)
@@ -50,10 +52,19 @@ class ConfigPage extends StatelessWidget {
         title: Text(
           'Configuration - $id',
         ),
-        commandBar: IconButton(
-          icon: const Icon(FluentIcons.edit),
-          onPressed: onEditConfigurationPressed,
-        ),
+        // title: Row(
+        //   children: [
+        //     Expanded(
+        //       child: Text(
+        //         'Configuration - $id',
+        //       ),
+        //     ),
+        //     IconButton(
+        //       icon: const Icon(FluentIcons.edit),
+        //       onPressed: onEditConfigurationPressed,
+        //     ),
+        //   ],
+        // ),
       ),
       content: TabView(
         currentIndex: 0,
