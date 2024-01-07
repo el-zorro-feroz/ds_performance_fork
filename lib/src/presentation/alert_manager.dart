@@ -79,7 +79,6 @@ class AlertManager extends StatelessWidget {
                               ),
                               const SizedBox(width: 8.0),
                               Text(
-                                // '2023-02-02 10:20',
                                 DateFormat('yyyy-MM-DD HH:mm').format(notificationData.datetime),
                                 style: typography.bodyStrong,
                               ),
@@ -87,13 +86,11 @@ class AlertManager extends StatelessWidget {
                           ),
                           const SizedBox(height: 8.0),
                           Text(
-                            // 'Configuration {ABCD-EFGH}',
                             notificationData.title,
                             style: typography.body,
                           ),
                           const SizedBox(height: 4.0),
                           Text(
-                            // 'Sensor {ABCD-EFGH}',
                             notificationData.description,
                             style: typography.body,
                           ),

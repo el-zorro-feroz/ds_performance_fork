@@ -2,10 +2,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:sensors_monitoring/src/presentation/dialogs/about_sensor_dialog.dart';
-import 'package:sensors_monitoring/src/presentation/widgets/sensor/intable_sensor_data.dart';
-import 'package:sensors_monitoring/src/presentation/widgets/sensor/intable_sensor_header.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:syncfusion_flutter_charts/sparkcharts.dart';
 
 class SensorDataPage extends StatelessWidget {
   final String configID;
@@ -22,8 +19,6 @@ class SensorDataPage extends StatelessWidget {
     final Typography typography = FluentTheme.of(context).typography;
 
     void onBackToSensorsPressed() {
-      //TODO: cpntroller stuff. Things about dispose data from back.
-      //? Things about adding some cache things to save database freq
       GoRouter.of(context).go('/config/$configID');
     }
 
@@ -196,16 +191,6 @@ class SensorDataPage extends StatelessWidget {
             ],
           ),
         ),
-        // const Padding(
-        //   padding: EdgeInsets.only(left: 32.0),
-        //   child: IntableSensorHeader(),
-        // ),
-        // Container(
-        //   padding: const EdgeInsets.only(left: 32.0),
-        //   width: MediaQuery.of(context).size.width,
-        //   height: MediaQuery.of(context).size.height,
-        //   child: const IntableSensorData(),
-        // ),
       ],
     );
   }

@@ -20,7 +20,7 @@ class HomePage extends StatelessWidget {
   }
 }
 
-// Deprecated [AlertManager] variant
+//? Deprecated [AlertManager] variant
 
 // class HomePage extends StatelessWidget {
 //   const HomePage({super.key});

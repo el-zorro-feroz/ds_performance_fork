@@ -9,12 +9,11 @@ class SensorCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final Typography typography = FluentTheme.of(context).typography;
 
-    //?? Things about add some cache logic into controller
     void openFullLog() {
-      final _id = 'id'; //TODO NEEDS TO BE CONTROLLED BY OVER CONTROLLER
-      final _sensor = 'sensor'; //TODO NEEDS TO BE CONTROLLED BY OVER CONTROLLER
+      const id = 'id'; //TODO NEEDS TO BE CONTROLLED BY OVER CONTROLLER
+      const sensor = 'sensor'; //TODO NEEDS TO BE CONTROLLED BY OVER CONTROLLER
 
-      GoRouter.of(context).go('/config/$_id/$_sensor');
+      GoRouter.of(context).go('/config/$id/$sensor');
     }
 
     return GestureDetector(
@@ -41,12 +40,7 @@ class SensorCard extends StatelessWidget {
                   borderRadius: const BorderRadius.all(Radius.circular(8.0)),
                   color: FluentTheme.of(context).micaBackgroundColor,
                 ),
-                // child: SfSparkLineChart(
-                //   width: 1.0,
-                //   axisLineWidth: 0.0,
-                //   data: List.generate(80, (_) => (_ * _) << _),
-                // ),
-                child: const SfCartesianChart(),
+                child: const SfCartesianChart(), //! CHART HERE
               ),
             ),
           ],

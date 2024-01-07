@@ -21,18 +21,10 @@ class RootPage extends StatelessWidget {
     final FocusNode searchFocusNode = FocusNode();
     final TextEditingController searchTextEditingController = TextEditingController();
 
-    //TODO: implement available configurations controller.
     final items = [
       PaneItemHeader(
         header: const Text('Configurations'),
       ),
-      // PaneItem(
-      //   key: const ValueKey('/'),
-      //   icon: const Icon(FluentIcons.home),
-      //   title: const Text('Configuration Panel'),
-      //   body: const SizedBox.shrink(),
-      // ),
-      // PaneItemSeparator(),
       PaneItem(
         key: const ValueKey('/config/{ABCD-EFGH-IJKL-MNOP}'),
         icon: const Icon(FluentIcons.database),
@@ -89,12 +81,6 @@ class RootPage extends StatelessWidget {
         title: const Text('Add Configuration'),
         body: const SizedBox.shrink(),
       ),
-      // PaneItem(
-      //   key: const ValueKey('/settings'),
-      //   icon: const Icon(FluentIcons.settings),
-      //   title: const Text('Settings'),
-      //   body: const SizedBox.shrink(),
-      // ),
     ].map((e) {
       if (e is PaneItem) {
         return PaneItem(

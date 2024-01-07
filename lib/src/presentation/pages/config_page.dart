@@ -1,8 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:go_router/go_router.dart';
-import 'package:sensors_monitoring/core/services/services.dart';
-import 'package:sensors_monitoring/src/presentation/controllers/active_tab_controller.dart';
-import 'package:sensors_monitoring/src/presentation/widgets/config/active_tab.dart';
+import 'package:sensors_monitoring/src/presentation/widgets/config_page/active_tab.dart';
 
 class ConfigPage extends StatelessWidget {
   final String id;
@@ -14,24 +12,13 @@ class ConfigPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ActiveTabController activeTabController = services<ActiveTabController>();
-
-    void onEditConfigurationPressed() {
-      GoRouter.of(context).go('/add');
-    }
-
-    final ActiveTab activeTab = services<ActiveTab>();
-    // final Typography typography = FluentTheme.of(context).typog  raphy;
-
-    void onChanged(index) async {
-      //TODO: replace tab index with actual tab id (server)
-      activeTabController.loadTab(id);
-    }
+    void onChanged(index) async {}
 
     void onNewPressed() async {
       GoRouter.of(context).go('/taboptions/$id');
     }
 
+    final ActiveTab activeTab = ActiveTab();
     final List<Tab> tabs = [
       Tab(
         text: const Text('Tab 1'),
@@ -52,19 +39,6 @@ class ConfigPage extends StatelessWidget {
         title: Text(
           'Configuration - $id',
         ),
-        // title: Row(
-        //   children: [
-        //     Expanded(
-        //       child: Text(
-        //         'Configuration - $id',
-        //       ),
-        //     ),
-        //     IconButton(
-        //       icon: const Icon(FluentIcons.edit),
-        //       onPressed: onEditConfigurationPressed,
-        //     ),
-        //   ],
-        // ),
       ),
       content: TabView(
         currentIndex: 0,

@@ -1,11 +1,10 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:go_router/go_router.dart';
-import 'package:sensors_monitoring/src/presentation/pages/add_confg_page.dart';
+import 'package:sensors_monitoring/src/presentation/pages/settings/config_settings_page.dart';
 import 'package:sensors_monitoring/src/presentation/pages/config_page.dart';
-import 'package:sensors_monitoring/src/presentation/pages/tab_options_page.dart';
+import 'package:sensors_monitoring/src/presentation/pages/settings/tab_settings_page.dart';
 import 'package:sensors_monitoring/src/presentation/pages/sensor_page.dart';
 import 'package:sensors_monitoring/src/presentation/pages/home_page.dart';
-import 'package:sensors_monitoring/src/presentation/pages/settings_page.dart';
 import 'package:sensors_monitoring/src/presentation/root_page.dart';
 
 class ServiceApp extends StatelessWidget {
@@ -13,6 +12,8 @@ class ServiceApp extends StatelessWidget {
 
   static final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
   static final GlobalKey<NavigatorState> _shellNavigatorKey = GlobalKey<NavigatorState>();
+
+  //TODO: recheck go router page paths
 
   static final GoRouter _router = GoRouter(
     navigatorKey: _rootNavigatorKey,
@@ -53,7 +54,7 @@ class ServiceApp extends StatelessWidget {
                 );
               }
 
-              return TabOptionsPage(id: id);
+              return TabSettingsPage(id: id);
             },
           ),
           GoRoute(
@@ -75,11 +76,7 @@ class ServiceApp extends StatelessWidget {
           ),
           GoRoute(
             path: '/add',
-            builder: (context, state) => const AddConfigPage(),
-          ),
-          GoRoute(
-            path: '/settings',
-            builder: (context, state) => const SettingsPage(),
+            builder: (context, state) => const ConfigSettingsPage(),
           ),
         ],
       ),

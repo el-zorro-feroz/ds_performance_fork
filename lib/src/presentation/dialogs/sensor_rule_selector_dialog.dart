@@ -1,5 +1,5 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:sensors_monitoring/src/presentation/widgets/rules/notification_rule_table.dart';
+import 'package:sensors_monitoring/src/presentation/widgets/dialog_elements/notification_rule_table.dart';
 
 Future<void> showSensorRuleSelectorDialog(BuildContext context) async {
   final Size size = MediaQuery.of(context).size;

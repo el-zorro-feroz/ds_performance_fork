@@ -1,9 +1,9 @@
 import 'package:fluent_ui/fluent_ui.dart';
 
-class TabOptionsPage extends StatelessWidget {
+class TabSettingsPage extends StatelessWidget {
   final String id;
 
-  const TabOptionsPage({
+  const TabSettingsPage({
     super.key,
     required this.id,
   });

@@ -1,9 +1,8 @@
-import 'package:dartz/dartz.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:sensors_monitoring/src/presentation/dialogs/sensor_rule_selector_dialog.dart';
 
-class AddConfigPage extends StatelessWidget {
-  const AddConfigPage({super.key});
+class ConfigSettingsPage extends StatelessWidget {
+  const ConfigSettingsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
