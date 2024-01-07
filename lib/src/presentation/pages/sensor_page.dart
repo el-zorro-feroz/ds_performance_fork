@@ -1,8 +1,10 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:sensors_monitoring/src/presentation/dialogs/about_sensor_dialog.dart';
 import 'package:sensors_monitoring/src/presentation/widgets/sensor/intable_sensor_data.dart';
 import 'package:sensors_monitoring/src/presentation/widgets/sensor/intable_sensor_header.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:syncfusion_flutter_charts/sparkcharts.dart';
 
 class SensorDataPage extends StatelessWidget {
@@ -29,7 +31,7 @@ class SensorDataPage extends StatelessWidget {
       showAboutSensorDialog(context);
     }
 
-    return ScaffoldPage(
+    return ScaffoldPage.scrollable(
       header: PageHeader(
         leading: Padding(
           padding: const EdgeInsets.symmetric(
@@ -55,82 +57,156 @@ class SensorDataPage extends StatelessWidget {
           ],
         ),
       ),
-      content: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: ListView(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(
-                left: 32.0,
-                top: 24.0,
-                bottom: 8.0,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(
+            left: 32.0,
+            top: 24.0,
+            bottom: 8.0,
+          ),
+          child: Text(
+            'Graph View',
+            style: typography.subtitle,
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 32.0),
+          child: Wrap(
+            spacing: 8.0,
+            children: [
+              Button(
+                child: Text(
+                  'AVG',
+                  style: typography.caption,
+                ),
+                onPressed: () => null,
               ),
-              child: Text(
-                'Graph View',
-                style: typography.subtitle,
+              Button(
+                child: Text(
+                  'MIN',
+                  style: typography.caption,
+                ),
+                onPressed: () => null,
               ),
-            ),
-            AspectRatio(
-              aspectRatio: 6,
-              child: Row(
-                children: [
-                  Expanded(
-                    flex: 2,
-                    child: Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(8.0),
-                      decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.all(
-                          Radius.circular(8.0),
-                        ),
-                        color: FluentTheme.of(context).micaBackgroundColor,
-                      ),
-                      child: SfSparkLineChart(
-                        width: 1.0,
-                        axisLineWidth: 0.0,
-                        data: List.generate(80, (_) => (_ * _) << _),
-                      ),
+              Button(
+                child: Text(
+                  'MAX',
+                  style: typography.caption,
+                ),
+                onPressed: () => null,
+              ),
+            ],
+          ),
+        ),
+        AspectRatio(
+          aspectRatio: 4,
+          child: Row(
+            children: [
+              Expanded(
+                flex: 4,
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(8.0),
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(8.0),
                     ),
+                    color: FluentTheme.of(context).micaBackgroundColor,
                   ),
-                  const SizedBox(width: 8.0),
-                  Expanded(
-                    child: ListView(
-                      children: List.generate(
-                        4,
+                  child: const SfCartesianChart(),
+                  // child: SfCartesianChart(),
+                ),
+              ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 32.0),
+          child: CommandBar(
+            overflowBehavior: CommandBarOverflowBehavior.wrap,
+            compactBreakpointWidth: 600,
+            primaryItems: <CommandBarItem>[
+              CommandBarButton(label: const Text('1H'), onPressed: () {}),
+              CommandBarButton(label: const Text('4H'), onPressed: () {}),
+              CommandBarButton(label: const Text('1D'), onPressed: () {}),
+              CommandBarButton(label: const Text('1W'), onPressed: () {}),
+              CommandBarButton(label: const Text('1M'), onPressed: () {}),
+              CommandBarButton(label: const Text('3M'), onPressed: () {}),
+              CommandBarButton(label: const Text('ALL'), onPressed: () {}),
+              const CommandBarSeparator(),
+              CommandBarButton(icon: const Icon(FluentIcons.calendar), onPressed: () {}),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(
+            left: 32.0,
+            top: 24.0,
+            bottom: 8.0,
+          ),
+          child: Text(
+            'Detailed Values',
+            style: typography.subtitle,
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Table(
+            border: TableBorder.all(),
+            defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+            columnWidths: const {
+              0: FractionColumnWidth(0.05),
+              1: FractionColumnWidth(0.95 / 2),
+              2: FractionColumnWidth(0.95 / 2),
+            },
+            children: <TableRow>[
+              TableRow(
+                children: ['#', 'Date', 'Value']
+                    .map(
+                      (_) => Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: Text(
+                          _,
+                          style: typography.bodyStrong,
+                        ),
+                      ),
+                    )
+                    .toList(),
+              ),
+              ...List.generate(
+                20,
+                (_) => TableRow(
+                  children: [
+                    '${_ + 1}',
+                    DateFormat.MMMMEEEEd().format(DateTime.now()),
+                    '$_ oC (+${_ << _}.${_ >> _})',
+                  ]
+                      .map(
                         (_) => Padding(
-                          padding: const EdgeInsets.only(bottom: 4.0),
-                          child: Button(
-                            onPressed: () {
-                              print('DEBUG: pressed $_ on Active Sensor');
-                            },
-                            child: Text('$_'),
+                          padding: const EdgeInsets.all(4.0),
+                          child: Text(
+                            _,
+                            style: typography.body,
                           ),
                         ),
-                      ),
-                    ),
-                  ),
-                ],
+                      )
+                      .toList(),
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(
-                left: 32.0,
-                top: 24.0,
-                bottom: 8.0,
-              ),
-              child: Text(
-                'Detailed Values',
-                style: typography.subtitle,
-              ),
-            ),
-            const IntableSensorHeader(),
-            SizedBox.fromSize(
-              size: MediaQuery.of(context).size,
-              child: const IntableSensorData(),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
+        // const Padding(
+        //   padding: EdgeInsets.only(left: 32.0),
+        //   child: IntableSensorHeader(),
+        // ),
+        // Container(
+        //   padding: const EdgeInsets.only(left: 32.0),
+        //   width: MediaQuery.of(context).size.width,
+        //   height: MediaQuery.of(context).size.height,
+        //   child: const IntableSensorData(),
+        // ),
+      ],
     );
   }
 }
