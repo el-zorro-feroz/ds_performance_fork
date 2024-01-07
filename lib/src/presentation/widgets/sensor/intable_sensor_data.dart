@@ -7,12 +7,13 @@ class IntableSensorData extends StatelessWidget {
   Widget build(BuildContext context) {
     final Typography typography = FluentTheme.of(context).typography;
 
-    return ListView.builder(
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: 50,
-      itemBuilder: (context, index) {
-        return Padding(
-          padding: const EdgeInsets.all(8.0),
+    return Column(
+      children: List.generate(
+        20,
+        (_) => Padding(
+          padding: const EdgeInsets.symmetric(
+            vertical: 8.0,
+          ),
           child: Row(
             children: [
               Expanded(
@@ -35,8 +36,8 @@ class IntableSensorData extends StatelessWidget {
               ),
             ],
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 }
