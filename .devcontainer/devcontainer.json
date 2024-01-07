@@ -1,6 +1,6 @@
 {
     "name": "container",
-    "image": "flutter:3.13.9",
+    "image": "flutter:3.16.0",
     "forwardPorts": [3000],
     "customizations": {
         "vscode": {
