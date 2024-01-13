@@ -60,6 +60,7 @@ class ConfigSettingsPage extends StatelessWidget {
                 ),
                 child: Wrap(
                   alignment: WrapAlignment.center,
+                  crossAxisAlignment: WrapCrossAlignment.center,
                   spacing: 8.0,
                   children: [
                     const Icon(
