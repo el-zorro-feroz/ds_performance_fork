@@ -6,8 +6,8 @@ import 'package:postgres/postgres.dart';
 import 'package:sensors_monitoring/core/services/services.dart';
 import 'package:sensors_monitoring/src/data/datasources/common_datasource.dart';
 import 'package:sensors_monitoring/src/data/models/alerts_model.dart';
-import 'package:sensors_monitoring/src/data/models/enum/alert_type.dart';
-import 'package:sensors_monitoring/src/data/models/enum/sensor_type.dart';
+import 'package:sensors_monitoring/core/enum/alert_type.dart';
+import 'package:sensors_monitoring/core/enum/sensor_type.dart';
 
 Future<void> main() async {
   await servicesInit();

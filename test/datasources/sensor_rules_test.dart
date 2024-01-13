@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:postgres/postgres.dart';
 import 'package:sensors_monitoring/core/services/services.dart';
 import 'package:sensors_monitoring/src/data/datasources/common_datasource.dart';
-import 'package:sensors_monitoring/src/data/models/enum/sensor_type.dart';
+import 'package:sensors_monitoring/core/enum/sensor_type.dart';
 import 'package:sensors_monitoring/src/data/models/sensors_rules_model.dart';
 
 Future<void> main() async {

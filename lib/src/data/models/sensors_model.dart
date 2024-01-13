@@ -1,4 +1,4 @@
-import 'package:sensors_monitoring/src/data/models/enum/sensor_type.dart';
+import 'package:sensors_monitoring/core/enum/sensor_type.dart';
 
 class SensorsModel {
   final String id;
