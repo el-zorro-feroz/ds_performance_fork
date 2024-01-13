@@ -3,11 +3,10 @@ import 'dart:async';
 import 'package:dartz/dartz.dart';
 import 'package:sensors_monitoring/core/failure/failure.dart';
 import 'package:sensors_monitoring/core/usecase/usecase.dart';
-import 'package:sensors_monitoring/src/domain/entities/sensor_rule.dart';
 
-class GetConcreteSensorRuleUsecase extends UseCase<SensorRule, String> {
+class DeleteSensorRuleByIdUsecase extends UseCase<Unit, String> {
   @override
-  FutureOr<Either<Failure, SensorRule>> call(String param) {
+  FutureOr<Either<Failure, Unit>> call(String param) {
     // TODO: implement call
     throw UnimplementedError();
   }
