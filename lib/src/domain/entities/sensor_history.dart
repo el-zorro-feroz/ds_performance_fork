@@ -1,0 +1,18 @@
+import 'package:equatable/equatable.dart';
+
+class SensorHistory extends Equatable {
+  final String id;
+  final String sensorId;
+  final DateTime date;
+  final double value;
+
+  const SensorHistory({
+    required this.id,
+    required this.sensorId,
+    required this.date,
+    required this.value,
+  });
+
+  @override
+  List<Object?> get props => [id];
+}
