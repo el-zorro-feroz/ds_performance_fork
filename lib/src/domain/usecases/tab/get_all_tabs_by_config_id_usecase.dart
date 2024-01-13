@@ -5,12 +5,10 @@ import 'package:sensors_monitoring/core/failure/failure.dart';
 import 'package:sensors_monitoring/core/usecase/usecase.dart';
 import 'package:sensors_monitoring/src/domain/entities/tab_sensor.dart';
 
-class DeleteTabSensor extends UseCase<TabSensor, DeleteTabSensorParams> {
+class GetAllTabsByConfigIdUsecase extends UseCase<List<TabSensor>, String> {
   @override
-  FutureOr<Either<Failure, TabSensor>> call(DeleteTabSensorParams param) {
+  FutureOr<Either<Failure, List<TabSensor>>> call(String param) {
     // TODO: implement call
     throw UnimplementedError();
   }
 }
-
-class DeleteTabSensorParams {}
