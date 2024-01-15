@@ -8,10 +8,10 @@ import 'package:sensors_monitoring/src/domain/entities/notification_data.dart';
 import 'package:sensors_monitoring/src/domain/repositories/notification_repository.dart';
 
 @Injectable()
-class GetNotificationsUseCase extends UseCase<Iterable<NotificationData>, GetNotificationsUseCaseParam> {
+class GetAlertsUseCase extends UseCase<Iterable<NotificationData>, GetNotificationsUseCaseParam> {
   final NotificationRepository notificationRepository;
 
-  GetNotificationsUseCase({
+  GetAlertsUseCase({
     required this.notificationRepository,
   });
 
