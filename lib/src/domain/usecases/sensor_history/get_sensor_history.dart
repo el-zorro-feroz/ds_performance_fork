@@ -4,11 +4,11 @@ import 'package:dartz/dartz.dart';
 import 'package:sensors_monitoring/core/enum/graph_dependency.dart';
 import 'package:sensors_monitoring/core/failure/failure.dart';
 import 'package:sensors_monitoring/core/usecase/usecase.dart';
-import 'package:sensors_monitoring/src/domain/entities/sensor_history.dart';
+import 'package:sensors_monitoring/src/domain/entities/sensor_data.dart';
 
-class GetSensorHistory extends UseCase<List<SensorHistory>, GetSensorHistoryParams> {
+class GetSensorHistory extends UseCase<List<SensorData>, GetSensorHistoryParams> {
   @override
-  FutureOr<Either<Failure, List<SensorHistory>>> call(GetSensorHistoryParams param) {
+  FutureOr<Either<Failure, List<SensorData>>> call(GetSensorHistoryParams param) {
     // TODO: implement call
     throw UnimplementedError();
   }

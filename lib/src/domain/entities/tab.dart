@@ -1,13 +1,16 @@
 import 'package:equatable/equatable.dart';
+import 'package:sensors_monitoring/src/domain/entities/sensor_data.dart';
+import 'package:sensors_monitoring/src/domain/entities/sensor_info.dart';
 
 class Tab extends Equatable {
   final String id;
-  final String configId;
   final String title;
-
+  final List<SensorInfo> sensorInfoList;
+  final List<SensorData> sensorDataList;
   const Tab({
+    required this.sensorDataList,
+    required this.sensorInfoList,
     required this.id,
-    required this.configId,
     required this.title,
   });
 

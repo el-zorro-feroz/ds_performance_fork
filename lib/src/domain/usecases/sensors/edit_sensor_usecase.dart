@@ -4,11 +4,11 @@ import 'package:dartz/dartz.dart';
 import 'package:sensors_monitoring/core/failure/failure.dart';
 import 'package:sensors_monitoring/core/usecase/usecase.dart';
 import 'package:sensors_monitoring/core/enum/sensor_type.dart';
-import 'package:sensors_monitoring/src/domain/entities/sensor.dart';
+import 'package:sensors_monitoring/src/domain/entities/sensor_info.dart';
 
-class EditSensorUsecase extends UseCase<Sensor, EditSensorUsecaseParams> {
+class EditSensorUsecase extends UseCase<SensorInfo, EditSensorUsecaseParams> {
   @override
-  FutureOr<Either<Failure, Sensor>> call(EditSensorUsecaseParams param) {
+  FutureOr<Either<Failure, SensorInfo>> call(EditSensorUsecaseParams param) {
     // TODO: implement call
     throw UnimplementedError();
   }
