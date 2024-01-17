@@ -1,7 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:intl/intl.dart';
 import 'package:sensors_monitoring/core/services/services.dart';
-import 'package:sensors_monitoring/src/domain/entities/notification_data.dart';
+import 'package:sensors_monitoring/src/domain/entities/alert_data.dart';
 import 'package:sensors_monitoring/src/presentation/controllers/notification_controller.dart';
 
 class AlertManager extends StatelessWidget {

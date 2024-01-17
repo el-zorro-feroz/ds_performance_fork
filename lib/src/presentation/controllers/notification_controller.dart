@@ -4,7 +4,7 @@ import 'package:dartz/dartz.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:injectable/injectable.dart';
 import 'package:sensors_monitoring/core/failure/failure.dart';
-import 'package:sensors_monitoring/src/domain/entities/notification_data.dart';
+import 'package:sensors_monitoring/src/domain/entities/alert_data.dart';
 import 'package:sensors_monitoring/src/domain/usecases/alert/get_alerts_usecase.dart';
 
 @Singleton()
