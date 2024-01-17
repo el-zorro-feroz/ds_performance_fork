@@ -5,7 +5,7 @@ import 'package:sensors_monitoring/core/enum/graph_dependency.dart';
 import 'package:sensors_monitoring/core/enum/graph_type.dart';
 import 'package:sensors_monitoring/core/failure/failure.dart';
 import 'package:sensors_monitoring/core/usecase/usecase.dart';
-import 'package:sensors_monitoring/src/domain/entities/sensor_data.dart';
+import 'package:sensors_monitoring/src/domain/entities/sensor_history.dart';
 
 class GetGraphHitsoryBySensorId extends UseCase<Iterable<SensorHistory>, GetSensorHistoryParams> {
   @override
