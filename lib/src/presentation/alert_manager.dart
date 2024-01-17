@@ -1,5 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:intl/intl.dart';
+import 'package:sensors_monitoring/core/enum/alert_type.dart';
 import 'package:sensors_monitoring/core/services/services.dart';
 import 'package:sensors_monitoring/src/domain/entities/alert_data.dart';
 import 'package:sensors_monitoring/src/presentation/controllers/notification_controller.dart';
@@ -35,10 +36,10 @@ class AlertManager extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.all(4.0),
                         child: Icon(
-                          <NotificationType, IconData>{
-                            NotificationType.info: FluentIcons.info,
-                            NotificationType.error: FluentIcons.warning,
-                            NotificationType.warning: FluentIcons.report_alert,
+                          <AlertType, IconData>{
+                            AlertType.info: FluentIcons.info,
+                            AlertType.error: FluentIcons.warning,
+                            AlertType.warning: FluentIcons.report_alert,
                           }[notificationData.type],
                         ),
                       ),
@@ -60,18 +61,18 @@ class AlertManager extends StatelessWidget {
                                   borderRadius: const BorderRadius.all(
                                     Radius.circular(32.0),
                                   ),
-                                  color: <NotificationType, Color>{
-                                    NotificationType.info: const Color(0xFF5566FF),
-                                    NotificationType.error: const Color(0xFFFF9955),
-                                    NotificationType.warning: const Color(0xFFFF6655),
+                                  color: <AlertType, Color>{
+                                    AlertType.info: const Color(0xFF5566FF),
+                                    AlertType.error: const Color(0xFFFF9955),
+                                    AlertType.warning: const Color(0xFFFF6655),
                                   }[notificationData.type],
                                   // color: Color(0xFFFF6655),
                                 ),
                                 child: Text(
-                                  <NotificationType, String>{
-                                        NotificationType.info: 'Info',
-                                        NotificationType.error: 'Error',
-                                        NotificationType.warning: 'Warning',
+                                  <AlertType, String>{
+                                        AlertType.info: 'Info',
+                                        AlertType.error: 'Error',
+                                        AlertType.warning: 'Warning',
                                       }[notificationData.type] ??
                                       'Report',
                                   style: typography.caption,
