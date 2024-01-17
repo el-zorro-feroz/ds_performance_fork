@@ -4,7 +4,7 @@ import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
 import 'package:sensors_monitoring/core/failure/failure.dart';
 import 'package:sensors_monitoring/core/usecase/usecase.dart';
-import 'package:sensors_monitoring/src/domain/entities/notification_data.dart';
+import 'package:sensors_monitoring/src/domain/entities/alert_data.dart';
 import 'package:sensors_monitoring/src/domain/repositories/alert_repository.dart';
 
 @Injectable()
