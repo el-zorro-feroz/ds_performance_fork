@@ -5,19 +5,19 @@ import 'package:injectable/injectable.dart';
 import 'package:sensors_monitoring/core/failure/failure.dart';
 import 'package:sensors_monitoring/core/usecase/usecase.dart';
 import 'package:sensors_monitoring/src/domain/entities/notification_data.dart';
-import 'package:sensors_monitoring/src/domain/repositories/notification_repository.dart';
+import 'package:sensors_monitoring/src/domain/repositories/alert_repository.dart';
 
 @Injectable()
 class GetAlertsUseCase extends UseCase<Iterable<AlertData>, GetNotificationsUseCaseParam> {
-  final NotificationRepository notificationRepository;
+  final AlertRepository alertRepository;
 
   GetAlertsUseCase({
-    required this.notificationRepository,
+    required this.alertRepository,
   });
 
   @override
   FutureOr<Either<Failure, Iterable<AlertData>>> call(GetNotificationsUseCaseParam param) {
-    return notificationRepository.get(count: param.count);
+    return alertRepository.get(count: param.count);
   }
 }
 
