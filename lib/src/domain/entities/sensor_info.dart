@@ -1,18 +1,17 @@
 import 'package:equatable/equatable.dart';
-import 'package:sensors_monitoring/core/enum/sensor_type.dart';
 
-class Sensor extends Equatable {
+class SensorInfo extends Equatable {
   final String id;
   final String configId;
+  final String tabName;
   final String title;
-  final SensorType sensorType;
   final String details;
 
-  const Sensor({
+  const SensorInfo(
+    this.tabName, {
     required this.id,
     required this.configId,
     required this.title,
-    required this.sensorType,
     required this.details,
   });
 

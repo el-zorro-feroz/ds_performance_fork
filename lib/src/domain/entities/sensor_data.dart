@@ -1,14 +1,12 @@
 import 'package:equatable/equatable.dart';
 
-class SensorHistory extends Equatable {
+class SensorData extends Equatable {
   final String id;
-  final String sensorId;
   final DateTime date;
   final double value;
 
-  const SensorHistory({
+  const SensorData({
     required this.id,
-    required this.sensorId,
     required this.date,
     required this.value,
   });
