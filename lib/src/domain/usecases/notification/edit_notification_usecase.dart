@@ -6,9 +6,9 @@ import 'package:sensors_monitoring/core/failure/failure.dart';
 import 'package:sensors_monitoring/core/usecase/usecase.dart';
 import 'package:sensors_monitoring/src/domain/entities/notification_data.dart';
 
-class EditNotificationUsecase extends UseCase<NotificationData, EditNotificationUsecaseParams> {
+class EditNotificationUsecase extends UseCase<AlertData, EditNotificationUsecaseParams> {
   @override
-  FutureOr<Either<Failure, NotificationData>> call(EditNotificationUsecaseParams param) {
+  FutureOr<Either<Failure, AlertData>> call(EditNotificationUsecaseParams param) {
     // TODO: implement call
     throw UnimplementedError();
   }

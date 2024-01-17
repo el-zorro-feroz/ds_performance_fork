@@ -6,7 +6,7 @@ class Tab extends Equatable {
   final String id;
   final String title;
   final List<SensorInfo> sensorInfoList;
-  final List<SensorData> sensorDataList;
+  final List<SensorHistory> sensorDataList;
   const Tab({
     required this.sensorDataList,
     required this.sensorInfoList,

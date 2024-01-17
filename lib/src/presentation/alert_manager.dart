@@ -24,7 +24,7 @@ class AlertManager extends StatelessWidget {
         return ListView.builder(
           itemCount: notificationController.notifications.length,
           itemBuilder: (context, index) {
-            final NotificationData notificationData = notificationController.notifications.elementAt(index);
+            final AlertData notificationData = notificationController.notifications.elementAt(index);
 
             return Card(
               child: Column(

@@ -8,7 +8,7 @@ import 'package:sensors_monitoring/src/domain/entities/notification_data.dart';
 import 'package:sensors_monitoring/src/domain/repositories/notification_repository.dart';
 
 @Injectable()
-class GetAlertsUseCase extends UseCase<Iterable<NotificationData>, GetNotificationsUseCaseParam> {
+class GetAlertsUseCase extends UseCase<Iterable<AlertData>, GetNotificationsUseCaseParam> {
   final NotificationRepository notificationRepository;
 
   GetAlertsUseCase({
@@ -16,7 +16,7 @@ class GetAlertsUseCase extends UseCase<Iterable<NotificationData>, GetNotificati
   });
 
   @override
-  FutureOr<Either<Failure, Iterable<NotificationData>>> call(GetNotificationsUseCaseParam param) {
+  FutureOr<Either<Failure, Iterable<AlertData>>> call(GetNotificationsUseCaseParam param) {
     return notificationRepository.get(count: param.count);
   }
 }

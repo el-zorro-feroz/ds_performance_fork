@@ -16,7 +16,7 @@ class NotificationController with ChangeNotifier {
   });
 
   Timer? timer;
-  Iterable<NotificationData> notifications = [];
+  Iterable<AlertData> notifications = [];
 
   void fetchNotifications() {
     const Duration duration = Duration(minutes: 1);
@@ -29,13 +29,13 @@ class NotificationController with ChangeNotifier {
 
   Future<void> _updateNotifications() async {
     const GetNotificationsUseCaseParam getNotificationsUseCaseParam = GetNotificationsUseCaseParam(count: 15);
-    final Either<Failure, Iterable<NotificationData>> notificationsOrFailiure = await getNotificationsUseCase.call(getNotificationsUseCaseParam);
+    final Either<Failure, Iterable<AlertData>> notificationsOrFailiure = await getNotificationsUseCase.call(getNotificationsUseCaseParam);
 
     notificationsOrFailiure.fold(
       (Failure failure) {
         //! Show Alert SnackBar
       },
-      (Iterable<NotificationData> data) {
+      (Iterable<AlertData> data) {
         if (notifications.hashCode == data.hashCode) return;
         notifications = data;
 

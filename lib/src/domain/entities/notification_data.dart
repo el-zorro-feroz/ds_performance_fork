@@ -1,12 +1,12 @@
 import 'package:equatable/equatable.dart';
 
-class NotificationData extends Equatable {
+class AlertData extends Equatable {
   final NotificationType type;
   final String title;
   final String description;
   final DateTime datetime;
 
-  const NotificationData({
+  const AlertData({
     required this.type,
     required this.title,
     required this.description,
