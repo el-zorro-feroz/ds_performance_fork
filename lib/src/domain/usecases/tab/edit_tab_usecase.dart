@@ -13,4 +13,12 @@ class EditTabUsecase extends UseCase<Tab, EditTabUsecaseParams> {
   }
 }
 
-class EditTabUsecaseParams {}
+class EditTabUsecaseParams {
+  final String id;
+  final String title;
+
+  EditTabUsecaseParams({
+    required this.id,
+    required this.title,
+  });
+}
