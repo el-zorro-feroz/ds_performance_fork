@@ -19,6 +19,25 @@ extension AlertsDatasource on CommonDatasource {
     }
   }
 
+  //TODO NOT TESTED
+  Future<List<AlertsModel>?> selectAllAlertsBySensorId(String id) async {
+    try {
+      final String query = await File('sql/model/alerts/select_all_alerts_by_sensor_id.sql').readAsString();
+      final List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(query);
+      final List<AlertsModel> result = [];
+
+      if (request.isEmpty) {
+        return null;
+      }
+      for (var e in request) {
+        result.add(AlertsModel.fromMap(e['alerts']!));
+      }
+      return result;
+    } catch (_) {
+      rethrow;
+    }
+  }
+
   Future<AlertsModel?> selectOneAlerts({required String id}) async {
     try {
       final String query = await File('sql/model/alerts/select_one_alert.sql').readAsString();
@@ -42,7 +61,8 @@ extension AlertsDatasource on CommonDatasource {
   Future<AlertsModel?> selectAlertByRuleId({required String ruleId}) async {
     try {
       final String query = await File('sql/model/alerts/select_alert_by_rule_id.sql').readAsString();
-      final List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(query, substitutionValues: {
+      final List<Map<String, Map<String, dynamic>>> request =
+          await PostgresModule.postgreSQLConnection.mappedResultsQuery(query, substitutionValues: {
         'rule_id': ruleId,
       });
 
@@ -59,7 +79,8 @@ extension AlertsDatasource on CommonDatasource {
   Future<AlertsModel?> selectAlertBySensorId({required String sensorId}) async {
     try {
       final String query = await File('sql/model/alerts/select_alert_by_sensor_id.sql').readAsString();
-      final List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(query, substitutionValues: {
+      final List<Map<String, Map<String, dynamic>>> request =
+          await PostgresModule.postgreSQLConnection.mappedResultsQuery(query, substitutionValues: {
         'sensor_id': sensorId,
       });
 
@@ -78,6 +99,8 @@ extension AlertsDatasource on CommonDatasource {
     required String ruleId,
     required String message,
     required AlertType type,
+    required String title,
+    required String description,
   }) async {
     try {
       final String query = await File('sql/model/alerts/insert_alerts.sql').readAsString();
@@ -88,6 +111,8 @@ extension AlertsDatasource on CommonDatasource {
           'rule_id': ruleId,
           'message': message,
           'type': type.name,
+          'title': title,
+          'description': description,
         },
       );
 
@@ -103,6 +128,8 @@ extension AlertsDatasource on CommonDatasource {
     String? ruleId,
     String? message,
     AlertType? type,
+    String? title,
+    String? description,
   }) async {
     try {
       final String query = await File('sql/model/alerts/update_alerts.sql').readAsString();
@@ -114,6 +141,8 @@ extension AlertsDatasource on CommonDatasource {
           'rule_id': ruleId,
           'message': message,
           'type': type?.name,
+          'title': title,
+          'description': description,
         },
       );
 

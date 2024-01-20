@@ -1,19 +1,22 @@
 import 'package:equatable/equatable.dart';
 import 'package:sensors_monitoring/core/enum/alert_type.dart';
+import 'package:sensors_monitoring/src/domain/entities/sensor_rule.dart';
 
 class AlertData extends Equatable {
-  final AlertType type;
   final String title;
+  final String message;
   final String description;
-  final DateTime datetime;
+  final AlertType type;
+  final List<SensorRule> sensorRuleList;
 
   const AlertData({
-    required this.type,
     required this.title,
+    required this.message,
     required this.description,
-    required this.datetime,
+    required this.type,
+    required this.sensorRuleList,
   });
 
   @override
-  List<Object?> get props => [datetime];
+  List<Object?> get props => [];
 }

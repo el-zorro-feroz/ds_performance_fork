@@ -6,13 +6,16 @@ class AlertsModel {
   final String ruleId;
   final AlertType type;
   final String message;
-
+  final String title;
+  final String description;
   const AlertsModel({
     required this.id,
     required this.sensorId,
     required this.ruleId,
     required this.type,
     required this.message,
+    required this.title,
+    required this.description,
   });
 
   AlertsModel copyWith({
@@ -21,6 +24,8 @@ class AlertsModel {
     String? ruleId,
     AlertType? type,
     String? message,
+    String? title,
+    String? description,
   }) {
     return AlertsModel(
       id: id ?? this.id,
@@ -28,6 +33,8 @@ class AlertsModel {
       ruleId: ruleId ?? this.ruleId,
       type: type ?? this.type,
       message: message ?? this.message,
+      title: title ?? this.title,
+      description: description ?? this.description,
     );
   }
 
@@ -48,11 +55,13 @@ class AlertsModel {
       ruleId: map['rule_id'] as String,
       type: AlertType.values.byName(map['type']),
       message: map['message'] as String,
+      title: map['title'] as String,
+      description: map['description'] as String,
     );
   }
 
   @override
   String toString() {
-    return 'AlertsModel(id: $id, sensorId: $sensorId, ruleId: $ruleId, message: $message)';
+    return 'AlertsModel(id: $id, sensorId: $sensorId, ruleId: $ruleId, message: $message), title: $title, description: $description';
   }
 }

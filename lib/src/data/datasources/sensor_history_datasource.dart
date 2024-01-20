@@ -21,7 +21,7 @@ extension SensorHistoryDatasource on CommonDatasource {
     }
   }
 
-  Future<List<SensorHistoryModel>?> selectAllSensorHistoryBySensorId({required String sensorId}) async {
+  Future<List<SensorHistoryModel>?> selectAllSensorHistoryBySensorId(String sensorId) async {
     try {
       final String query = await File('sql/model/sensor_history/select_all_sensor_history_by_sensor_id.sql').readAsString();
       final List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(

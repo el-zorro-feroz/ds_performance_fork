@@ -96,5 +96,7 @@ CREATE TABLE IF NOT EXISTS Alerts(
     FOREIGN KEY(sensor_id) REFERENCES Sensors (id) ON DELETE CASCADE,
     FOREIGN KEY(rule_id) REFERENCES Rules (id) ON DELETE CASCADE,
     type AlertType NOT NULL,
-    message VARCHAR
+    message VARCHAR,
+    title VARCHAR,
+    description VARCHAR
 );
