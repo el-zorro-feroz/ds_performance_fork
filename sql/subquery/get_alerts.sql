@@ -1,12 +1,13 @@
--- SELECT * 
--- FROM alerts
--- JOIN sensorrules
--- ON alerts.rule_id = sensorrules.id
--- WHERE sensor_id = @sensor_id
-SELECT * 
-FROM (SELECT *
-      FROM alerts
-      WHERE sensor_id = @sensor_id)
-    as al
-JOIN sensorrules
-ON al.rule_id = sensorrules.id
+SELECT id as alert_id, sensor_id, rule_groups_data.rule_group_id, sensor_rules_data.sensor_rule_id, message, sensor_rules_data.type, sensor_rules_data.value
+FROM alerts
+JOIN (
+  SELECT id as rule_group_id, alert_id, rule_id
+  FROM rulegroups
+) AS rule_groups_data
+ON rule_groups_data.alert_id = alerts.id
+JOIN (
+  SELECT id as sensor_rule_id, type, value
+  FROM sensorrules
+) AS sensor_rules_data
+ON sensor_rules_data.sensor_rule_id = rule_groups_data.rule_id
+WHERE alerts.sensor_id = @sensor_id;

@@ -91,11 +91,17 @@ CREATE TABLE IF NOT EXISTS SensorHistory(
 CREATE TABLE IF NOT EXISTS Alerts(
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
     sensor_id UUID,
-    rule_id UUID,
     FOREIGN KEY(sensor_id) REFERENCES Sensors (id) ON DELETE CASCADE,
-    FOREIGN KEY(rule_id) REFERENCES SensorRules (id) ON DELETE CASCADE,
     type AlertType NOT NULL,
     message VARCHAR,
     title VARCHAR,
     description VARCHAR
+);
+
+CREATE TABLE IF NOT EXISTS RuleGroups(
+    id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+    alert_id UUID,
+    rule_id UUID,
+    FOREIGN KEY(alert_id) REFERENCES Alerts (id) ON DELETE CASCADE,
+    FOREIGN KEY(rule_id) REFERENCES SensorRules (id) ON DELETE CASCADE
 );
