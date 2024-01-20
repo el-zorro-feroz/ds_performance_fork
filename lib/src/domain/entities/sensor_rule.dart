@@ -1,22 +1,19 @@
 import 'package:equatable/equatable.dart';
 
 class SensorRule extends Equatable {
-  final String title;
-  final double avgValue; //!
-  final double maxValue;
-  final double minValue;
+  final String decription;
+  final double value;
+  final String ruleID;
 
   const SensorRule({
-    required this.title,
-    required this.avgValue,
-    required this.maxValue,
-    required this.minValue,
+    required this.decription,
+    required this.value,
+    required this.ruleID,
   });
 
   @override
   List<Object?> get props => [
-        title,
-        minValue,
-        maxValue,
+        decription,
+        value,
       ];
 }

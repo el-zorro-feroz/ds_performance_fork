@@ -24,6 +24,12 @@ CREATE TYPE public.alerttype AS ENUM
 ALTER TYPE public.alerttype
     OWNER TO postgres;
 
+CREATE TYPE public.ruletype AS ENUM
+    ('min','max','avg');
+
+ALTER TYPE public.ruletype
+    OWNER TO postgres;
+
 CREATE TABLE IF NOT EXISTS Configs (
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
     title VARCHAR UNIQUE NOT NULL
@@ -67,17 +73,10 @@ CREATE TABLE IF NOT EXISTS TabSensors(
     FOREIGN KEY(tab_id) REFERENCES Tabs (id) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS Rules(
-    id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
-    description VARCHAR UNIQUE NOT NULL
-);
 
 CREATE TABLE IF NOT EXISTS SensorRules(
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
-    sensor_id UUID,
-    rule_id UUID,
-    FOREIGN KEY(sensor_id) REFERENCES Sensors (id) ON DELETE CASCADE,
-    FOREIGN KEY(rule_id) REFERENCES Rules (id) ON DELETE CASCADE,
+    type RuleType NOT NULL,
     value real NOT NULL
 );
 
@@ -94,7 +93,7 @@ CREATE TABLE IF NOT EXISTS Alerts(
     sensor_id UUID,
     rule_id UUID,
     FOREIGN KEY(sensor_id) REFERENCES Sensors (id) ON DELETE CASCADE,
-    FOREIGN KEY(rule_id) REFERENCES Rules (id) ON DELETE CASCADE,
+    FOREIGN KEY(rule_id) REFERENCES SensorRules (id) ON DELETE CASCADE,
     type AlertType NOT NULL,
     message VARCHAR,
     title VARCHAR,

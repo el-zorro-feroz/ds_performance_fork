@@ -47,23 +47,25 @@ class ConfigRepositoryImpl implements ConfigRepository {
   }
 
   @override
-  Future<Either<Failure, List<Config>>> getAllConfigs(Unit unit) async {
+  Future<Either<Failure, List<Config>>> getAllConfigs() async {
     try {
       final configList = await datasource.selectAllConfigs();
       final List<Config> resList = [];
+
       configList?.forEach((config) async {
         final sensorModelList = await datasource.selectAllSensorsByConfigId(configId: config.id);
         final sensorList = sensorModelList?.map((sensor) async {
           final sensorRuleModelList = await datasource.selectAllSensorRulesBySensorId(sensor.id);
-          // final sensorRuleList = sensorRuleModelList?.map((sensorRule) => SensorRule(
-          //       title: title,
-          //       avgValue: avgValue,
-          //       maxValue: maxValue,
-          //       minValue: minValue,
-          //     ));
 
-          final notificationModelList = await datasource.selectAllAlertsBySensorId(sensor.id);
-          final notificationList = notificationModelList?.map((alert) => AlertData(
+          // final ruleModel = await datasource.selectOneRules(id: sensor.id);
+
+          final sensorRuleList = sensorRuleModelList?.map((sensorRule) => SensorRule(
+                decription: ruleModel!.description,
+              ));
+
+          final alertModelList = await datasource.selectAllAlertsBySensorId(sensor.id);
+
+          final alertList = alertModelList?.map((alert) => AlertData(
                 title: alert.title,
                 message: alert.message,
                 description: alert.description,
@@ -73,12 +75,13 @@ class ConfigRepositoryImpl implements ConfigRepository {
 
           final sensorHistoryList = await datasource.selectAllSensorHistoryBySensorId(sensor.id)
             ?..map((e) => null);
+
           return SensorInfo(
             id: sensor.id,
             details: sensor.details,
             title: sensor.title,
-            notification: [],
             sensorHistoryList: [],
+            alerts: [],
           );
         });
 

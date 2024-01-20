@@ -6,5 +6,5 @@ import 'package:sensors_monitoring/src/domain/usecases/configs/add_config_usecas
 abstract class ConfigRepository {
   Future<Either<Failure, Config>> addConfig(AddConfigUsecaseParams params);
   Future<Either<Failure, Unit>> deleteConfig(String id);
-  Future<Either<Failure, List<Config>>> getAllConfigs(Unit unit);
+  Future<Either<Failure, List<Config>>> getAllConfigs();
 }
