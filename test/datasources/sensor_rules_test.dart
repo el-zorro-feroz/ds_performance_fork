@@ -101,7 +101,7 @@ Future<void> main() async {
         await clearTablesSensors();
         await clearTablesConfigs();
         //!Arrange
-        final SensorRulesModel? resultOrNull = await commonDatasource.selectOneSensorRules(id: '87f0a680-815d-11ee-b962-0242ac120002');
+        final SensorRulesModel? resultOrNull = await commonDatasource.selectSensorRulesById(id: '87f0a680-815d-11ee-b962-0242ac120002');
         //!Assert
         expect(resultOrNull, null);
       });
@@ -125,7 +125,7 @@ Future<void> main() async {
 
         //!Arrange
         final String? id = (await commonDatasource.selectAllSensorRules())?.first.id;
-        final double? resultOrNull = (await commonDatasource.selectOneSensorRules(id: id!))?.value;
+        final double? resultOrNull = (await commonDatasource.selectSensorRulesById(id: id!))?.value;
 
         //!Assert
         expect(resultOrNull, value1);

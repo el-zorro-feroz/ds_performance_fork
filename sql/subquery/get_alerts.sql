@@ -1,4 +1,4 @@
-SELECT id as alert_id, sensor_id, rule_groups_data.rule_group_id, sensor_rules_data.sensor_rule_id, message, sensor_rules_data.type, sensor_rules_data.value
+SELECT id as alert_id, sensor_id, rule_groups_data.rule_group_id, sensor_rules_data.sensor_rule_id, message, sensor_rules_data.type, sensor_rules_data.value, title, description, alerts.type as alert_type
 FROM alerts
 JOIN (
   SELECT id as rule_group_id, alert_id, rule_id

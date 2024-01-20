@@ -16,11 +16,11 @@ class UnimplementedNotificationRepository implements AlertRepository {
   @override
   Future<Either<Failure, Iterable<AlertData>>> get({required int count}) async {
     // Test Right Example
-    return Right([
-      AlertData(type: AlertType.error, title: 'Test Error', description: 'Test Error Description', datetime: DateTime.now()),
-      AlertData(type: AlertType.info, title: 'Test Info', description: 'Test Info Description', datetime: DateTime.now()),
-      AlertData(type: AlertType.warning, title: 'Test Warning', description: 'Test Warning Description', datetime: DateTime.now()),
-    ]);
+    // return Right([
+    //   AlertData(type: AlertType.error, title: 'Test Error', description: 'Test Error Description', datetime: DateTime.now()),
+    //   AlertData(type: AlertType.info, title: 'Test Info', description: 'Test Info Description', datetime: DateTime.now()),
+    //   AlertData(type: AlertType.warning, title: 'Test Warning', description: 'Test Warning Description', datetime: DateTime.now()),
+    // ]);
 
     return const Left(Failure(message: 'Unimplemented [NotificationRepository] logic'));
   }

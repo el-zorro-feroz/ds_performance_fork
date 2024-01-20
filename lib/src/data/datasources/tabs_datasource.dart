@@ -66,13 +66,13 @@ extension TabsDatasource on CommonDatasource {
     }
   }
 
-  Future<Unit> insertTabs({
+  Future<TabsModel> insertTabs({
     required String configId,
     required String title,
   }) async {
     try {
       final String query = await File('sql/model/tabs/insert_tabs.sql').readAsString();
-      await PostgresModule.postgreSQLConnection.mappedResultsQuery(
+      final request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(
         query,
         substitutionValues: {
           'config_id': configId,
@@ -80,7 +80,7 @@ extension TabsDatasource on CommonDatasource {
         },
       );
 
-      return unit;
+      return TabsModel.fromMap(request[0]['tabs']!);
     } catch (_) {
       rethrow;
     }

@@ -66,7 +66,7 @@ extension SensorsDatasource on CommonDatasource {
     }
   }
 
-  Future<Unit> insertSensors({
+  Future<String> insertSensors({
     required String configId,
     required String title,
     required SensorType sensorType,
@@ -74,7 +74,7 @@ extension SensorsDatasource on CommonDatasource {
   }) async {
     try {
       final String query = await File('sql/model/sensors/insert_sensors.sql').readAsString();
-      await PostgresModule.postgreSQLConnection.mappedResultsQuery(
+      final request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(
         query,
         substitutionValues: {
           'config_id': configId,
@@ -84,7 +84,7 @@ extension SensorsDatasource on CommonDatasource {
         },
       );
 
-      return unit;
+      return request[0]['sensors']!['id'];
     } catch (_) {
       rethrow;
     }

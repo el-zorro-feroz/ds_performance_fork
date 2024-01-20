@@ -1,19 +1,17 @@
 import 'package:equatable/equatable.dart';
+import 'package:sensors_monitoring/core/enum/rule_type.dart';
 
 class SensorRule extends Equatable {
-  final String decription;
+  final String id;
+  final RuleType ruleType;
   final double value;
-  final String ruleID;
 
   const SensorRule({
-    required this.decription,
+    required this.id,
+    required this.ruleType,
     required this.value,
-    required this.ruleID,
   });
 
   @override
-  List<Object?> get props => [
-        decription,
-        value,
-      ];
+  List<Object?> get props => [id];
 }

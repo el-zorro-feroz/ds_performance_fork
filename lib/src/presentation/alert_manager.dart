@@ -80,7 +80,7 @@ class AlertManager extends StatelessWidget {
                               ),
                               const SizedBox(width: 8.0),
                               Text(
-                                DateFormat('yyyy-MM-DD HH:mm').format(notificationData.datetime),
+                                'dfg',
                                 style: typography.bodyStrong,
                               ),
                             ],

@@ -1,4 +1,3 @@
 SELECT * 
-FROM sensorrules
--- rule_id uuid
+FROM rulegroups
 WHERE rule_id = @rule_id;
