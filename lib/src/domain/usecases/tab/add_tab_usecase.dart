@@ -13,4 +13,12 @@ class AddTabUsecase extends UseCase<Tab, AddTabUsecaseParams> {
   }
 }
 
-class AddTabUsecaseParams {}
+class AddTabUsecaseParams {
+  final String configId;
+  final String title;
+
+  AddTabUsecaseParams({
+    required this.configId,
+    required this.title,
+  });
+}
