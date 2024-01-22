@@ -6,6 +6,8 @@ import 'package:sensors_monitoring/core/enum/alert_type.dart';
 import 'package:sensors_monitoring/core/enum/rule_type.dart';
 import 'package:sensors_monitoring/core/failure/failure.dart';
 import 'package:sensors_monitoring/src/data/datasources/common_datasource.dart';
+import 'package:sensors_monitoring/src/data/models/configs_model.dart';
+import 'package:sensors_monitoring/src/data/models/sensors_model.dart';
 import 'package:sensors_monitoring/src/data/models/tab_sensors_model.dart';
 import 'package:sensors_monitoring/src/data/models/tabs_model.dart';
 import 'package:sensors_monitoring/src/domain/entities/alert_data.dart';
@@ -93,80 +95,81 @@ class ConfigRepositoryImpl implements ConfigRepository {
     try {
       final configList = await datasource.selectAllConfigs();
       final List<Config> resList = [];
-
-      configList?.forEach((config) async {
-        final sensorModelList = await datasource.selectAllSensorsByConfigId(configId: config.id);
-        final List<SensorInfo> sensorList = [];
-        sensorModelList?.map((sensor) async {
-          final List<Map<String, Map<String, dynamic>>>? alertModelList = await datasource.selectAllAlertsBySensorId(sensor.id);
-          final Map<String, AlertData> alertDataMap = {};
-          alertModelList?.map((alertModel) {
-            final Map<String, dynamic> alertRequestMap = alertModel['alerts']!;
-            final Map<String, dynamic> rulesRequestMap = alertModel['sensorrules']!;
-            final String alertId = alertRequestMap['alert_id'];
-            if (alertDataMap.containsKey(alertId)) {
-              alertDataMap[alertId]!.sensorRuleList.add(
+      if (configList != null) {
+        for (final config in configList) {
+          final sensorModelList = await datasource.selectAllSensorsByConfigId(configId: config.id);
+          final List<SensorInfo> sensorList = [];
+          for (final sensor in sensorModelList ?? []) {
+            final List<Map<String, Map<String, dynamic>>>? alertModelList = await datasource.selectAllAlertsBySensorId(sensor.id);
+            final Map<String, AlertData> alertDataMap = {};
+            for (final alertModel in alertModelList ?? []) {
+              final Map<String, dynamic> alertRequestMap = alertModel['alerts']!;
+              final Map<String, dynamic> rulesRequestMap = alertModel['sensorrules']!;
+              final String alertId = alertRequestMap['alert_id'];
+              if (alertDataMap.containsKey(alertId)) {
+                alertDataMap[alertId]!.sensorRuleList.add(
+                      SensorRule(
+                        id: rulesRequestMap['sensor_rule_id'],
+                        ruleType: RuleType.values.byName(rulesRequestMap['type']),
+                        value: rulesRequestMap['value'],
+                      ),
+                    );
+              } else {
+                alertDataMap[alertId] = AlertData(
+                  id: alertRequestMap['alert_id'],
+                  title: alertRequestMap['title'],
+                  message: alertRequestMap['message'],
+                  description: alertRequestMap['description'],
+                  type: AlertType.values.byName(alertRequestMap['alert_type']),
+                  sensorRuleList: [
                     SensorRule(
                       id: rulesRequestMap['sensor_rule_id'],
                       ruleType: RuleType.values.byName(rulesRequestMap['type']),
                       value: rulesRequestMap['value'],
                     ),
-                  );
-            } else {
-              alertDataMap[alertId] = AlertData(
-                id: alertRequestMap['alert_id'],
-                title: alertRequestMap['title'],
-                message: alertRequestMap['message'],
-                description: alertRequestMap['description'],
-                type: AlertType.values.byName(alertRequestMap['alert_type']),
-                sensorRuleList: [
-                  SensorRule(
-                    id: rulesRequestMap['sensor_rule_id'],
-                    ruleType: RuleType.values.byName(rulesRequestMap['type']),
-                    value: rulesRequestMap['value'],
-                  ),
-                ],
-              );
+                  ],
+                );
+              }
             }
+
+            final List<SensorHistory> sensorHistoryList = ((await datasource.selectAllSensorHistoryBySensorId(sensor.id)) ?? [])
+                .map(
+                  (sensorHistoryModel) => SensorHistory(
+                    id: sensorHistoryModel.id,
+                    date: sensorHistoryModel.date,
+                    value: sensorHistoryModel.value,
+                  ),
+                )
+                .toList();
+
+            sensorList.add(SensorInfo(
+              id: sensor.id,
+              details: sensor.details,
+              title: sensor.title,
+              sensorType: sensor.sensorType,
+              sensorHistoryList: sensorHistoryList,
+              alerts: alertDataMap.values.toList(),
+            ));
+          }
+
+          final List<Tab> tabList = [];
+
+          (await datasource.selectAllTabsByConfigId(configId: config.id))!.map((tabModel) async {
+            final List<SensorInfo> sensorInfoList = [];
+            (await datasource.selectAllTabSensorsByTabId(tabModel.id))!.map((tabSensorModel) {
+              sensorInfoList.add(sensorList.where((element) => element.id == tabSensorModel.sensorId).first);
+            });
+            tabList.add(Tab(sensorInfoList: sensorInfoList, id: tabModel.id, title: tabModel.title));
           });
 
-          final List<SensorHistory> sensorHistoryList = (await datasource.selectAllSensorHistoryBySensorId(sensor.id))!
-              .map(
-                (sensorHistoryModel) => SensorHistory(
-                  id: sensorHistoryModel.id,
-                  date: sensorHistoryModel.date,
-                  value: sensorHistoryModel.value,
-                ),
-              )
-              .toList();
-
-          sensorList.add(SensorInfo(
-            id: sensor.id,
-            details: sensor.details,
-            title: sensor.title,
-            sensorType: sensor.sensorType,
-            sensorHistoryList: sensorHistoryList,
-            alerts: alertDataMap.values.toList(),
+          resList.add(Config(
+            id: config.id,
+            title: config.title,
+            sensorList: sensorList,
+            tabList: tabList,
           ));
-        });
-
-        final List<Tab> tabList = [];
-
-        (await datasource.selectAllTabsByConfigId(configId: config.id))!.map((tabModel) async {
-          final List<SensorInfo> sensorInfoList = [];
-          (await datasource.selectAllTabSensorsByTabId(tabModel.id))!.map((tabSensorModel) {
-            sensorInfoList.add(sensorList.where((element) => element.id == tabSensorModel.sensorId).first);
-          });
-          tabList.add(Tab(sensorInfoList: sensorInfoList, id: tabModel.id, title: tabModel.title));
-        });
-
-        resList.add(Config(
-          id: config.id,
-          title: config.title,
-          sensorList: sensorList,
-          tabList: tabList,
-        ));
-      });
+        }
+      }
 
       return Right(resList);
     } catch (_) {
@@ -186,63 +189,73 @@ class ConfigRepositoryImpl implements ConfigRepository {
 
         final allTabs = await datasource.selectAllTabsByConfigId(configId: params.id);
 
-        allTabs!.forEach((tab) async {
+        for (final tab in allTabs ?? []) {
           final listTabSensors = await datasource.selectAllTabSensorsByTabId(tab.id);
-          allTabSensorsMap[tab.id] = listTabSensors!;
-        });
+          allTabSensorsMap[tab.id] = listTabSensors ?? [];
+        }
 
-        final set2 = params.editedSensorsList!.toSet();
-        allTabSensorsMap.forEach((key, value) {
-          final set1 = value.toSet();
-          final set3 = set1.intersection(set2);
-          value = set3.toList();
-        });
+        final List<TabSensorsModel> correctTabSensorsList = [];
 
-        params.editedSensorsList!.forEach((sensor) async {
+        if (params.editedSensorsList!.isNotEmpty) {
+          for (final tabSensorsList in allTabSensorsMap.values) {
+            for (final tabSensorModel in tabSensorsList) {
+              for (final sensor in params.editedSensorsList!) {
+                if (tabSensorModel.sensorId == sensor.id) {
+                  correctTabSensorsList.add(tabSensorModel);
+                }
+              }
+            }
+          }
+        }
+
+        for (final sensor in params.allSensors) {
           await datasource.deleteSensors(id: sensor.id);
+        }
 
-          final String sensorId = await datasource.insertSensors(
-            configId: params.id,
-            title: sensor.title,
-            sensorType: sensor.sensorType,
-            details: sensor.details,
-          );
-
-          sensor.alerts.first.sensorRuleList.forEach((sensorRule) async {
-            await datasource.insertSensorRules(
-              value: sensorRule.value,
-              ruleType: sensorRule.ruleType,
+        if (params.editedSensorsList != null) {
+          for (final sensor in params.editedSensorsList!) {
+            await datasource.insertSensors(
+              configId: params.id,
+              title: sensor.title,
+              sensorType: sensor.sensorType,
+              details: sensor.details,
             );
-          });
+            if (sensor.alerts.isNotEmpty) {
+              sensor.alerts.first.sensorRuleList.forEach((sensorRule) async {
+                await datasource.insertSensorRules(
+                  value: sensorRule.value,
+                  ruleType: sensorRule.ruleType,
+                );
+              });
 
-          sensor.alerts.forEach((alertData) async {
-            final String alertId = await datasource.insertAlerts(
-              sensorId: sensor.id,
-              type: alertData.type,
-              message: alertData.message,
-              title: alertData.title,
-              description: alertData.description,
-            );
+              for (final alertData in sensor.alerts) {
+                final String alertId = await datasource.insertAlerts(
+                  sensorId: sensor.id,
+                  type: alertData.type,
+                  message: alertData.message,
+                  title: alertData.title,
+                  description: alertData.description,
+                );
 
-            alertData.sensorRuleList.forEach((sensorRule) async {
-              await datasource.insertRuleGroups(alertId: alertId, ruleId: sensorRule.id);
-            });
-          });
-        });
+                for (final sensorRule in alertData.sensorRuleList) {
+                  await datasource.insertRuleGroups(alertId: alertId, ruleId: sensorRule.id);
+                }
+              }
+            }
+          }
+        }
 
         final List<Tab> tabList = [];
+        for (final key in allTabSensorsMap.keys) {
+          for (final tabSensorModel in correctTabSensorsList) {
+            await datasource.insertTabSensors(sensorId: tabSensorModel.sensorId, tabId: key);
+            final sensorList = params.editedSensorsList!.where((element) => element.id == tabSensorModel.sensorId).toList();
+            tabList.add(
+              Tab(sensorInfoList: sensorList, id: tabSensorModel.id, title: allTabs!.firstWhere((tab) => tab.id == key).title),
+            );
+          }
+        }
 
-        allTabSensorsMap.forEach(
-          (key, value) async {
-            value.forEach((tabSensorModel) async {
-              await datasource.insertTabSensors(sensorId: tabSensorModel.sensorId, tabId: key);
-              final sensorList = params.editedSensorsList!.where((element) => element.id == tabSensorModel.sensorId).toList();
-              tabList.add(
-                Tab(sensorInfoList: sensorList, id: tabSensorModel.id, title: allTabs.firstWhere((tab) => tab.id == key).title),
-              );
-            });
-          },
-        );
         return Right(Config(id: params.id, title: params.title!, tabList: tabList, sensorList: params.editedSensorsList!));
       }
       return Left(Failure(message: 'Ничего не изменили'));
