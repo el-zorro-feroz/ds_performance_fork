@@ -21,10 +21,12 @@ class EditConfigUsecase extends UseCase<Config, EditConfigUsecaseParams> {
 class EditConfigUsecaseParams {
   final String id;
   final String? title;
+  final List<SensorInfo> allSensors;
   final List<SensorInfo>? editedSensorsList;
 
   const EditConfigUsecaseParams({
     required this.id,
+    required this.allSensors,
     this.title,
     this.editedSensorsList,
   });
