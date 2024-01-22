@@ -1,9 +1,12 @@
+// ignore_for_file: avoid_function_literals_in_foreach_calls
+
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
 import 'package:sensors_monitoring/core/enum/alert_type.dart';
 import 'package:sensors_monitoring/core/enum/rule_type.dart';
 import 'package:sensors_monitoring/core/failure/failure.dart';
 import 'package:sensors_monitoring/src/data/datasources/common_datasource.dart';
+import 'package:sensors_monitoring/src/data/models/tab_sensors_model.dart';
 import 'package:sensors_monitoring/src/data/models/tabs_model.dart';
 import 'package:sensors_monitoring/src/domain/entities/alert_data.dart';
 import 'package:sensors_monitoring/src/domain/entities/config.dart';
@@ -13,6 +16,7 @@ import 'package:sensors_monitoring/src/domain/entities/sensor_rule.dart';
 import 'package:sensors_monitoring/src/domain/entities/tab.dart';
 import 'package:sensors_monitoring/src/domain/repositories/config_repository.dart';
 import 'package:sensors_monitoring/src/domain/usecases/configs/add_config_usecase.dart';
+import 'package:sensors_monitoring/src/domain/usecases/configs/edit_config_usecase.dart';
 
 @Injectable(as: ConfigRepository)
 class ConfigRepositoryImpl implements ConfigRepository {
@@ -150,7 +154,7 @@ class ConfigRepositoryImpl implements ConfigRepository {
 
         (await datasource.selectAllTabsByConfigId(configId: config.id))!.map((tabModel) async {
           final List<SensorInfo> sensorInfoList = [];
-          (await datasource.selectAllTabSensorsByTabId(tabId: tabModel.id))!.map((tabSensorModel) {
+          (await datasource.selectAllTabSensorsByTabId(tabModel.id))!.map((tabSensorModel) {
             sensorInfoList.add(sensorList.where((element) => element.id == tabSensorModel.sensorId).first);
           });
           tabList.add(Tab(sensorInfoList: sensorInfoList, id: tabModel.id, title: tabModel.title));
@@ -167,6 +171,83 @@ class ConfigRepositoryImpl implements ConfigRepository {
       return Right(resList);
     } catch (_) {
       return Left(Failure(message: _.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Config>> editConfig(EditConfigUsecaseParams params) async {
+    try {
+      if (params.title != null || params.title != '') {
+        await datasource.updateConfigs(id: params.id, title: params.title!);
+      }
+
+      if (params.editedSensorsList != null) {
+        final Map<String, List<TabSensorsModel>> allTabSensorsMap = {};
+
+        final allTabs = await datasource.selectAllTabsByConfigId(configId: params.id);
+
+        allTabs!.forEach((tab) async {
+          final listTabSensors = await datasource.selectAllTabSensorsByTabId(tab.id);
+          allTabSensorsMap[tab.id] = listTabSensors!;
+        });
+
+        final set2 = params.editedSensorsList!.toSet();
+        allTabSensorsMap.forEach((key, value) {
+          final set1 = value.toSet();
+          final set3 = set1.intersection(set2);
+          value = set3.toList();
+        });
+
+        params.editedSensorsList!.forEach((sensor) async {
+          await datasource.deleteSensors(id: sensor.id);
+
+          final String sensorId = await datasource.insertSensors(
+            configId: params.id,
+            title: sensor.title,
+            sensorType: sensor.sensorType,
+            details: sensor.details,
+          );
+
+          sensor.alerts.first.sensorRuleList.forEach((sensorRule) async {
+            await datasource.insertSensorRules(
+              value: sensorRule.value,
+              ruleType: sensorRule.ruleType,
+            );
+          });
+
+          sensor.alerts.forEach((alertData) async {
+            final String alertId = await datasource.insertAlerts(
+              sensorId: sensor.id,
+              type: alertData.type,
+              message: alertData.message,
+              title: alertData.title,
+              description: alertData.description,
+            );
+
+            alertData.sensorRuleList.forEach((sensorRule) async {
+              await datasource.insertRuleGroups(alertId: alertId, ruleId: sensorRule.id);
+            });
+          });
+        });
+
+        final List<Tab> tabList = [];
+
+        allTabSensorsMap.forEach(
+          (key, value) async {
+            value.forEach((tabSensorModel) async {
+              await datasource.insertTabSensors(sensorId: tabSensorModel.sensorId, tabId: key);
+              final sensorList = params.editedSensorsList!.where((element) => element.id == tabSensorModel.sensorId).toList();
+              tabList.add(
+                Tab(sensorInfoList: sensorList, id: tabSensorModel.id, title: allTabs.firstWhere((tab) => tab.id == key).title),
+              );
+            });
+          },
+        );
+        return Right(Config(id: params.id, title: params.title!, tabList: tabList, sensorList: params.editedSensorsList!));
+      }
+      return Left(Failure(message: 'Ничего не изменили'));
+    } catch (e, s) {
+      return Left(Failure(message: s.toString()));
     }
   }
 }

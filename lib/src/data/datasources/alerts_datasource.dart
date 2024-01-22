@@ -104,7 +104,7 @@ extension AlertsDatasource on CommonDatasource {
     }
   }
 
-  Future<Unit> updateAlerts({
+  Future<String> updateAlerts({
     required String id,
     String? sensorId,
     String? message,
@@ -114,7 +114,7 @@ extension AlertsDatasource on CommonDatasource {
   }) async {
     try {
       final String query = await File('sql/model/alerts/update_alerts.sql').readAsString();
-      await PostgresModule.postgreSQLConnection.mappedResultsQuery(
+      final request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(
         query,
         substitutionValues: {
           'id': id,
@@ -126,7 +126,7 @@ extension AlertsDatasource on CommonDatasource {
         },
       );
 
-      return unit;
+      return request.first['alerts']!['id'];
     } catch (_) {
       rethrow;
     }

@@ -10,4 +10,5 @@ SET sensor_id = COALESCE(@sensor_id, sensor_id),
     title = COALESCE(@title, title),
     description = COALESCE(@description, description)
 -- id uuid
-WHERE id = @id;
+WHERE id = @id
+RETURNING id;

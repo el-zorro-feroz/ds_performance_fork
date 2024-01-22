@@ -46,7 +46,7 @@ extension TabsensorsDatasource on CommonDatasource {
     }
   }
 
-  Future<List<TabSensorsModel>?> selectAllTabSensorsByTabId({required String tabId}) async {
+  Future<List<TabSensorsModel>?> selectAllTabSensorsByTabId(String tabId) async {
     try {
       final String query = await File('sql/model/tab_sensors/select_all_tab_sensors_by_tab_id.sql').readAsString();
       final List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(
