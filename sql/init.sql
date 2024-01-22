@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS Sensors (
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
     config_id UUID,
     FOREIGN KEY(config_id) REFERENCES Configs (id) ON DELETE CASCADE,
-    title VARCHAR UNIQUE NOT NULL,
+    title VARCHAR NOT NULL,
     type SensorType NOT NULL,
     details VARCHAR NOT NULL
 );
