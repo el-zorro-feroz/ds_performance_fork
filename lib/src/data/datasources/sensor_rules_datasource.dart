@@ -39,21 +39,21 @@ extension SensorRulesDatasource on CommonDatasource {
     }
   }
 
-  Future<Unit> insertSensorRules({
+  Future<String> insertSensorRules({
     required double value,
     required RuleType ruleType,
   }) async {
     try {
       final String query = await File('sql/model/sensor_rules/insert_sensor_rules.sql').readAsString();
-      await PostgresModule.postgreSQLConnection.mappedResultsQuery(
+      final List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(
         query,
         substitutionValues: {
           'value': value,
-          'type': ruleType,
+          'type': ruleType.name,
         },
       );
 
-      return unit;
+      return request[0]['sensorrules']!['id'];
     } catch (_) {
       rethrow;
     }
