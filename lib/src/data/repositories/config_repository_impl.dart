@@ -35,7 +35,9 @@ class ConfigRepositoryImpl implements ConfigRepository {
 
       final TabsModel tabModel = await datasource.insertTabs(configId: configId, title: 'Tab 1');
 
-      params.sensorList.forEach((sensor) async {
+      final List<SensorInfo> resultSensorList = [];
+
+      for (SensorInfo sensor in params.sensorList) {
         final String sensorId = await datasource.insertSensors(
           configId: configId,
           title: sensor.title,
@@ -45,34 +47,71 @@ class ConfigRepositoryImpl implements ConfigRepository {
 
         await datasource.insertTabSensors(sensorId: sensorId, tabId: tabModel.id);
 
-        sensor.alerts.first.sensorRuleList.forEach((sensorRule) async {
-          await datasource.insertSensorRules(
-            value: sensorRule.value,
-            ruleType: sensorRule.ruleType,
-          );
-        });
+        final List<AlertData> resultAlertList = [];
 
-        sensor.alerts.forEach((alertData) async {
+        for (AlertData alertData in sensor.alerts) {
           final String alertId = await datasource.insertAlerts(
-            sensorId: sensor.id,
+            sensorId: sensorId,
             type: alertData.type,
             message: alertData.message,
             title: alertData.title,
             description: alertData.description,
           );
+          final List<SensorRule> resultSensorRuleList = [];
 
-          alertData.sensorRuleList.forEach((sensorRule) async {
-            await datasource.insertRuleGroups(alertId: alertId, ruleId: sensorRule.id);
-          });
-        });
-      });
+          for (SensorRule sensorRule in alertData.sensorRuleList) {
+            final sensorRuleId = await datasource.insertSensorRules(
+              value: sensorRule.value,
+              ruleType: sensorRule.ruleType,
+            );
+
+            resultSensorRuleList.add(
+              SensorRule(
+                id: sensorRuleId,
+                ruleType: sensorRule.ruleType,
+                value: sensorRule.value,
+              ),
+            );
+
+            await datasource.insertRuleGroups(alertId: alertId, ruleId: sensorRuleId);
+          }
+
+          resultAlertList.add(
+            AlertData(
+              id: alertId,
+              title: alertData.title,
+              message: alertData.message,
+              description: alertData.description,
+              type: alertData.type,
+              sensorRuleList: resultSensorRuleList,
+            ),
+          );
+        }
+
+        resultSensorList.add(
+          SensorInfo(
+            id: sensorId,
+            title: sensor.title,
+            details: sensor.details,
+            sensorType: sensor.sensorType,
+            sensorHistoryList: [],
+            alerts: resultAlertList,
+          ),
+        );
+      }
 
       return Right(
         Config(
           id: configId,
           title: params.title,
-          tabList: [Tab(sensorInfoList: params.sensorList, id: tabModel.id, title: tabModel.title)],
-          sensorList: params.sensorList,
+          tabList: [
+            Tab(
+              sensorInfoList: resultSensorList,
+              id: tabModel.id,
+              title: tabModel.title,
+            ),
+          ],
+          sensorList: resultSensorList,
         ),
       );
     } catch (_) {
@@ -81,7 +120,7 @@ class ConfigRepositoryImpl implements ConfigRepository {
   }
 
   @override
-  Future<Either<Failure, Unit>> deleteConfig(String id) async {
+  Future<Either<Failure, Unit>> deleteConfigById(String id) async {
     try {
       await datasource.deleteConfigs(id: id);
     } catch (e) {
