@@ -57,18 +57,24 @@ class ConfigRepositoryImpl implements ConfigRepository {
           final List<SensorRule> resultSensorRuleList = [];
 
           for (SensorRule sensorRule in alertData.sensorRuleList) {
-            final sensorRuleId = await datasource.insertSensorRules(
-              value: sensorRule.value,
-              ruleType: sensorRule.ruleType,
-            );
-
-            resultSensorRuleList.add(
-              SensorRule(
-                id: sensorRuleId,
-                ruleType: sensorRule.ruleType,
+            late final String sensorRuleId;
+            if (sensorRule.id.isEmpty) {
+              sensorRuleId = await datasource.insertSensorRules(
                 value: sensorRule.value,
-              ),
-            );
+                ruleType: sensorRule.ruleType,
+              );
+
+              resultSensorRuleList.add(
+                SensorRule(
+                  id: sensorRuleId,
+                  ruleType: sensorRule.ruleType,
+                  value: sensorRule.value,
+                ),
+              );
+            } else {
+              sensorRuleId = sensorRule.id;
+              resultSensorRuleList.add(sensorRule);
+            }
 
             await datasource.insertRuleGroups(alertId: alertId, ruleId: sensorRuleId);
           }
