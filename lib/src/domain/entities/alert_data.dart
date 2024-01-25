@@ -20,5 +20,12 @@ class AlertData extends Equatable {
   });
 
   @override
-  List<Object?> get props => [id];
+  List<Object?> get props => [
+        id,
+        title,
+        message,
+        description,
+        type,
+        sensorRuleList,
+      ];
 }
