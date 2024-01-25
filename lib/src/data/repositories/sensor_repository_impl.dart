@@ -29,7 +29,7 @@ class SensorRepositoryImpl implements SensorRepository {
   @override
   Future<Either<Failure, Unit>> deleteSensorById({required String id}) async {
     try {
-      await commonDatasource.deleteSensors(id: id);
+      await commonDatasource.deleteSensorsById(id);
 
       return const Right(unit);
     } catch (_) {

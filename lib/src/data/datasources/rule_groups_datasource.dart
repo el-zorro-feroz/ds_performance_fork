@@ -121,13 +121,33 @@ extension RuleGroupsDatasource on CommonDatasource {
     }
   }
 
-  Future<Unit> deleteRuleGroups({required String id}) async {
+  Future<Unit> deleteRuleGroupsById(String id) async {
     try {
       final String query = await File('sql/model/rulegroups/delete_rule_groups_by_id.sql').readAsString();
       await PostgresModule.postgreSQLConnection.mappedResultsQuery(
         query,
         substitutionValues: {
           'id': id,
+        },
+      );
+
+      return unit;
+    } catch (_) {
+      rethrow;
+    }
+  }
+
+  Future<Unit> deleteRuleGroupsByAlertIdAndRuleId({
+    required String alertId,
+    required String ruleId,
+  }) async {
+    try {
+      final String query = await File('sql/model/rulegroups/delete_rule_groups_by_alert_id_and_rule_id.sql').readAsString();
+      await PostgresModule.postgreSQLConnection.mappedResultsQuery(
+        query,
+        substitutionValues: {
+          'alert_id': alertId,
+          'rule_id': ruleId,
         },
       );
 

@@ -276,7 +276,7 @@ Future<void> main() async {
             );
             final String? sensorId = (await commonDatasource.selectAllSensors())?.first.id;
 
-            return await commonDatasource.deleteSensors(id: sensorId!);
+            return await commonDatasource.deleteSensorsById(id: sensorId!);
           } catch (_) {
             return null;
           }
@@ -293,7 +293,7 @@ Future<void> main() async {
         await clearTables();
         Future<Either<Unit, Unit?>> Function() deleteSensors = () async {
           try {
-            return Right(await commonDatasource.deleteSensors(id: 'e'));
+            return Right(await commonDatasource.deleteSensorsById(id: 'e'));
           } catch (_) {
             return Left(unit);
           }

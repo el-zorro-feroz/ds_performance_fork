@@ -244,7 +244,7 @@ Future<void> main() async {
 
       // Arrange
       final String? id = (await commonDatasource.selectAllAlerts())?.first.id;
-      final Unit resultOrNull = await commonDatasource.deleteAlerts(id: id!);
+      final Unit resultOrNull = await commonDatasource.deleteAlertsById(id: id!);
       // Assert
       expect(resultOrNull, unit);
     });

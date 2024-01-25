@@ -257,7 +257,7 @@ Future<void> main() async {
       await commonDatasource.insertSensorRules(sensorId: sensorId!, value: value1, ruleId: ruleId!);
       //!Arrange
       final String? id = (await commonDatasource.selectAllSensorRules())?.first.id;
-      final Unit resultOrNull = await commonDatasource.deleteSensorRules(id: id!);
+      final Unit resultOrNull = await commonDatasource.deleteSensorRulesById(id: id!);
       //!Assert
       expect(resultOrNull, unit);
     });

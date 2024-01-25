@@ -52,7 +52,7 @@ class TabRepositoryImpl implements TabRepository {
   @override
   Future<Either<Failure, Unit>> getAllTabsByConfigId({required String configId}) async {
     try {
-      await commonDatasource.selectAllTabsByConfigId(configId: configId);
+      await commonDatasource.selectAllTabsByConfigId(configId);
 
       return const Right(unit);
     } catch (_) {

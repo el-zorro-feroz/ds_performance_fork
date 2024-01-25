@@ -21,7 +21,7 @@ extension TabsDatasource on CommonDatasource {
     }
   }
 
-  Future<List<TabsModel>?> selectAllTabsByConfigId({required String configId}) async {
+  Future<List<TabsModel>?> selectAllTabsByConfigId(String configId) async {
     try {
       final String query = await File('sql/model/tabs/select_all_tabs_by_config_id.sql').readAsString();
       final List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(

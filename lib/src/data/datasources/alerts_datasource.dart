@@ -132,7 +132,7 @@ extension AlertsDatasource on CommonDatasource {
     }
   }
 
-  Future<Unit> deleteAlerts({required String id}) async {
+  Future<Unit> deleteAlertsById(String id) async {
     try {
       final String query = await File('sql/model/alerts/delete_alerts.sql').readAsString();
       await PostgresModule.postgreSQLConnection.mappedResultsQuery(

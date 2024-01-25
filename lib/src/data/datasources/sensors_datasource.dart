@@ -114,7 +114,7 @@ extension SensorsDatasource on CommonDatasource {
     }
   }
 
-  Future<Unit> deleteSensors({required String id}) async {
+  Future<Unit> deleteSensorsById(String id) async {
     try {
       final String query = await File('sql/model/sensors/delete_sensors.sql').readAsString();
       await PostgresModule.postgreSQLConnection.mappedResultsQuery(
