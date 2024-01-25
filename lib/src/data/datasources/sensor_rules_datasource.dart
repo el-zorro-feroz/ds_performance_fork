@@ -65,13 +65,13 @@ extension SensorRulesDatasource on CommonDatasource {
     RuleType? ruleType,
   }) async {
     try {
-      final String query = await File('sql/model/sensor_rules/udate_sensor_rules.sql').readAsString();
+      final String query = await File('sql/model/sensor_rules/update_sensor_rules.sql').readAsString();
       await PostgresModule.postgreSQLConnection.mappedResultsQuery(
         query,
         substitutionValues: {
           'id': id,
           'value': value,
-          'type': ruleType,
+          'type': ruleType?.name,
         },
       );
 
@@ -81,7 +81,7 @@ extension SensorRulesDatasource on CommonDatasource {
     }
   }
 
-  Future<Unit> deleteSensorRules({required String id}) async {
+  Future<Unit> deleteSensorRulesById(String id) async {
     try {
       final String query = await File('sql/model/sensor_rules/delete_sensor_rules.sql').readAsString();
       await PostgresModule.postgreSQLConnection.mappedResultsQuery(
