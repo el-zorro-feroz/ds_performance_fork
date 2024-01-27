@@ -1,6 +1,5 @@
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
-import 'package:sensors_monitoring/core/enum/alert_type.dart';
 import 'package:sensors_monitoring/core/failure/failure.dart';
 import 'package:sensors_monitoring/src/domain/entities/alert_data.dart';
 
@@ -11,7 +10,7 @@ abstract class AlertRepository {
   Future<Either<Failure, Iterable<AlertData>>> get({required int count});
 }
 
-//TODO: implement this one 
+//TODO: create correct implementation
 @Injectable(as: AlertRepository)
 class UnimplementedNotificationRepository implements AlertRepository {
   @override
