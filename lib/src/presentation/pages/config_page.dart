@@ -46,7 +46,10 @@ class ConfigPage extends StatelessWidget {
           return Tab(
             text: Text(tab.title),
             body: Center(
-              child: ActiveTab(data: tab),
+              child: ActiveTab(
+                configID: id,
+                data: tab,
+              ),
             ),
           );
         },
