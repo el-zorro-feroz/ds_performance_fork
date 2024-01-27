@@ -3,15 +3,27 @@ import 'package:sensors_monitoring/src/presentation/widgets/sensor_page/sensor_c
 import 'package:sensors_monitoring/src/domain/entities/tab.dart' as config_tab show Tab;
 
 class ActiveTab extends StatelessWidget {
+  final String configID;
   final config_tab.Tab data;
 
   const ActiveTab({
     super.key,
+    required this.configID,
     required this.data,
   });
 
   @override
   Widget build(BuildContext context) {
+    if (data.sensorInfoList.isEmpty) {
+      return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Text(
+          'No added configurations yet',
+          style: FluentTheme.of(context).typography.bodyStrong,
+        ),
+      );
+    }
+
     return GridView.builder(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
@@ -19,7 +31,7 @@ class ActiveTab extends StatelessWidget {
       ),
       itemCount: data.sensorInfoList.length,
       itemBuilder: (_, index) => SensorCard(
-        configId: 'ASDASDASD', //TODO: PARAMS MISSTAKE
+        configId: configID,
         sensorData: data.sensorInfoList.elementAt(index),
       ),
     );

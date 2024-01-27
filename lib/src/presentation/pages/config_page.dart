@@ -4,6 +4,7 @@ import 'package:sensors_monitoring/core/services/services.dart';
 import 'package:sensors_monitoring/src/domain/entities/config.dart';
 import 'package:sensors_monitoring/src/domain/entities/tab.dart' as config_tab show Tab;
 import 'package:sensors_monitoring/src/presentation/controllers/config_controller.dart';
+import 'package:sensors_monitoring/src/presentation/controllers/tab_controller.dart';
 import 'package:sensors_monitoring/src/presentation/widgets/config_page/active_tab.dart';
 
 class ConfigPage extends StatelessWidget {
@@ -18,35 +19,16 @@ class ConfigPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final ConfigController controller = services<ConfigController>();
 
-    void onNewPressed() async {
-      GoRouter.of(context).go('/taboptions/$id');
-    }
-
-    // DEPRECATED DEV STUFF
-    //
-    // final ActiveTab activeTab = ActiveTab();
-    // final List<Tab> tabs = [
-    //   Tab(
-    //     text: const Text('Tab 1'),
-    //     body: activeTab,
-    //   ),
-    //   Tab(
-    //     text: const Text('Tab 2'),
-    //     body: activeTab,
-    //   ),
-    //   Tab(
-    //     text: const Text('Tab 3'),
-    //     body: activeTab,
-    //   ),
-    // ];
-
     List<Tab> buildTabs(List<config_tab.Tab> tabs) {
       return tabs.map(
         (config_tab.Tab tab) {
           return Tab(
             text: Text(tab.title),
             body: Center(
-              child: ActiveTab(data: tab),
+              child: ActiveTab(
+                configID: id,
+                data: tab,
+              ),
             ),
           );
         },
@@ -65,9 +47,9 @@ class ConfigPage extends StatelessWidget {
         }
 
         final Config config = snapshot.data!;
-        final List<Tab> tabs = buildTabs(config.tabList);
 
-        void onChanged(index) async {}
+        final TabController tabController = services<TabController>();
+        final List<Tab> tabs = buildTabs(config.tabList);
 
         return ScaffoldPage(
           header: PageHeader(
@@ -75,12 +57,15 @@ class ConfigPage extends StatelessWidget {
               'Configuration ${config.title}',
             ),
           ),
-          content: TabView(
-            tabs: tabs,
-            currentIndex: 0,
-            closeButtonVisibility: CloseButtonVisibilityMode.never,
-            onChanged: onChanged,
-            onNewPressed: onNewPressed,
+          content: ListenableBuilder(
+            listenable: tabController,
+            builder: (_, __) => TabView(
+              tabs: tabs,
+              currentIndex: tabController.active,
+              closeButtonVisibility: CloseButtonVisibilityMode.never,
+              onChanged: (i) => tabController.active = i,
+              onNewPressed: () => GoRouter.of(context).go('/taboptions/$id'),
+            ),
           ),
         );
       },
