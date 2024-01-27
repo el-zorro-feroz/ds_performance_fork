@@ -34,15 +34,19 @@ class ConfigSettingsController with ChangeNotifier {
   Future<void> initConfig([String? id]) async {
     if (id != null) {
       final ConfigController configController = services.get<ConfigController>();
+      configId = id;
       config = await configController.getConfigData(id);
     } else {
-      _isNewConfig = true;
+      final String configId = const Uuid().v4();
+
       config = Config(
-        id: const Uuid().v4(),
+        id: configId,
         title: 'New Configuration',
         tabList: const [],
         sensorList: const [],
       );
+
+      _isNewConfig = true;
     }
 
     notifyListeners();
