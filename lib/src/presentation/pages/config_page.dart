@@ -4,6 +4,7 @@ import 'package:sensors_monitoring/core/services/services.dart';
 import 'package:sensors_monitoring/src/domain/entities/config.dart';
 import 'package:sensors_monitoring/src/domain/entities/tab.dart' as config_tab show Tab;
 import 'package:sensors_monitoring/src/presentation/controllers/config_controller.dart';
+import 'package:sensors_monitoring/src/presentation/widgets/config_page/active_tab.dart';
 
 class ConfigPage extends StatelessWidget {
   final String id;
@@ -16,8 +17,6 @@ class ConfigPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ConfigController controller = services<ConfigController>();
-
-    void onChanged(index) async {}
 
     void onNewPressed() async {
       GoRouter.of(context).go('/taboptions/$id');
@@ -43,11 +42,11 @@ class ConfigPage extends StatelessWidget {
 
     List<Tab> buildTabs(List<config_tab.Tab> tabs) {
       return tabs.map(
-        (tab) {
+        (config_tab.Tab tab) {
           return Tab(
             text: Text(tab.title),
-            body: const Center(
-              child: Text('Loading'),
+            body: Center(
+              child: ActiveTab(data: tab),
             ),
           );
         },
@@ -68,6 +67,8 @@ class ConfigPage extends StatelessWidget {
         final Config config = snapshot.data!;
         final List<Tab> tabs = buildTabs(config.tabList);
 
+        void onChanged(index) async {}
+
         return ScaffoldPage(
           header: PageHeader(
             title: Text(
@@ -75,8 +76,8 @@ class ConfigPage extends StatelessWidget {
             ),
           ),
           content: TabView(
-            currentIndex: 0,
             tabs: tabs,
+            currentIndex: 0,
             closeButtonVisibility: CloseButtonVisibilityMode.never,
             onChanged: onChanged,
             onNewPressed: onNewPressed,

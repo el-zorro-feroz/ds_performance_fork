@@ -1,12 +1,14 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:injectable/injectable.dart';
 import 'package:sensors_monitoring/src/presentation/widgets/sensor_page/sensor_card.dart';
+import 'package:sensors_monitoring/src/domain/entities/tab.dart' as config_tab show Tab;
 
-@Singleton()
 class ActiveTab extends StatelessWidget {
-  static final GlobalKey _activeTabKey = GlobalKey(debugLabel: 'Active Tab Global Key');
+  final config_tab.Tab data;
 
-  ActiveTab() : super(key: _activeTabKey);
+  const ActiveTab({
+    super.key,
+    required this.data,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -15,8 +17,11 @@ class ActiveTab extends StatelessWidget {
         crossAxisCount: 3,
         childAspectRatio: 8 / 6,
       ),
-      itemCount: 20,
-      itemBuilder: (_, __) => const SensorCard(),
+      itemCount: data.sensorInfoList.length,
+      itemBuilder: (_, index) => SensorCard(
+        configId: 'ASDASDASD', //TODO: PARAMS MISSTAKE
+        sensorData: data.sensorInfoList.elementAt(index),
+      ),
     );
 
     //? Controller Builder Example

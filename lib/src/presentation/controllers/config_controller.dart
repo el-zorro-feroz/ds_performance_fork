@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:injectable/injectable.dart';
 import 'package:sensors_monitoring/src/domain/entities/config.dart';
+import 'package:sensors_monitoring/src/domain/entities/sensor_info.dart';
 import 'package:sensors_monitoring/src/domain/usecases/configs/get_all_configs_usecase.dart';
 
 @Singleton()
@@ -44,6 +45,22 @@ class ConfigController with ChangeNotifier {
     try {
       return configs.firstWhere((config) => config.id == id, orElse: () {
         throw Exception('Called missing configuration');
+      });
+    } catch (_) {
+      throw Exception('Configuration fetch error');
+    }
+  }
+
+  Future<SensorInfo> getSensorDataDetails(String configID, String sensorID) async {
+    try {
+      return await getConfigData(configID).then<SensorInfo>((config) {
+        return config.sensorList.firstWhere(
+          (sensor) {
+            return sensor.id == sensorID;
+          },
+        );
+      }).onError((_, __) {
+        throw Exception('Sensor fetch error');
       });
     } catch (_) {
       throw Exception('Configuration fetch error');
