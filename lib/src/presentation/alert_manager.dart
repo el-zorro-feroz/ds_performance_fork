@@ -1,5 +1,4 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:intl/intl.dart';
 import 'package:sensors_monitoring/core/enum/alert_type.dart';
 import 'package:sensors_monitoring/core/services/services.dart';
 import 'package:sensors_monitoring/src/domain/entities/alert_data.dart';

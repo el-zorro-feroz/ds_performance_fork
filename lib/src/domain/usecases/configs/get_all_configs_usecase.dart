@@ -8,10 +8,10 @@ import 'package:sensors_monitoring/src/domain/entities/config.dart';
 import 'package:sensors_monitoring/src/domain/repositories/config_repository.dart';
 
 @Injectable()
-class GetAllConfigsUsecase extends UseCase<List<Config>, Unit> {
+class GetAllConfigsUseCase extends UseCase<List<Config>, Unit> {
   final ConfigRepository configRepository;
 
-  GetAllConfigsUsecase({required this.configRepository});
+  GetAllConfigsUseCase({required this.configRepository});
 
   @override
   Future<Either<Failure, List<Config>>> call(Unit param) async {

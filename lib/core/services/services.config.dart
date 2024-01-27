@@ -29,6 +29,16 @@ import 'package:sensors_monitoring/src/domain/repositories/tab_repository.dart'
     as _i10;
 import 'package:sensors_monitoring/src/domain/usecases/alert/get_alerts_usecase.dart'
     as _i5;
+import 'package:sensors_monitoring/src/domain/usecases/configs/add_config_usecase.dart'
+    as _i18;
+import 'package:sensors_monitoring/src/domain/usecases/configs/delete_config_by_id_usecase.dart'
+    as _i15;
+import 'package:sensors_monitoring/src/domain/usecases/configs/edit_config_usecase.dart'
+    as _i16;
+import 'package:sensors_monitoring/src/domain/usecases/configs/get_all_configs_usecase.dart'
+    as _i17;
+import 'package:sensors_monitoring/src/presentation/controllers/config_controller.dart'
+    as _i19;
 import 'package:sensors_monitoring/src/presentation/controllers/notification_controller.dart'
     as _i6;
 import 'package:sensors_monitoring/src/presentation/widgets/config_page/active_tab.dart'
@@ -59,6 +69,16 @@ extension GetItInjectableX on _i1.GetIt {
         () => _i12.CommonDatasource(postgresModule: gh<_i7.PostgresModule>()));
     gh.factory<_i13.ConfigRepository>(() =>
         _i14.ConfigRepositoryImpl(datasource: gh<_i12.CommonDatasource>()));
+    gh.factory<_i15.DeleteConfigByIdUsecase>(() => _i15.DeleteConfigByIdUsecase(
+        configRepository: gh<_i13.ConfigRepository>()));
+    gh.factory<_i16.EditConfigUsecase>(
+        () => _i16.EditConfigUsecase(repository: gh<_i13.ConfigRepository>()));
+    gh.factory<_i17.GetAllConfigsUseCase>(() => _i17.GetAllConfigsUseCase(
+        configRepository: gh<_i13.ConfigRepository>()));
+    gh.factory<_i18.AddConfigUsecase>(() =>
+        _i18.AddConfigUsecase(configRepository: gh<_i13.ConfigRepository>()));
+    gh.singleton<_i19.ConfigController>(_i19.ConfigController(
+        getAllConfigsUseCase: gh<_i17.GetAllConfigsUseCase>()));
     return this;
   }
 }
