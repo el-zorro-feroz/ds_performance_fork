@@ -39,7 +39,7 @@ class RootPage extends StatelessWidget {
             trailing: IconButton(
               icon: const Icon(FluentIcons.edit),
               onPressed: () {
-                GoRouter.of(context).go('/add');
+                GoRouter.of(context).go('/edit/$configID');
               },
             ),
             body: const SizedBox.shrink(),
