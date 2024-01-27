@@ -39,7 +39,6 @@ class RootPage extends StatelessWidget {
             trailing: IconButton(
               icon: const Icon(FluentIcons.edit),
               onPressed: () {
-                //TODO: implement real opening page logic
                 GoRouter.of(context).go('/add');
               },
             ),
@@ -68,60 +67,6 @@ class RootPage extends StatelessWidget {
         return e;
       }).toList();
     }
-
-    //! DEPRECATED DEV STUFF
-    //
-    // final items = [
-    //   PaneItemHeader(
-    //     header: const Text('Configurations'),
-    //   ),
-    //   PaneItem(
-    //     key: const ValueKey('/config/{ABCD-EFGH-IJKL-MNOP}'),
-    //     icon: const Icon(FluentIcons.database),
-    //     title: const Text('{ABCD-EFGH-IJKL-MNOP}'),
-    //     trailing: IconButton(icon: const Icon(FluentIcons.edit), onPressed: () => GoRouter.of(context).go('/add')),
-    //     body: const SizedBox.shrink(),
-    //   ),
-    //   PaneItem(
-    //     key: const ValueKey('/config/{EFGH-ABCD-IJKL-MNOP}'),
-    //     icon: const Icon(FluentIcons.database),
-    //     title: const Text('{EFGH-ABCD-IJKL-MNOP}'),
-    //     trailing: IconButton(icon: const Icon(FluentIcons.edit), onPressed: () => null),
-    //     body: const SizedBox.shrink(),
-    //   ),
-    //   PaneItem(
-    //     key: const ValueKey('/config/{IJKL-ABCD-EFGH-MNOP}'),
-    //     icon: const Icon(FluentIcons.database),
-    //     title: const Text('{IJKL-ABCD-EFGH-MNOP}'),
-    //     trailing: IconButton(icon: const Icon(FluentIcons.edit), onPressed: () => null),
-    //     body: const SizedBox.shrink(),
-    //   ),
-    //   PaneItem(
-    //     key: const ValueKey('/config/{MNOP-ABCD-EFGH-IJKL}'),
-    //     icon: const Icon(FluentIcons.database),
-    //     title: const Text('{MNOP-ABCD-EFGH-IJKL}'),
-    //     trailing: IconButton(icon: const Icon(FluentIcons.edit), onPressed: () => null),
-    //     body: const SizedBox.shrink(),
-    //   ),
-    // ].map((e) {
-    //   if (e is PaneItem) {
-    //     return PaneItem(
-    //       key: e.key,
-    //       icon: e.icon,
-    //       title: e.title,
-    //       trailing: e.trailing,
-    //       body: e.body,
-    //       onTap: () {
-    //         final path = (e.key as ValueKey).value;
-    //         if (GoRouterState.of(context).uri.toString() != path) {
-    //           context.go(path);
-    //         }
-    //         e.onTap?.call();
-    //       },
-    //     );
-    //   }
-    //   return e;
-    // }).toList();
 
     final List<NavigationPaneItem> footerItems = <NavigationPaneItem>[
       PaneItemSeparator(),
