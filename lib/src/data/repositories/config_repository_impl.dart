@@ -144,7 +144,6 @@ class ConfigRepositoryImpl implements ConfigRepository {
           if (sensorModelList != null) {
             for (final sensor in sensorModelList) {
               final List<Map<String, Map<String, dynamic>>>? alertModelList = await datasource.selectAllAlertsBySensorId(sensor.id);
-              print(alertModelList);
               final Map<String, AlertData> alertDataMap = {};
               if (alertModelList != null) {
                 for (final alertModel in alertModelList) {
@@ -187,7 +186,6 @@ class ConfigRepositoryImpl implements ConfigRepository {
                     ),
                   )
                   .toList();
-              print(alertDataMap.values.toList());
               sensorList.add(SensorInfo(
                 id: sensor.id,
                 details: sensor.details,
@@ -200,14 +198,15 @@ class ConfigRepositoryImpl implements ConfigRepository {
           }
 
           final List<Tab> tabList = [];
-
-          (await datasource.selectAllTabsByConfigId(config.id))!.map((tabModel) async {
+          final tabsModelList = await datasource.selectAllTabsByConfigId(config.id) ?? [];
+          for (var tabModel in tabsModelList) {
             final List<SensorInfo> sensorInfoList = [];
-            (await datasource.selectAllTabSensorsByTabId(tabModel.id))!.map((tabSensorModel) {
+            final tabSensorsModelList = await datasource.selectAllTabSensorsByTabId(tabModel.id) ?? [];
+            for (var tabSensorModel in tabSensorsModelList) {
               sensorInfoList.add(sensorList.where((element) => element.id == tabSensorModel.sensorId).first);
-            });
+            }
             tabList.add(Tab(sensorInfoList: sensorInfoList, id: tabModel.id, title: tabModel.title));
-          });
+          }
 
           resList.add(Config(
             id: config.id,
