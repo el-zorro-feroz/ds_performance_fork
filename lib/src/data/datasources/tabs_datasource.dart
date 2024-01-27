@@ -106,7 +106,7 @@ extension TabsDatasource on CommonDatasource {
     }
   }
 
-  Future<Unit> deleteTabs({required String id}) async {
+  Future<Unit> deleteTabsById(String id) async {
     try {
       final String query = await File('sql/model/tabs/delete_tabs.sql').readAsString();
       await PostgresModule.postgreSQLConnection.mappedResultsQuery(
