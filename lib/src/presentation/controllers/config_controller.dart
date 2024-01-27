@@ -39,4 +39,14 @@ class ConfigController with ChangeNotifier {
       return {};
     }
   }
+
+  Future<Config> getConfigData(String id) async {
+    try {
+      return configs.firstWhere((config) => config.id == id, orElse: () {
+        throw Exception('Called missing configuration');
+      });
+    } catch (_) {
+      throw Exception('Configuration fetch error');
+    }
+  }
 }
