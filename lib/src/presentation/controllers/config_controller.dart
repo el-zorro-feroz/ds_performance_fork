@@ -41,7 +41,7 @@ class ConfigController with ChangeNotifier {
     }
   }
 
-  Future<Config> getConfigData(String id) async {
+  Config getConfigData(String id) {
     try {
       return configs.firstWhere((config) => config.id == id, orElse: () {
         throw Exception('Called missing configuration');
@@ -53,15 +53,13 @@ class ConfigController with ChangeNotifier {
 
   Future<SensorInfo> getSensorDataDetails(String configID, String sensorID) async {
     try {
-      return await getConfigData(configID).then<SensorInfo>((config) {
-        return config.sensorList.firstWhere(
-          (sensor) {
-            return sensor.id == sensorID;
-          },
-        );
-      }).onError((_, __) {
-        throw Exception('Sensor fetch error');
-      });
+      final config = getConfigData(configID);
+      return config.sensorList.firstWhere(
+        (sensor) {
+          return sensor.id == sensorID;
+        },
+        orElse: () => throw Exception('Sensor fetch error'),
+      );
     } catch (_) {
       throw Exception('Configuration fetch error');
     }

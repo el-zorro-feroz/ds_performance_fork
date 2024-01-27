@@ -18,7 +18,8 @@ class ConfigSettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ConfigSettingsController controller = services<ConfigSettingsController>();
-    controller.initConfig(configId);
+
+    controller.initConfig(configId); // TODO
 
     final Typography typography = FluentTheme.of(context).typography;
 

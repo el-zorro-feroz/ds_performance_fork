@@ -31,16 +31,16 @@ class ConfigSettingsController with ChangeNotifier {
     required this.deleteConfigByIdUsecase,
   });
 
-  Future<void> initConfig([String? id]) async {
+  void initConfig([String? id]) {
     if (id != null) {
       final ConfigController configController = services.get<ConfigController>();
       configId = id;
-      config = await configController.getConfigData(id);
+      config = configController.getConfigData(id);
     } else {
-      final String configId = const Uuid().v4();
+      configId = const Uuid().v4();
 
       config = Config(
-        id: configId,
+        id: configId ?? '', //TODO
         title: 'New Configuration',
         tabList: const [],
         sensorList: const [],

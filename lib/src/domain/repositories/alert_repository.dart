@@ -28,7 +28,7 @@ class UnimplementedNotificationRepository implements AlertRepository {
           title: e,
           message: 'TEST_MESSAGE',
           description: 'TEST_DESCRIPTION',
-          type: alertTypeIter.current,
+          type: AlertType.info, //TODO
           sensorRuleList: [],
         );
 
