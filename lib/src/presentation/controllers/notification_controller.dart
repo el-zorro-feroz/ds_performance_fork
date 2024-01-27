@@ -18,7 +18,7 @@ class NotificationController with ChangeNotifier {
   Timer? timer;
   Iterable<AlertData> notifications = [];
 
-  void fetchNotifications() {
+  Future<void> fetchNotifications() async {
     const Duration duration = Duration(minutes: 1);
 
     _updateNotifications();

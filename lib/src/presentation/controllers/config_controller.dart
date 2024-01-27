@@ -13,7 +13,7 @@ class ConfigController with ChangeNotifier {
 
   List<Config> configs = [];
 
-  void fetchAllConfigs() async {
+  Future<void> fetchAllConfigs() async {
     final resultOrFailure = await getAllConfigsUseCase.call(unit);
 
     resultOrFailure.fold(
