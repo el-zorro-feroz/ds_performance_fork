@@ -1,7 +1,11 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sensors_monitoring/src/presentation/widgets/dialog_elements/notification_rule_table.dart';
 
-Future<void> showSensorRuleSelectorDialog(BuildContext context) async {
+Future<void> showSensorRuleSelectorDialog(
+  BuildContext context, {
+  Function()? onCompleteRuleSelect,
+}) async {
   final Size size = MediaQuery.of(context).size;
   final Typography typography = FluentTheme.of(context).typography;
 
@@ -10,12 +14,12 @@ Future<void> showSensorRuleSelectorDialog(BuildContext context) async {
     builder: (_) => ContentDialog(
       actions: [
         Button(
+          onPressed: () => GoRouter.of(context).pop(),
           child: const Text('Cancel'),
-          onPressed: () => null,
         ),
         FilledButton(
+          onPressed: onCompleteRuleSelect,
           child: const Text('Accept'),
-          onPressed: () => null,
         ),
       ],
       content: SizedBox(
