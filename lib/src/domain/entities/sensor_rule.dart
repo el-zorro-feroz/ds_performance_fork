@@ -18,4 +18,16 @@ class SensorRule extends Equatable {
         ruleType,
         value,
       ];
+
+  SensorRule copyWith({
+    String? id,
+    RuleType? ruleType,
+    double? value,
+  }) {
+    return SensorRule(
+      id: id ?? this.id,
+      ruleType: ruleType ?? this.ruleType,
+      value: value ?? this.value,
+    );
+  }
 }

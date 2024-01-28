@@ -28,4 +28,22 @@ class AlertData extends Equatable {
         type,
         sensorRuleList,
       ];
+
+  AlertData copyWith({
+    String? id,
+    String? title,
+    String? message,
+    String? description,
+    AlertType? type,
+    List<SensorRule>? sensorRuleList,
+  }) {
+    return AlertData(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      message: message ?? this.message,
+      description: description ?? this.description,
+      type: type ?? this.type,
+      sensorRuleList: sensorRuleList ?? this.sensorRuleList,
+    );
+  }
 }

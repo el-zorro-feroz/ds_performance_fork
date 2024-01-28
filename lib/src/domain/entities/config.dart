@@ -20,12 +20,12 @@ class Config extends Equatable {
   @override
   List<Object?> get props => [id];
 
-  Config copyWith(
+  Config copyWith({
     String? id,
     String? title,
     List<Tab>? tabList,
     List<SensorInfo>? sensorList,
-  ) {
+  }) {
     return Config(
       id: id ?? this.id,
       title: title ?? this.title,

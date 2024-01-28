@@ -28,4 +28,22 @@ class SensorInfo extends Equatable {
         sensorType,
         alerts,
       ];
+
+  SensorInfo copyWith({
+    String? id,
+    String? title,
+    String? details,
+    SensorType? sensorType,
+    List<SensorHistory>? sensorHistoryList,
+    List<AlertData>? alerts,
+  }) {
+    return SensorInfo(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      details: details ?? this.details,
+      sensorType: sensorType ?? this.sensorType,
+      sensorHistoryList: sensorHistoryList ?? this.sensorHistoryList,
+      alerts: alerts ?? this.alerts,
+    );
+  }
 }
