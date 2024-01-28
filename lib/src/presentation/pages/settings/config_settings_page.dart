@@ -23,9 +23,9 @@ class ConfigSettingsPage extends StatelessWidget {
 
     final Typography typography = FluentTheme.of(context).typography;
 
-    Future<void> addAlertRule(BuildContext context) async {
-      showSensorRuleSelectorDialog(context);
-    }
+    // Future<void> addAlertRule(BuildContext context) async {
+    //   showSensorRuleSelectorDialog(context);
+    // }
 
     return ListenableBuilder(
       listenable: controller,
@@ -193,7 +193,7 @@ class ConfigSettingsPage extends StatelessWidget {
                                 ),
                               ),
                               Button(
-                                onPressed: () => addAlertRule(context),
+                                onPressed: () => controller.addAlert(context),
                                 child: Container(
                                   width: double.infinity,
                                   padding: const EdgeInsets.all(4.0),
