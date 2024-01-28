@@ -64,4 +64,16 @@ class ConfigController with ChangeNotifier {
       throw Exception('Configuration fetch error');
     }
   }
+
+  void removeConfigById(String id) {
+    configs.removeWhere((config) => config.id == id);
+
+    notifyListeners();
+  }
+
+  void addConfig({required Config config}) {
+    configs.add(config);
+
+    notifyListeners();
+  }
 }

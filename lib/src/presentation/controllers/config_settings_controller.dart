@@ -28,7 +28,7 @@ class ConfigSettingsController with ChangeNotifier {
   final EditConfigUsecase editConfigUsecase;
   final DeleteConfigByIdUsecase deleteConfigByIdUsecase;
 
-  late final String? configId;
+  late String? configId;
   late Config config;
 
   late bool _isNewConfig = false;
@@ -76,10 +76,13 @@ class ConfigSettingsController with ChangeNotifier {
         (failure) => _showDebugFailureSnack(context, failure),
         (unit) => GoRouter.of(context).go('/'),
       );
-    }
 
-    configId = null;
-    notifyListeners();
+      services<ConfigController>().removeConfigById(configId!);
+
+      configId = null;
+
+      notifyListeners();
+    }
   }
 
   Future<void> onSaveConfigurationPressed(BuildContext context) async {
@@ -88,7 +91,7 @@ class ConfigSettingsController with ChangeNotifier {
     if (_isNewConfig) {
       failOrConfig = await addConfigUsecase.call(
         AddConfigUsecaseParams(
-          title: 'title',
+          title: 'title', //TODO
           sensorList: [],
         ),
       );
@@ -103,7 +106,10 @@ class ConfigSettingsController with ChangeNotifier {
 
     failOrConfig.fold(
       (failure) => _showDebugFailureSnack(context, failure),
-      (config) => GoRouter.of(context).go('/config/$configId'),
+      (config) {
+        services<ConfigController>().addConfig(config: config);
+        GoRouter.of(context).go('/config/${config.id}');
+      },
     );
   }
 
