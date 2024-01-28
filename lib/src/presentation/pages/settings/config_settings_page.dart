@@ -5,7 +5,6 @@ import 'package:sensors_monitoring/core/services/services.dart';
 import 'package:sensors_monitoring/src/domain/entities/alert_data.dart';
 import 'package:sensors_monitoring/src/domain/entities/sensor_info.dart';
 import 'package:sensors_monitoring/src/presentation/controllers/config_settings_controller.dart';
-import 'package:sensors_monitoring/src/presentation/dialogs/sensor_rule_selector_dialog.dart';
 
 class ConfigSettingsPage extends StatelessWidget {
   final String? configId;
@@ -19,7 +18,7 @@ class ConfigSettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final ConfigSettingsController controller = services<ConfigSettingsController>();
 
-    controller.initConfig(configId); // TODO
+    controller.initConfig(configId);
 
     final Typography typography = FluentTheme.of(context).typography;
 
@@ -100,6 +99,8 @@ class ConfigSettingsPage extends StatelessWidget {
           children: [
             TextBox(
               placeholder: controller.config.title,
+              controller: controller.titleEditingController,
+              onEditingComplete: controller.ontitleEditingComplete,
             ),
             const Padding(
               padding: EdgeInsets.symmetric(vertical: 8.0),

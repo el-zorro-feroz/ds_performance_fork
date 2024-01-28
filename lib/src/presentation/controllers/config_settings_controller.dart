@@ -1,13 +1,11 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:dartz/dartz.dart';
-import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:injectable/injectable.dart';
 import 'package:sensors_monitoring/core/enum/alert_type.dart';
-import 'package:sensors_monitoring/core/enum/rule_type.dart';
 import 'package:sensors_monitoring/core/enum/sensor_type.dart';
 import 'package:sensors_monitoring/core/failure/failure.dart';
 import 'package:sensors_monitoring/core/services/services.dart';
@@ -39,22 +37,28 @@ class ConfigSettingsController with ChangeNotifier {
     required this.deleteConfigByIdUsecase,
   });
 
+  final TextEditingController titleEditingController = TextEditingController();
+
   void initConfig([String? id]) {
-    if (id != null) {
-      final ConfigController configController = services.get<ConfigController>();
-      configId = id;
-      config = configController.getConfigData(id);
-    } else {
-      configId = const Uuid().v4();
+    try {
+      if (id != null) {
+        final ConfigController configController = services.get<ConfigController>();
+        configId = id;
+        config = configController.getConfigData(id);
+      } else {
+        configId = const Uuid().v4();
 
-      config = Config(
-        id: configId!,
-        title: 'New Configuration',
-        tabList: const [],
-        sensorList: const [],
-      );
+        config = Config(
+          id: configId!,
+          title: 'New Configuration',
+          tabList: const [],
+          sensorList: const [],
+        );
 
-      _isNewConfig = true;
+        _isNewConfig = true;
+      }
+    } catch (_) {
+      configId = null;
     }
 
     notifyListeners();
@@ -74,12 +78,11 @@ class ConfigSettingsController with ChangeNotifier {
 
       failOrUnit.fold(
         (failure) => _showDebugFailureSnack(context, failure),
-        (unit) => GoRouter.of(context).go('/'),
+        (unit) {
+          services<ConfigController>().removeConfigById(configId!);
+          GoRouter.of(context).go('/');
+        },
       );
-
-      services<ConfigController>().removeConfigById(configId!);
-
-      configId = null;
 
       notifyListeners();
     }
@@ -91,15 +94,15 @@ class ConfigSettingsController with ChangeNotifier {
     if (_isNewConfig) {
       failOrConfig = await addConfigUsecase.call(
         AddConfigUsecaseParams(
-          title: 'title', //TODO
-          sensorList: [],
+          title: config.title,
+          sensorList: config.sensorList,
         ),
       );
     } else {
       failOrConfig = await editConfigUsecase.call(
         EditConfigUsecaseParams(
           config: config,
-          editedSensorsList: [],
+          editedSensorsList: config.sensorList,
         ),
       );
     }
@@ -168,5 +171,9 @@ class ConfigSettingsController with ChangeNotifier {
         ),
       );
     }
+  }
+
+  void ontitleEditingComplete() {
+    config = config.copyWith(title: titleEditingController.text);
   }
 }
