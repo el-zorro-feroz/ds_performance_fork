@@ -1,13 +1,124 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:go_router/go_router.dart';
+import 'package:sensors_monitoring/core/enum/alert_type.dart';
+import 'package:sensors_monitoring/core/enum/rule_type.dart';
+import 'package:sensors_monitoring/src/domain/entities/alert_data.dart';
+import 'package:sensors_monitoring/src/domain/entities/sensor_rule.dart';
 import 'package:sensors_monitoring/src/presentation/widgets/dialog_elements/notification_rule_table.dart';
+import 'package:uuid/uuid.dart';
+
+class _SelectorController with ChangeNotifier {
+  late AlertData resultAlertData;
+
+  final TextEditingController titleEditingController = TextEditingController();
+  final TextEditingController messageEditingController = TextEditingController();
+  final TextEditingController descriptionEditingController = TextEditingController();
+
+  _SelectorController({
+    required AlertData data,
+  }) {
+    resultAlertData = data;
+    titleEditingController.text = data.title;
+    messageEditingController.text = data.message;
+    descriptionEditingController.text = data.description;
+  }
+
+  void changeResultTitle() {
+    resultAlertData = resultAlertData.copyWith(
+      title: titleEditingController.text,
+    );
+  }
+
+  void changeResultMessage() {
+    resultAlertData = resultAlertData.copyWith(
+      message: messageEditingController.text,
+    );
+  }
+
+  void changeResultDescription() {
+    resultAlertData = resultAlertData.copyWith(
+      description: descriptionEditingController.text,
+    );
+  }
+
+  void changeResultType(AlertType type) {
+    resultAlertData = resultAlertData.copyWith(
+      type: type,
+    );
+
+    notifyListeners();
+  }
+
+  void addRule(RuleType type) {
+    resultAlertData.copyWith(
+      sensorRuleList: List.from(
+        resultAlertData.sensorRuleList,
+      )..add(
+          SensorRule(
+            id: const Uuid().v4(),
+            ruleType: type,
+            value: 0.0,
+          ),
+        ),
+    );
+
+    notifyListeners();
+  }
+
+  void deleteRuleByIndex(int index) {
+    resultAlertData.copyWith(
+      sensorRuleList: List.from(
+        resultAlertData.sensorRuleList,
+      )..removeAt(index),
+    );
+
+    notifyListeners();
+  }
+
+  void changeRuleValueByIndex(int index, String value) {
+    final double? obusValue = double.tryParse(value);
+    if (obusValue != null) {
+      resultAlertData.copyWith(
+        sensorRuleList: List.from(
+          resultAlertData.sensorRuleList,
+        )..replaceRange(
+            index,
+            index,
+            [
+              resultAlertData.sensorRuleList[index].copyWith(
+                value: obusValue,
+              ),
+            ],
+          ),
+      );
+    } else {
+      debugPrint('_SelectorController($hashCode): trying to set invalid sensor rule value');
+    }
+  }
+}
 
 Future<void> showSensorRuleSelectorDialog(
   BuildContext context, {
-  Function()? onCompleteRuleSelect,
+  required AlertData initialAlertData,
+  Function(AlertData)? onCompleteEditing,
 }) async {
+  final _SelectorController controller = _SelectorController(data: initialAlertData);
+
   final Size size = MediaQuery.of(context).size;
   final Typography typography = FluentTheme.of(context).typography;
+
+  final Map<AlertType, String> alertTypeToStrData = <AlertType, String>{
+    AlertType.info: "Info",
+    AlertType.error: "Error",
+    AlertType.warning: "Warning",
+    AlertType.fatal: "Fatal",
+  };
+
+  final Map<RuleType, String> ruleTypeToStrData = <RuleType, String>{
+    RuleType.avg: "Average Sensor changes value check",
+    RuleType.max: "Set Maximum Sensor value limit",
+    RuleType.min: "Set Minimum Sensor value limit",
+  };
 
   showDialog(
     context: context,
@@ -18,144 +129,159 @@ Future<void> showSensorRuleSelectorDialog(
           child: const Text('Cancel'),
         ),
         FilledButton(
-          onPressed: onCompleteRuleSelect,
+          onPressed: () {
+            if (onCompleteEditing != null) {
+              onCompleteEditing(controller.resultAlertData);
+            }
+          },
           child: const Text('Accept'),
         ),
       ],
-      content: SizedBox(
-        width: 600,
-        height: size.height,
-        child: ScaffoldPage.scrollable(
-          header: const PageHeader(
-            // commandBar: Row(
-            //   mainAxisSize: MainAxisSize.min,
-            //   children: [
-            //     IconButton(
-            //       icon: const Icon(
-            //         FluentIcons.remove_content,
-            //       ),
-            //       onPressed: () => null,
-            //     ),
-            //     const SizedBox(width: 2.0),
-            //     IconButton(
-            //       icon: const Icon(
-            //         FluentIcons.accept,
-            //       ),
-            //       onPressed: () => null,
-            //     ),
-            //   ],
-            // ),
-            title: SizedBox(
-              width: double.infinity,
-              child: TextBox(
-                placeholder: 'Notification title',
-              ),
-            ),
-          ),
-          children: [
-            const TextBox(
-              placeholder: 'Notification text',
-            ),
-            const TextBox(
-              placeholder: 'Notification description',
-            ),
-            DropDownButton(
-              buttonBuilder: (_, __) {
-                return Button(
-                  onPressed: __,
-                  child: Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 4.0,
-                    ),
-                    child: const Wrap(
-                      spacing: 8.0,
-                      children: [
-                        Icon(
-                          FluentIcons.chevron_down_med,
-                        ),
-                        Text(
-                          'Notification type',
-                        ),
-                      ],
-                    ),
+      content: ListenableBuilder(
+        listenable: controller,
+        builder: (_, __) {
+          return SizedBox(
+            width: 600,
+            height: size.height,
+            child: ScaffoldPage.scrollable(
+              header: PageHeader(
+                title: SizedBox(
+                  width: double.infinity,
+                  child: TextBox(
+                    controller: controller.titleEditingController,
+                    onEditingComplete: controller.changeResultTitle,
+                    placeholder: 'Notification title',
                   ),
-                );
-              },
-              items: <MenuFlyoutItemBase>[
-                MenuFlyoutItem(text: const Text('Info'), onPressed: () => null),
-                MenuFlyoutItem(text: const Text('Error'), onPressed: () => null),
-                MenuFlyoutItem(text: const Text('Alert'), onPressed: () => null),
-                MenuFlyoutItem(text: const Text('Warning'), onPressed: () => null),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.only(
-                top: 32.0,
-                bottom: 16.0,
-                left: 8.0,
-                right: 8.0,
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      'Rules',
-                      style: typography.subtitle,
-                    ),
-                  ),
-                  IconButton(
-                    icon: const Icon(FluentIcons.add),
-                    onPressed: () => null,
-                  ),
-                ],
-              ),
-            ),
-            AutoSuggestBox(
-              placeholder: 'Add Exists Rule',
-              items: List.generate(
-                5,
-                (_) => AutoSuggestBoxItem(
-                  value: _,
-                  label: 'lable $_',
                 ),
               ),
+              children: [
+                TextBox(
+                  controller: controller.messageEditingController,
+                  onEditingComplete: controller.changeResultMessage,
+                  placeholder: 'Notification text',
+                ),
+                TextBox(
+                  controller: controller.descriptionEditingController,
+                  onEditingComplete: controller.changeResultDescription,
+                  placeholder: 'Notification description',
+                ),
+                DropDownButton(
+                  buttonBuilder: (_, __) {
+                    return Button(
+                      onPressed: __,
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 4.0,
+                        ),
+                        child: Wrap(
+                          spacing: 8.0,
+                          children: [
+                            const Icon(
+                              FluentIcons.chevron_down_med,
+                            ),
+                            Text(
+                              alertTypeToStrData[controller.resultAlertData.type]!,
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                  items: AlertType.values.map<MenuFlyoutItem>((type) {
+                    return MenuFlyoutItem(
+                      text: Text(
+                        alertTypeToStrData[controller.resultAlertData.type]!,
+                      ),
+                      onPressed: () => controller.changeResultType(type),
+                    );
+                  }).toList(),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: 32.0,
+                    bottom: 16.0,
+                    left: 8.0,
+                    right: 8.0,
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          'Rules',
+                          style: typography.subtitle,
+                        ),
+                      ),
+                      // Replaced with dropdown menu above
+                      //
+                      // IconButton(
+                      //   icon: const Icon(FluentIcons.add),
+                      //   onPressed: controller.addRule,
+                      // ),
+                    ],
+                  ),
+                ),
+                DropDownButton(
+                  buttonBuilder: (_, __) {
+                    return Button(
+                      onPressed: __,
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 4.0,
+                        ),
+                        child: Wrap(
+                          spacing: 8.0,
+                          children: [
+                            const Icon(
+                              FluentIcons.chevron_down_med,
+                            ),
+                            Text(
+                              alertTypeToStrData[controller.resultAlertData.type]!,
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                  items: RuleType.values.map<MenuFlyoutItem>((type) {
+                    return MenuFlyoutItem(
+                      text: Text(
+                        ruleTypeToStrData[type]!,
+                      ),
+                      onPressed: () => controller.addRule(type),
+                    );
+                  }).toList(),
+                ),
+                // AutoSuggestBox(
+                //   placeholder: 'Add Exists Rule',
+                //   items: List.generate(
+                //     5,
+                //     (_) => AutoSuggestBoxItem(
+                //       value: _,
+                //       label: 'label $_',
+                //     ),
+                //   ),
+                // ),
+                ...List.generate(
+                  controller.resultAlertData.sensorRuleList.length,
+                  (index) {
+                    SensorRule data = controller.resultAlertData.sensorRuleList.elementAt(index);
+                    final TextEditingController valueTextEditingController = TextEditingController()..text = data.value.toString();
+
+                    return NotificationRuleTable(
+                      index: index,
+                      sensorRule: data,
+                      valueEditingController: valueTextEditingController,
+                      onDeleteCallback: () => controller.deleteRuleByIndex(index),
+                      onEditingComplete: () => controller.changeRuleValueByIndex(index, valueTextEditingController.text),
+                    );
+                  },
+                ),
+              ],
             ),
-            ...List.generate(
-              3,
-              (_) => const NotificationRuleTable(),
-            ),
-            // Button(
-            //   onPressed: () => null,
-            //   child: Container(
-            //     width: double.infinity,
-            //     padding: const EdgeInsets.all(4.0),
-            //     child: const Text(
-            //       'Add notification rule',
-            //     ),
-            //   ),
-            // ),
-            // const SizedBox(height: 16.0),
-            // Wrap(
-            //   alignment: WrapAlignment.end,
-            //   spacing: 8.0,
-            //   children: [
-            //     Expanded(
-            //       child: Button(
-            //         child: const Text('Cancel'),
-            //         onPressed: () => null,
-            //       ),
-            //     ),
-            //     Expanded(
-            //       child: FilledButton(
-            //         child: const Text('Add'),
-            //         onPressed: () => null,
-            //       ),
-            //     ),
-            //   ],
-            // )
-          ],
-        ),
+          );
+        },
       ),
     ),
   );

@@ -1,11 +1,33 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter/services.dart';
+import 'package:sensors_monitoring/core/enum/rule_type.dart';
+import 'package:sensors_monitoring/src/domain/entities/sensor_rule.dart';
 
 class NotificationRuleTable extends StatelessWidget {
-  const NotificationRuleTable({super.key});
+  final int index;
+  final SensorRule sensorRule;
+  final TextEditingController valueEditingController;
+  final Function()? onDeleteCallback;
+  final Function()? onEditingComplete;
+
+  const NotificationRuleTable({
+    super.key,
+    required this.sensorRule,
+    required this.index,
+    required this.valueEditingController,
+    this.onDeleteCallback,
+    this.onEditingComplete,
+  });
 
   @override
   Widget build(BuildContext context) {
     final Typography typography = FluentTheme.of(context).typography;
+
+    final Map<RuleType, String> ruleTypeToStrData = <RuleType, String>{
+      RuleType.avg: "AVG changes Rule",
+      RuleType.max: "Minimal val Rule",
+      RuleType.min: "Maximum val Rule",
+    };
 
     return Padding(
       padding: const EdgeInsets.only(top: 8.0),
@@ -17,13 +39,13 @@ class NotificationRuleTable extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    'Rule Description',
+                    ruleTypeToStrData[sensorRule.ruleType]!,
                     style: typography.body,
                   ),
                 ),
                 IconButton(
                   icon: const Icon(FluentIcons.delete),
-                  onPressed: () => null,
+                  onPressed: onDeleteCallback,
                 ),
               ],
             ),
@@ -31,55 +53,42 @@ class NotificationRuleTable extends StatelessWidget {
             Table(
               defaultVerticalAlignment: TableCellVerticalAlignment.middle,
               children: <TableRow>[
-                TableRow(children: [
-                  Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: Text(
-                      'State',
-                      style: typography.body,
+                // DEPRECATED
+                //
+                // TableRow(children: [
+                //   Padding(
+                //     padding: const EdgeInsets.all(4.0),
+                //     child: Text(
+                //       'State',
+                //       style: typography.body,
+                //     ),
+                //   ),
+                //   Padding(
+                //     padding: const EdgeInsets.all(4.0),
+                //     child: Text(
+                //       'Value',
+                //       style: typography.body,
+                //     ),
+                //   ),
+                // ]),
+                TableRow(
+                  children: [
+                    Text(
+                      'Value:',
+                      style: typography.caption,
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: Text(
-                      'Value',
-                      style: typography.body,
-                    ),
-                  ),
-                ]),
-                TableRow(children: [
-                  Text(
-                    'AvG',
-                    style: typography.caption,
-                  ),
-                  TextBox(
-                    placeholder: '0.0',
-                    placeholderStyle: typography.caption,
-                    style: typography.caption,
-                  )
-                ]),
-                TableRow(children: [
-                  Text(
-                    'Max Limit',
-                    style: typography.caption,
-                  ),
-                  TextBox(
-                    placeholder: '0.0',
-                    placeholderStyle: typography.caption,
-                    style: typography.caption,
-                  )
-                ]),
-                TableRow(children: [
-                  Text(
-                    'Min Limit',
-                    style: typography.caption,
-                  ),
-                  TextBox(
-                    placeholder: '0.0',
-                    placeholderStyle: typography.caption,
-                    style: typography.caption,
-                  ),
-                ]),
+                    TextBox(
+                      controller: valueEditingController,
+                      onEditingComplete: onEditingComplete,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9.]'))],
+                      maxLines: 1,
+                      placeholder: '0.0',
+                      placeholderStyle: typography.caption,
+                      style: typography.caption,
+                    )
+                  ],
+                ),
               ],
             )
           ],
