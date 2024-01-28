@@ -50,7 +50,7 @@ class _SelectorController with ChangeNotifier {
   }
 
   void addRule(RuleType type) {
-    resultAlertData.copyWith(
+    resultAlertData = resultAlertData.copyWith(
       sensorRuleList: List.from(
         resultAlertData.sensorRuleList,
       )..add(
@@ -81,14 +81,13 @@ class _SelectorController with ChangeNotifier {
       resultAlertData.copyWith(
         sensorRuleList: List.from(
           resultAlertData.sensorRuleList,
-        )..replaceRange(
+        )
+          ..removeAt(index)
+          ..insert(
             index,
-            index,
-            [
-              resultAlertData.sensorRuleList[index].copyWith(
-                value: obusValue,
-              ),
-            ],
+            resultAlertData.sensorRuleList[index].copyWith(
+              value: obusValue,
+            ),
           ),
       );
     } else {
@@ -166,6 +165,7 @@ Future<void> showSensorRuleSelectorDialog(
                   placeholder: 'Notification description',
                 ),
                 DropDownButton(
+                  closeAfterClick: false,
                   buttonBuilder: (_, __) {
                     return Button(
                       onPressed: __,
@@ -191,7 +191,7 @@ Future<void> showSensorRuleSelectorDialog(
                   items: AlertType.values.map<MenuFlyoutItem>((type) {
                     return MenuFlyoutItem(
                       text: Text(
-                        alertTypeToStrData[controller.resultAlertData.type]!,
+                        alertTypeToStrData[type]!,
                       ),
                       onPressed: () => controller.changeResultType(type),
                     );
@@ -222,6 +222,7 @@ Future<void> showSensorRuleSelectorDialog(
                   ),
                 ),
                 DropDownButton(
+                  closeAfterClick: false,
                   buttonBuilder: (_, __) {
                     return Button(
                       onPressed: __,
@@ -230,14 +231,14 @@ Future<void> showSensorRuleSelectorDialog(
                         padding: const EdgeInsets.symmetric(
                           vertical: 4.0,
                         ),
-                        child: Wrap(
+                        child: const Wrap(
                           spacing: 8.0,
                           children: [
-                            const Icon(
+                            Icon(
                               FluentIcons.chevron_down_med,
                             ),
                             Text(
-                              alertTypeToStrData[controller.resultAlertData.type]!,
+                              'Select rule',
                             ),
                           ],
                         ),
@@ -277,7 +278,7 @@ Future<void> showSensorRuleSelectorDialog(
                       onEditingComplete: () => controller.changeRuleValueByIndex(index, valueTextEditingController.text),
                     );
                   },
-                ),
+                ).reversed,
               ],
             ),
           );

@@ -116,6 +116,23 @@ class ConfigSettingsController with ChangeNotifier {
     );
   }
 
+  void addSensor() {
+    config = config.copyWith(
+      sensorList: List.from(config.sensorList)
+        ..add(
+          SensorInfo(
+            id: const Uuid().v4(),
+            title: 'New sensor',
+            details: '',
+            sensorType: SensorType.temperature,
+            sensorHistoryList: const [],
+            alerts: const [],
+          ),
+        ),
+    );
+    notifyListeners();
+  }
+
   void editSensorTitleByID(BuildContext context, int sensorIndex) {
     //TODO: dialog box or text-to-textbox pass
   }
@@ -130,19 +147,17 @@ class ConfigSettingsController with ChangeNotifier {
 
   void changeSensorTypeByID(BuildContext context, int sensorIndex, SensorType type) {
     config = config.copyWith(
-      sensorList: List<SensorInfo>.from(config.sensorList)
-        //TOOD: recheck replacement on ui
-        ..replaceRange(
-          sensorIndex,
-          sensorIndex,
-          [config.sensorList.elementAt(sensorIndex).copyWith(sensorType: type)],
-        ),
-    );
+        sensorList: List<SensorInfo>.from(config.sensorList)
+          ..removeAt(sensorIndex)
+          ..insert(
+            sensorIndex,
+            config.sensorList.elementAt(sensorIndex).copyWith(sensorType: type, title: type.name), //TODO
+          ));
 
     notifyListeners();
   }
 
-  void addAlert(BuildContext context) async {
+  void addAlert(BuildContext context, int sensorIndex) async {
     await showSensorRuleSelectorDialog(
       context,
       initialAlertData: AlertData(
@@ -153,7 +168,22 @@ class ConfigSettingsController with ChangeNotifier {
         type: AlertType.info,
         sensorRuleList: const [],
       ),
-      onCompleteEditing: (AlertData data) async {},
+      onCompleteEditing: (AlertData data) async {
+        if (data.sensorRuleList.isEmpty) {
+          return;
+        }
+        List<AlertData> alertList = [...config.sensorList.elementAt(sensorIndex).alerts];
+        alertList.add(data);
+        List<SensorInfo> sensorList = List.from(config.sensorList)
+          ..removeAt(sensorIndex)
+          ..insert(sensorIndex, config.sensorList.elementAt(sensorIndex).copyWith(alerts: alertList));
+
+        config = config.copyWith(sensorList: sensorList);
+
+        GoRouter.of(context).pop();
+
+        notifyListeners();
+      },
     );
   }
 
@@ -163,17 +193,12 @@ class ConfigSettingsController with ChangeNotifier {
 
   void _showDebugFailureSnack(BuildContext context, Failure failure) {
     if (kDebugMode) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            '${failure.runtimeType}:${failure.message}',
-          ),
-        ),
-      );
+      debugPrint('${failure.runtimeType}:${failure.message}');
     }
   }
 
   void ontitleEditingComplete() {
     config = config.copyWith(title: titleEditingController.text);
+    notifyListeners();
   }
 }

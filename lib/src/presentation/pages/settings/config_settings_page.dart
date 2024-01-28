@@ -32,23 +32,24 @@ class ConfigSettingsPage extends StatelessWidget {
         if (controller.configId == null) {
           return const Center(child: ProgressRing());
         }
-
+        final focusNode = FocusNode();
         return ScaffoldPage.scrollable(
           header: PageHeader(
             title: Text(
-              controller.config.title,
+              // controller.config.title,
+              (controller.config.title.isEmpty) ? 'New configuration' : controller.config.title,
               style: typography.title,
             ),
             commandBar: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                IconButton(
-                  icon: const Icon(
-                    FluentIcons.remove_content,
-                  ),
-                  onPressed: () => controller.onRemoveConfigurationPressed(context),
-                ),
-                const SizedBox(width: 2.0),
+                // IconButton(
+                //   icon: const Icon(
+                //     FluentIcons.remove_content,
+                //   ),
+                //   onPressed: () => controller.onRemoveConfigurationPressed(context),
+                // ),
+                // const SizedBox(width: 2.0),
                 IconButton(
                   icon: const Icon(
                     FluentIcons.accept,
@@ -100,7 +101,15 @@ class ConfigSettingsPage extends StatelessWidget {
             TextBox(
               placeholder: controller.config.title,
               controller: controller.titleEditingController,
-              onEditingComplete: controller.ontitleEditingComplete,
+              onEditingComplete: () {
+                focusNode.unfocus();
+                controller.ontitleEditingComplete();
+              },
+              focusNode: focusNode,
+              onTapOutside: (event) {
+                focusNode.unfocus();
+                controller.ontitleEditingComplete();
+              },
             ),
             const Padding(
               padding: EdgeInsets.symmetric(vertical: 8.0),
@@ -194,7 +203,7 @@ class ConfigSettingsPage extends StatelessWidget {
                                 ),
                               ),
                               Button(
-                                onPressed: () => controller.addAlert(context),
+                                onPressed: () => controller.addAlert(context, sensorIndex),
                                 child: Container(
                                   width: double.infinity,
                                   padding: const EdgeInsets.all(4.0),
@@ -232,7 +241,7 @@ class ConfigSettingsPage extends StatelessWidget {
                   ],
                 ),
               ),
-              onPressed: () => null,
+              onPressed: controller.addSensor,
             ),
           ],
         );
