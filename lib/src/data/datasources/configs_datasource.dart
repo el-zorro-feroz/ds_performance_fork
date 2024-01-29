@@ -41,17 +41,17 @@ extension ConfigsDatasource on CommonDatasource {
     }
   }
 
-  Future<Unit> insertConfigs({required String title}) async {
+  Future<String> insertConfigs({required String title}) async {
     try {
       final String query = await File('sql/model/configs/insert_configs.sql').readAsString();
-      await PostgresModule.postgreSQLConnection.mappedResultsQuery(
+      final request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(
         query,
         substitutionValues: {
           'title': title,
         },
       );
 
-      return unit;
+      return request[0]['configs']!['id'];
     } catch (_) {
       rethrow;
     }

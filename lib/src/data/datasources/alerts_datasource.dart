@@ -19,6 +19,25 @@ extension AlertsDatasource on CommonDatasource {
     }
   }
 
+  //TODO NOT TESTED
+  Future<List<Map<String, Map<String, dynamic>>>?> selectAllAlertsBySensorId(String id) async {
+    try {
+      final String query = await File('sql/subquery/get_alerts.sql').readAsString();
+      final List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(
+        query,
+        substitutionValues: {'sensor_id': id},
+      );
+
+      if (request.isEmpty) {
+        return null;
+      }
+
+      return request;
+    } catch (_) {
+      rethrow;
+    }
+  }
+
   Future<AlertsModel?> selectOneAlerts({required String id}) async {
     try {
       final String query = await File('sql/model/alerts/select_one_alert.sql').readAsString();
@@ -39,29 +58,15 @@ extension AlertsDatasource on CommonDatasource {
     }
   }
 
-  Future<AlertsModel?> selectAlertByRuleId({required String ruleId}) async {
-    try {
-      final String query = await File('sql/model/alerts/select_alert_by_rule_id.sql').readAsString();
-      final List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(query, substitutionValues: {
-        'rule_id': ruleId,
-      });
-
-      if (request.isEmpty) {
-        return null;
-      }
-
-      return AlertsModel.fromMap(request.first['alerts']!);
-    } catch (_) {
-      rethrow;
-    }
-  }
-
   Future<AlertsModel?> selectAlertBySensorId({required String sensorId}) async {
     try {
       final String query = await File('sql/model/alerts/select_alert_by_sensor_id.sql').readAsString();
-      final List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(query, substitutionValues: {
-        'sensor_id': sensorId,
-      });
+      final List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(
+        query,
+        substitutionValues: {
+          'sensor_id': sensorId,
+        },
+      );
 
       if (request.isEmpty) {
         return null;
@@ -73,57 +78,61 @@ extension AlertsDatasource on CommonDatasource {
     }
   }
 
-  Future<Unit> insertAlerts({
+  Future<String> insertAlerts({
     required String sensorId,
-    required String ruleId,
-    required String message,
     required AlertType type,
+    required String message,
+    required String title,
+    required String description,
   }) async {
     try {
       final String query = await File('sql/model/alerts/insert_alerts.sql').readAsString();
-      await PostgresModule.postgreSQLConnection.mappedResultsQuery(
+      final request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(
         query,
         substitutionValues: {
           'sensor_id': sensorId,
-          'rule_id': ruleId,
           'message': message,
           'type': type.name,
+          'title': title,
+          'description': description,
         },
       );
 
-      return unit;
+      return request[0]['alerts']!['id'];
     } catch (_) {
       rethrow;
     }
   }
 
-  Future<Unit> updateAlerts({
+  Future<String> updateAlerts({
     required String id,
     String? sensorId,
-    String? ruleId,
     String? message,
     AlertType? type,
+    String? title,
+    String? description,
   }) async {
     try {
       final String query = await File('sql/model/alerts/update_alerts.sql').readAsString();
-      await PostgresModule.postgreSQLConnection.mappedResultsQuery(
+      final request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(
         query,
         substitutionValues: {
           'id': id,
           'sensor_id': sensorId,
-          'rule_id': ruleId,
           'message': message,
           'type': type?.name,
+          'title': title,
+          'description': description,
         },
       );
 
-      return unit;
+      return request.first['alerts']!['id'];
     } catch (_) {
       rethrow;
     }
   }
 
-  Future<Unit> deleteAlerts({required String id}) async {
+  Future<Unit> deleteAlertsById(String id) async {
     try {
       final String query = await File('sql/model/alerts/delete_alerts.sql').readAsString();
       await PostgresModule.postgreSQLConnection.mappedResultsQuery(

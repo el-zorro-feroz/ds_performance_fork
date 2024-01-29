@@ -1,26 +1,24 @@
+import 'package:sensors_monitoring/core/enum/rule_type.dart';
+
 class SensorRulesModel {
   final String id;
-  final String sensorId;
-  final String ruleId;
+  final RuleType ruleType;
   final double value;
 
   const SensorRulesModel({
     required this.id,
-    required this.sensorId,
-    required this.ruleId,
+    required this.ruleType,
     required this.value,
   });
 
   SensorRulesModel copyWith({
     String? id,
-    String? sensorId,
-    String? ruleId,
+    RuleType? ruleType,
     double? value,
   }) {
     return SensorRulesModel(
       id: id ?? this.id,
-      sensorId: sensorId ?? this.sensorId,
-      ruleId: ruleId ?? this.ruleId,
+      ruleType: ruleType ?? this.ruleType,
       value: value ?? this.value,
     );
   }
@@ -28,8 +26,7 @@ class SensorRulesModel {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
-      'sensor_id': sensorId,
-      'rule_id': ruleId,
+      'type': ruleType,
       'value': value,
     };
   }
@@ -37,12 +34,11 @@ class SensorRulesModel {
   factory SensorRulesModel.fromMap(Map<String, dynamic> map) {
     return SensorRulesModel(
       id: map['id'] as String,
-      sensorId: map['sensor_id'] as String,
-      ruleId: map['rule_id'] as String,
+      ruleType: RuleType.values.byName(map['type']),
       value: map['value'] as double,
     );
   }
 
   @override
-  String toString() => 'SensorsRules(id: $id, sensorId: $sensorId, ruleId: $ruleId, value: $value)';
+  String toString() => 'SensorsRules(id: $id, ruleType: $ruleType, value: $value)';
 }

@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:postgres/postgres.dart';
 import 'package:sensors_monitoring/core/services/services.dart';
 import 'package:sensors_monitoring/src/data/datasources/common_datasource.dart';
-import 'package:sensors_monitoring/src/data/models/enum/sensor_type.dart';
+import 'package:sensors_monitoring/core/enum/sensor_type.dart';
 import 'package:sensors_monitoring/src/data/models/sensors_rules_model.dart';
 
 Future<void> main() async {
@@ -101,7 +101,7 @@ Future<void> main() async {
         await clearTablesSensors();
         await clearTablesConfigs();
         //!Arrange
-        final SensorRulesModel? resultOrNull = await commonDatasource.selectOneSensorRules(id: '87f0a680-815d-11ee-b962-0242ac120002');
+        final SensorRulesModel? resultOrNull = await commonDatasource.selectSensorRulesById(id: '87f0a680-815d-11ee-b962-0242ac120002');
         //!Assert
         expect(resultOrNull, null);
       });
@@ -125,7 +125,7 @@ Future<void> main() async {
 
         //!Arrange
         final String? id = (await commonDatasource.selectAllSensorRules())?.first.id;
-        final double? resultOrNull = (await commonDatasource.selectOneSensorRules(id: id!))?.value;
+        final double? resultOrNull = (await commonDatasource.selectSensorRulesById(id: id!))?.value;
 
         //!Assert
         expect(resultOrNull, value1);
@@ -257,7 +257,7 @@ Future<void> main() async {
       await commonDatasource.insertSensorRules(sensorId: sensorId!, value: value1, ruleId: ruleId!);
       //!Arrange
       final String? id = (await commonDatasource.selectAllSensorRules())?.first.id;
-      final Unit resultOrNull = await commonDatasource.deleteSensorRules(id: id!);
+      final Unit resultOrNull = await commonDatasource.deleteSensorRulesById(id: id!);
       //!Assert
       expect(resultOrNull, unit);
     });

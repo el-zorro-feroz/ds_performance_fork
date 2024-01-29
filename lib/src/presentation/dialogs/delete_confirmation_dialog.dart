@@ -17,12 +17,12 @@ Future<bool> deleteConfirmationDialog(
         Button(
           child: const Text('Delete'),
           onPressed: () {
-            Navigator.pop(context, true);
+            Navigator.pop(context, false);
           },
         ),
         FilledButton(
           child: const Text('Cancel'),
-          onPressed: () => Navigator.pop(context, false),
+          onPressed: () => Navigator.pop(context, true),
         ),
       ],
     ),

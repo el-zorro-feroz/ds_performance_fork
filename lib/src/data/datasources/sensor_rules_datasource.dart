@@ -19,74 +19,41 @@ extension SensorRulesDatasource on CommonDatasource {
     }
   }
 
-  Future<SensorRulesModel?> selectOneSensorRules({required String id}) async {
+  Future<SensorRulesModel?> selectSensorRulesById({required String id}) async {
     try {
-      final String query = await File('sql/model/sensor_rules/select_one_sensor_rules.sql').readAsString();
-      final List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(query, substitutionValues: {
-        'id': id,
-      });
-
-      if (request.isEmpty) {
-        return null;
-      }
-
-      return SensorRulesModel.fromMap(request.first['sensorrules']!);
-    } catch (_) {
-      rethrow;
-    }
-  }
-
-  Future<SensorRulesModel?> selectSensorRulesByRuleId({required String ruleId}) async {
-    try {
-      final String query = await File('sql/model/sensor_rules/select_sensor_rules_by_rule_id.sql').readAsString();
-      final List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(query, substitutionValues: {
-        'rule_id': ruleId,
-      });
-
-      if (request.isEmpty) {
-        return null;
-      }
-
-      return SensorRulesModel.fromMap(request.first['sensorrules']!);
-    } catch (_) {
-      rethrow;
-    }
-  }
-
-  Future<SensorRulesModel?> selectSensorRulesBySensorId({required String sensorId}) async {
-    try {
-      final String query = await File('sql/model/sensor_rules/select_sensor_rules_by_sensor_id.sql').readAsString();
-      final List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(query, substitutionValues: {
-        'sensor_id': sensorId,
-      });
-
-      if (request.isEmpty) {
-        return null;
-      }
-
-      return SensorRulesModel.fromMap(request.first['sensorrules']!);
-    } catch (_) {
-      rethrow;
-    }
-  }
-
-  Future<Unit> insertSensorRules({
-    required double value,
-    required String ruleId,
-    required String sensorId,
-  }) async {
-    try {
-      final String query = await File('sql/model/sensor_rules/insert_sensor_rules.sql').readAsString();
-      await PostgresModule.postgreSQLConnection.mappedResultsQuery(
+      final String query = await File('sql/model/sensor_rules/select_sensor_rules_by_id.sql').readAsString();
+      final List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(
         query,
         substitutionValues: {
-          'value': value,
-          'sensor_id': sensorId,
-          'rule_id': ruleId,
+          'id': id,
         },
       );
 
-      return unit;
+      if (request.isEmpty) {
+        return null;
+      }
+
+      return SensorRulesModel.fromMap(request.first['sensorrules']!);
+    } catch (_) {
+      rethrow;
+    }
+  }
+
+  Future<String> insertSensorRules({
+    required double value,
+    required RuleType ruleType,
+  }) async {
+    try {
+      final String query = await File('sql/model/sensor_rules/insert_sensor_rules.sql').readAsString();
+      final List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(
+        query,
+        substitutionValues: {
+          'value': value,
+          'type': ruleType.name,
+        },
+      );
+
+      return request[0]['sensorrules']!['id'];
     } catch (_) {
       rethrow;
     }
@@ -95,18 +62,16 @@ extension SensorRulesDatasource on CommonDatasource {
   Future<Unit> updateSensorRules({
     required String id,
     double? value,
-    String? ruleId,
-    String? sensorId,
+    RuleType? ruleType,
   }) async {
     try {
-      final String query = await File('sql/model/sensor_rules/udate_sensor_rules.sql').readAsString();
+      final String query = await File('sql/model/sensor_rules/update_sensor_rules.sql').readAsString();
       await PostgresModule.postgreSQLConnection.mappedResultsQuery(
         query,
         substitutionValues: {
           'id': id,
           'value': value,
-          'sensor_id': sensorId,
-          'rule_id': ruleId,
+          'type': ruleType?.name,
         },
       );
 
@@ -116,7 +81,7 @@ extension SensorRulesDatasource on CommonDatasource {
     }
   }
 
-  Future<Unit> deleteSensorRules({required String id}) async {
+  Future<Unit> deleteSensorRulesById(String id) async {
     try {
       final String query = await File('sql/model/sensor_rules/delete_sensor_rules.sql').readAsString();
       await PostgresModule.postgreSQLConnection.mappedResultsQuery(

@@ -78,6 +78,19 @@ class ServiceApp extends StatelessWidget {
             path: '/add',
             builder: (context, state) => const ConfigSettingsPage(),
           ),
+          GoRoute(
+            path: '/edit/:id',
+            builder: (context, state) {
+              final String? id = state.pathParameters['id'];
+              if (id == null) {
+                throw Exception(
+                  'Config id must not be null',
+                );
+              }
+
+              return ConfigSettingsPage(configId: id);
+            },
+          )
         ],
       ),
     ],

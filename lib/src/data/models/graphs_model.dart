@@ -1,5 +1,5 @@
-import 'package:sensors_monitoring/src/data/models/enum/graph_dependency.dart';
-import 'package:sensors_monitoring/src/data/models/enum/graph_type.dart';
+import 'package:sensors_monitoring/core/enum/graph_dependency.dart';
+import 'package:sensors_monitoring/core/enum/graph_type.dart';
 
 class GraphsModel {
   final String id;

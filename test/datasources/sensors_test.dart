@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:postgres/postgres.dart';
 import 'package:sensors_monitoring/core/services/services.dart';
 import 'package:sensors_monitoring/src/data/datasources/common_datasource.dart';
-import 'package:sensors_monitoring/src/data/models/enum/sensor_type.dart';
+import 'package:sensors_monitoring/core/enum/sensor_type.dart';
 import 'package:sensors_monitoring/src/data/models/sensors_model.dart';
 
 Future<void> main() async {
@@ -276,7 +276,7 @@ Future<void> main() async {
             );
             final String? sensorId = (await commonDatasource.selectAllSensors())?.first.id;
 
-            return await commonDatasource.deleteSensors(id: sensorId!);
+            return await commonDatasource.deleteSensorsById(id: sensorId!);
           } catch (_) {
             return null;
           }
@@ -293,7 +293,7 @@ Future<void> main() async {
         await clearTables();
         Future<Either<Unit, Unit?>> Function() deleteSensors = () async {
           try {
-            return Right(await commonDatasource.deleteSensors(id: 'e'));
+            return Right(await commonDatasource.deleteSensorsById(id: 'e'));
           } catch (_) {
             return Left(unit);
           }

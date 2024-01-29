@@ -21,7 +21,7 @@ extension TabsDatasource on CommonDatasource {
     }
   }
 
-  Future<List<TabsModel>?> selectAllTabsByConfigId({required String configId}) async {
+  Future<List<TabsModel>?> selectAllTabsByConfigId(String configId) async {
     try {
       final String query = await File('sql/model/tabs/select_all_tabs_by_config_id.sql').readAsString();
       final List<Map<String, Map<String, dynamic>>> request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(
@@ -66,13 +66,13 @@ extension TabsDatasource on CommonDatasource {
     }
   }
 
-  Future<Unit> insertTabs({
+  Future<TabsModel> insertTabs({
     required String configId,
     required String title,
   }) async {
     try {
       final String query = await File('sql/model/tabs/insert_tabs.sql').readAsString();
-      await PostgresModule.postgreSQLConnection.mappedResultsQuery(
+      final request = await PostgresModule.postgreSQLConnection.mappedResultsQuery(
         query,
         substitutionValues: {
           'config_id': configId,
@@ -80,7 +80,7 @@ extension TabsDatasource on CommonDatasource {
         },
       );
 
-      return unit;
+      return TabsModel.fromMap(request[0]['tabs']!);
     } catch (_) {
       rethrow;
     }
@@ -106,7 +106,7 @@ extension TabsDatasource on CommonDatasource {
     }
   }
 
-  Future<Unit> deleteTabs({required String id}) async {
+  Future<Unit> deleteTabsById(String id) async {
     try {
       final String query = await File('sql/model/tabs/delete_tabs.sql').readAsString();
       await PostgresModule.postgreSQLConnection.mappedResultsQuery(

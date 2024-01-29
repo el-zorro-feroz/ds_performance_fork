@@ -1,34 +1,37 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:go_router/go_router.dart';
+import 'package:sensors_monitoring/src/domain/entities/sensor_info.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class SensorCard extends StatelessWidget {
-  const SensorCard({super.key});
+  final String configId;
+  final SensorInfo sensorData;
+
+  const SensorCard({
+    super.key,
+    required this.configId,
+    required this.sensorData,
+  });
 
   @override
   Widget build(BuildContext context) {
     final Typography typography = FluentTheme.of(context).typography;
 
-    void openFullLog() {
-      const id = 'id'; //TODO NEEDS TO BE CONTROLLED BY OVER CONTROLLER
-      const sensor = 'sensor'; //TODO NEEDS TO BE CONTROLLED BY OVER CONTROLLER
-
-      GoRouter.of(context).go('/config/$id/$sensor');
-    }
-
     return GestureDetector(
-      onTap: openFullLog,
+      onTap: () {
+        GoRouter.of(context).go('/config/$configId/${sensorData.id}');
+      },
       child: Card(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Sensor Title',
+              sensorData.title,
               style: typography.bodyLarge,
             ),
             const SizedBox(height: 8.0),
             Text(
-              'Sensor Short Description',
+              sensorData.details,
               style: typography.body,
             ),
             Expanded(
@@ -40,7 +43,8 @@ class SensorCard extends StatelessWidget {
                   borderRadius: const BorderRadius.all(Radius.circular(8.0)),
                   color: FluentTheme.of(context).micaBackgroundColor,
                 ),
-                child: const SfCartesianChart(), //! CHART HERE
+                //TODO: paint graph with [data] values
+                child: const SfCartesianChart(),
               ),
             ),
           ],

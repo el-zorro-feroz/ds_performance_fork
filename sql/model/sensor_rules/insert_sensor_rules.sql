@@ -1,5 +1,3 @@
-INSERT INTO sensorrules (sensor_id, rule_id, value)
--- sensor_id uuid
--- rule_id uuid
--- value real
-VALUES (@sensor_id, @rule_id, @value);
+INSERT INTO sensorrules (type, value)
+VALUES (@type, @value)
+RETURNING id;
