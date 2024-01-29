@@ -1,14 +1,18 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:equatable/equatable.dart';
 
+/// Responsible to store user [message] and possible [StackTrace] on fails.
 class Failure extends Equatable {
-  final String message;
-  final StackTrace? stackTrace;
-
+  /// Creates an instance of [Failure]
   const Failure({
     required this.message,
     this.stackTrace,
   });
+
+  /// User message
+  final String message;
+
+  /// Possible trace for debugging
+  final StackTrace? stackTrace;
 
   @override
   List<Object?> get props => [message];
