@@ -34,27 +34,35 @@ class ConfigPage extends StatelessWidget {
       ).toList();
     }
 
-    final TabController tabController = services<TabController>();
+    return FutureBuilder(
+      future: controller.getConfigData(id),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return const Center(child: ProgressRing());
+        }
 
-    return ListenableBuilder(
-        listenable: controller,
-        builder: (context, _) {
-          final config = controller.getConfigData(id);
-          final tabs = buildTabs(config.tabList);
-          return ScaffoldPage(
-            header: PageHeader(
-              title: Text(
-                'Configuration ${config.title}',
-              ),
+        if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        }
+
+        final TabController tabController = services<TabController>();
+        final tabs = buildTabs(snapshot.data.tabList);
+
+        return ScaffoldPage(
+          header: PageHeader(
+            title: Text(
+              'Configuration ${snapshot.data.title}',
             ),
-            content: TabView(
-              tabs: tabs,
-              currentIndex: tabController.active,
-              closeButtonVisibility: CloseButtonVisibilityMode.never,
-              onChanged: (i) => tabController.active = i,
-              onNewPressed: () => GoRouter.of(context).go('/taboptions/$id'),
-            ),
-          );
-        });
+          ),
+          content: TabView(
+            tabs: tabs,
+            currentIndex: tabController.active,
+            closeButtonVisibility: CloseButtonVisibilityMode.never,
+            onChanged: (i) => tabController.active = i,
+            onNewPressed: () => GoRouter.of(context).go('/taboptions/$id'),
+          ),
+        );
+      },
+    );
   }
 }
