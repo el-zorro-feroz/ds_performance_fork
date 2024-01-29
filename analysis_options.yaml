@@ -6,6 +6,7 @@ analyzer:
 
   errors:
     close_sinks: ignore
+    must_be_immutable: ignore
     missing_required_param: error
     missing_return: error
     record_literal_one_positional_no_trailing_comma: error
@@ -201,3 +202,4 @@ linter:
     - use_to_and_as_if_applicable
     - valid_regexps
     - void_checks
+    
