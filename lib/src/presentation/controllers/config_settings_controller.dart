@@ -28,6 +28,7 @@ class ConfigSettingsController with ChangeNotifier {
 
   late String? configId;
   late Config config;
+  late Config savedConfig;
 
   late bool _isNewConfig = false;
 
@@ -57,6 +58,7 @@ class ConfigSettingsController with ChangeNotifier {
 
         _isNewConfig = true;
       }
+      savedConfig = config;
     } catch (_) {
       configId = null;
     }
@@ -101,8 +103,9 @@ class ConfigSettingsController with ChangeNotifier {
     } else {
       failOrConfig = await editConfigUsecase.call(
         EditConfigUsecaseParams(
-          config: config,
+          config: savedConfig,
           editedSensorsList: config.sensorList,
+          title: config.title,
         ),
       );
     }
@@ -110,10 +113,14 @@ class ConfigSettingsController with ChangeNotifier {
     failOrConfig.fold(
       (failure) => _showDebugFailureSnack(context, failure),
       (config) {
+        GoRouter.of(context).go('/');
+        this.config = config;
         services<ConfigController>().addConfig(config: config);
         GoRouter.of(context).go('/config/${config.id}');
       },
     );
+
+    notifyListeners();
   }
 
   void addSensor() {
@@ -139,7 +146,7 @@ class ConfigSettingsController with ChangeNotifier {
 
   void deleteSensorByID(BuildContext context, int sensorIndex) {
     config = config.copyWith(
-      sensorList: List.from(config.sensorList).removeAt(sensorIndex),
+      sensorList: List.from(config.sensorList)..removeAt(sensorIndex),
     );
 
     notifyListeners();
@@ -187,9 +194,22 @@ class ConfigSettingsController with ChangeNotifier {
     );
   }
 
-  void editAlertByIndex(BuildContext context, int alertIndex) {}
+  void editAlertByIndex(BuildContext context, int alertIndex, int sensorIndex) {}
 
-  void deleteAlertByIndex(BuildContext context, int alertIndex) {}
+  void deleteAlertByIndex(BuildContext context, int alertIndex, int sensorIndex) {
+    List<AlertData> alertList = [...config.sensorList.elementAt(sensorIndex).alerts];
+    alertList.removeAt(alertIndex);
+    List<SensorInfo> sensorList = List.from(config.sensorList)
+      ..removeAt(sensorIndex)
+      ..insert(
+        sensorIndex,
+        config.sensorList.elementAt(sensorIndex).copyWith(alerts: alertList),
+      );
+
+    config = config.copyWith(sensorList: sensorList);
+
+    notifyListeners();
+  }
 
   void _showDebugFailureSnack(BuildContext context, Failure failure) {
     if (kDebugMode) {
@@ -200,5 +220,35 @@ class ConfigSettingsController with ChangeNotifier {
   void ontitleEditingComplete() {
     config = config.copyWith(title: titleEditingController.text);
     notifyListeners();
+  }
+
+  final Map<int, TextEditingController> _sensorTitleTextEditingControllers = {};
+
+  void changeSensorTitleByIndex({required int sensorIndex}) {
+    config = config.copyWith(
+      sensorList: List.from(config.sensorList)
+        ..removeAt(sensorIndex)
+        ..insert(
+          sensorIndex,
+          config.sensorList.elementAt(sensorIndex).copyWith(
+                title: _sensorTitleTextEditingControllers[sensorIndex]!.text,
+              ),
+        ),
+    );
+    notifyListeners();
+  }
+
+  TextEditingController getSensorTitleControllerByIndex({required int sensorIndex}) {
+    if (_sensorTitleTextEditingControllers.containsKey(sensorIndex)) {
+      return _sensorTitleTextEditingControllers[sensorIndex]!;
+    }
+    _sensorTitleTextEditingControllers.addEntries([
+      MapEntry(
+        sensorIndex,
+        TextEditingController()..text = config.sensorList[sensorIndex].title,
+      ),
+    ]);
+
+    return _sensorTitleTextEditingControllers[sensorIndex]!;
   }
 }

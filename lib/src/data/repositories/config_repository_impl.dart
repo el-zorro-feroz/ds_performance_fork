@@ -233,10 +233,10 @@ class ConfigRepositoryImpl implements ConfigRepository {
         await datasource.updateConfigs(id: configId, title: params.title!);
       }
 
-      // Проверяем были ли внесены изменения
-      if (config.sensorList == params.editedSensorsList) {
-        return Right(config); //? Можно дропать ошибку
-      } else
+      // // Проверяем были ли внесены изменения
+      // if (config.sensorList == params.editedSensorsList) {
+      //   return Right(config); //? Можно дропать ошибку
+      // } else
 
       // Если после изменения в конфигурации отсутствует содержимое, то удаляем все сенсоры,
       // которые были до изменения (каскадно удалаются все записи, связанные с ними).

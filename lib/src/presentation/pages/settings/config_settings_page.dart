@@ -33,6 +33,7 @@ class ConfigSettingsPage extends StatelessWidget {
           return const Center(child: ProgressRing());
         }
         final focusNode = FocusNode();
+        final sensorFocusNode = FocusNode();
         return ScaffoldPage.scrollable(
           header: PageHeader(
             title: Text(
@@ -135,17 +136,23 @@ class ConfigSettingsPage extends StatelessWidget {
                       trailing: Row(
                         children: [
                           IconButton(
-                            icon: const Icon(FluentIcons.edit),
-                            onPressed: () => controller.editSensorTitleByID(context, sensorIndex),
-                          ),
-                          IconButton(
                             icon: const Icon(FluentIcons.delete),
                             onPressed: () => controller.deleteSensorByID(context, sensorIndex),
                           ),
                         ],
                       ),
-                      header: Text(
-                        sensorInfo.title,
+                      header: TextBox(
+                        controller: controller.getSensorTitleControllerByIndex(sensorIndex: sensorIndex),
+                        focusNode: sensorFocusNode,
+                        placeholder: sensorInfo.title.isEmpty ? 'Sensor Title' : sensorInfo.title,
+                        onEditingComplete: () {
+                          sensorFocusNode.unfocus();
+                          controller.changeSensorTitleByIndex(sensorIndex: sensorIndex);
+                        },
+                        onTapOutside: (event) {
+                          sensorFocusNode.unfocus();
+                          controller.changeSensorTitleByIndex(sensorIndex: sensorIndex);
+                        },
                       ),
                       content: Wrap(
                         runSpacing: 8.0,
@@ -198,8 +205,8 @@ class ConfigSettingsPage extends StatelessWidget {
                                 sensorInfo.alerts.length,
                                 (alertIndex) => SensorAlertSetting(
                                   alert: sensorInfo.alerts.elementAt(alertIndex),
-                                  onEditAlertPressed: () => controller.editAlertByIndex(context, alertIndex),
-                                  onDeleteAlertPressed: () => controller.deleteAlertByIndex(context, alertIndex),
+                                  onEditAlertPressed: () => controller.editAlertByIndex(context, alertIndex, sensorIndex),
+                                  onDeleteAlertPressed: () => controller.deleteAlertByIndex(context, alertIndex, sensorIndex),
                                 ),
                               ),
                               Button(

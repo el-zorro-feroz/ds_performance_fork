@@ -1,10 +1,11 @@
 import 'package:dartz/dartz.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:fluent_ui/fluent_ui.dart';
 import 'package:injectable/injectable.dart';
+import 'package:sensors_monitoring/core/services/services.dart';
 import 'package:sensors_monitoring/src/domain/entities/config.dart';
 import 'package:sensors_monitoring/src/domain/entities/sensor_info.dart';
 import 'package:sensors_monitoring/src/domain/usecases/configs/get_all_configs_usecase.dart';
+import 'package:sensors_monitoring/src/presentation/controllers/tab_controller.dart';
 
 @Singleton()
 class ConfigController with ChangeNotifier {
@@ -72,7 +73,15 @@ class ConfigController with ChangeNotifier {
   }
 
   void addConfig({required Config config}) {
-    configs.add(config);
+    if (configs.where((element) => element.id == config.id).isEmpty) {
+      configs.add(config);
+    } else {
+      final int configIndex = configs.indexWhere((element) => element.id == config.id);
+      configs.removeAt(configIndex);
+      configs.insert(configIndex, config);
+    }
+    services<TabController>().active = -1;
+    services<TabController>().notifyListeners();
 
     notifyListeners();
   }

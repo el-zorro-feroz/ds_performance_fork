@@ -1,4 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:sensors_monitoring/core/services/services.dart';
+import 'package:sensors_monitoring/src/presentation/controllers/config_controller.dart';
+import 'package:sensors_monitoring/src/presentation/controllers/tab_controller.dart';
 import 'package:sensors_monitoring/src/presentation/widgets/sensor_page/sensor_card.dart';
 import 'package:sensors_monitoring/src/domain/entities/tab.dart' as config_tab show Tab;
 
@@ -24,17 +27,21 @@ class ActiveTab extends StatelessWidget {
       );
     }
 
-    return GridView.builder(
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
-        childAspectRatio: 8 / 6,
-      ),
-      itemCount: data.sensorInfoList.length,
-      itemBuilder: (_, index) => SensorCard(
-        configId: configID,
-        sensorData: data.sensorInfoList.elementAt(index),
-      ),
-    );
+    return ListenableBuilder(
+        listenable: services<TabController>(),
+        builder: (context, _) {
+          return GridView.builder(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3,
+              childAspectRatio: 8 / 6,
+            ),
+            itemCount: data.sensorInfoList.length,
+            itemBuilder: (_, index) => SensorCard(
+              configId: configID,
+              sensorData: data.sensorInfoList.elementAt(index),
+            ),
+          );
+        });
 
     //? Controller Builder Example
 

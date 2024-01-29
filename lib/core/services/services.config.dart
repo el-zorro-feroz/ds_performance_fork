@@ -99,8 +99,8 @@ extension GetItInjectableX on _i1.GetIt {
         _i21.DeleteTabByIdUsecase(tabRepository: gh<_i15.TabRepository>()));
     gh.factory<_i22.EditTabUsecase>(
         () => _i22.EditTabUsecase(tabRepository: gh<_i15.TabRepository>()));
-    gh.factory<_i23.TabController>(
-        () => _i23.TabController(addTabUsecase: gh<_i18.AddTabUsecase>()));
+    gh.singleton<_i23.TabController>(
+        _i23.TabController(addTabUsecase: gh<_i18.AddTabUsecase>()));
     return this;
   }
 }

@@ -14,7 +14,7 @@ class EditConfigUsecase extends UseCase<Config, EditConfigUsecaseParams> {
   EditConfigUsecase({required this.repository});
   @override
   FutureOr<Either<Failure, Config>> call(EditConfigUsecaseParams param) async {
-    return repository.editConfig(param);
+    return await repository.editConfig(param);
   }
 }
 
