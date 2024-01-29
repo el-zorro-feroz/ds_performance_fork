@@ -113,7 +113,6 @@ class ConfigSettingsController with ChangeNotifier {
     failOrConfig.fold(
       (failure) => _showDebugFailureSnack(context, failure),
       (config) {
-        GoRouter.of(context).go('/');
         this.config = config;
         services<ConfigController>().addConfig(config: config);
         GoRouter.of(context).go('/config/${config.id}');
@@ -140,9 +139,7 @@ class ConfigSettingsController with ChangeNotifier {
     notifyListeners();
   }
 
-  void editSensorTitleByID(BuildContext context, int sensorIndex) {
-    //TODO: dialog box or text-to-textbox pass
-  }
+  void editSensorDetailsByID(BuildContext context, int sensorIndex) {}
 
   void deleteSensorByID(BuildContext context, int sensorIndex) {
     config = config.copyWith(
@@ -176,9 +173,17 @@ class ConfigSettingsController with ChangeNotifier {
         sensorRuleList: const [],
       ),
       onCompleteEditing: (AlertData data) async {
+        print(data);
         if (data.sensorRuleList.isEmpty) {
           return;
         }
+        final sensorRuleList = [...data.sensorRuleList];
+        for (var element in sensorRuleList) {
+          sensorRuleList.remove(element);
+          sensorRuleList.add(element.copyWith(id: ''));
+        }
+
+        data = data.copyWith(sensorRuleList: sensorRuleList);
         List<AlertData> alertList = [...config.sensorList.elementAt(sensorIndex).alerts];
         alertList.add(data);
         List<SensorInfo> sensorList = List.from(config.sensorList)
@@ -250,5 +255,35 @@ class ConfigSettingsController with ChangeNotifier {
     ]);
 
     return _sensorTitleTextEditingControllers[sensorIndex]!;
+  }
+
+  final Map<int, TextEditingController> _sensorDetailsTextEditingControllers = {};
+
+  void changeSensorDetailsByIndex({required int sensorIndex}) {
+    config = config.copyWith(
+      sensorList: List.from(config.sensorList)
+        ..removeAt(sensorIndex)
+        ..insert(
+          sensorIndex,
+          config.sensorList.elementAt(sensorIndex).copyWith(
+                details: _sensorDetailsTextEditingControllers[sensorIndex]!.text,
+              ),
+        ),
+    );
+    notifyListeners();
+  }
+
+  TextEditingController getSensorDetailsControllerByIndex({required int sensorIndex}) {
+    if (_sensorDetailsTextEditingControllers.containsKey(sensorIndex)) {
+      return _sensorDetailsTextEditingControllers[sensorIndex]!;
+    }
+    _sensorDetailsTextEditingControllers.addEntries([
+      MapEntry(
+        sensorIndex,
+        TextEditingController()..text = config.sensorList[sensorIndex].details,
+      ),
+    ]);
+
+    return _sensorDetailsTextEditingControllers[sensorIndex]!;
   }
 }

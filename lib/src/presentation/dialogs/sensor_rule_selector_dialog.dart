@@ -75,10 +75,13 @@ class _SelectorController with ChangeNotifier {
     notifyListeners();
   }
 
-  void changeRuleValueByIndex(int index, String value) {
+  void changeRuleValueByIndex(
+    int index,
+    String value,
+  ) {
     final double? obusValue = double.tryParse(value);
     if (obusValue != null) {
-      resultAlertData.copyWith(
+      resultAlertData = resultAlertData.copyWith(
         sensorRuleList: List.from(
           resultAlertData.sensorRuleList,
         )
@@ -121,169 +124,212 @@ Future<void> showSensorRuleSelectorDialog(
 
   showDialog(
     context: context,
-    builder: (_) => ContentDialog(
-      actions: [
-        Button(
-          onPressed: () => GoRouter.of(context).pop(),
-          child: const Text('Cancel'),
-        ),
-        FilledButton(
-          onPressed: () {
-            if (onCompleteEditing != null) {
-              onCompleteEditing(controller.resultAlertData);
-            }
-          },
-          child: const Text('Accept'),
-        ),
-      ],
-      content: ListenableBuilder(
-        listenable: controller,
-        builder: (_, __) {
-          return SizedBox(
-            width: 600,
-            height: size.height,
-            child: ScaffoldPage.scrollable(
-              header: PageHeader(
-                title: SizedBox(
-                  width: double.infinity,
-                  child: TextBox(
-                    controller: controller.titleEditingController,
-                    onEditingComplete: controller.changeResultTitle,
-                    placeholder: 'Notification title',
+    builder: (_) {
+      final titleFocusNode = FocusNode();
+      final detailsFocusNode = FocusNode();
+      final messageFocusNode = FocusNode();
+      return ContentDialog(
+        actions: [
+          Button(
+            onPressed: () => GoRouter.of(context).pop(),
+            child: const Text('Cancel'),
+          ),
+          FilledButton(
+            onPressed: () {
+              if (onCompleteEditing != null) {
+                onCompleteEditing(controller.resultAlertData);
+              }
+            },
+            child: const Text('Accept'),
+          ),
+        ],
+        content: ListenableBuilder(
+          listenable: controller,
+          builder: (_, __) {
+            return SizedBox(
+              width: 600,
+              height: size.height,
+              child: ScaffoldPage.scrollable(
+                header: PageHeader(
+                  title: SizedBox(
+                    width: double.infinity,
+                    child: TextBox(
+                      controller: controller.titleEditingController,
+                      focusNode: titleFocusNode,
+                      onEditingComplete: () {
+                        titleFocusNode.unfocus();
+                        controller.changeResultTitle();
+                      },
+                      onTapOutside: (event) {
+                        titleFocusNode.unfocus();
+                        controller.changeResultTitle();
+                      },
+                      placeholder: 'Notification title',
+                    ),
                   ),
                 ),
+                children: [
+                  TextBox(
+                    controller: controller.messageEditingController,
+                    focusNode: messageFocusNode,
+                    onEditingComplete: () {
+                      messageFocusNode.unfocus();
+                      controller.changeResultMessage();
+                    },
+                    onTapOutside: (event) {
+                      messageFocusNode.unfocus();
+                      controller.changeResultMessage();
+                    },
+                    placeholder: 'Notification text',
+                  ),
+                  TextBox(
+                    controller: controller.descriptionEditingController,
+                    focusNode: detailsFocusNode,
+                    onEditingComplete: () {
+                      detailsFocusNode.unfocus();
+                      controller.changeResultDescription();
+                    },
+                    onTapOutside: (event) {
+                      detailsFocusNode.unfocus();
+                      controller.changeResultDescription();
+                    },
+                    placeholder: 'Notification description',
+                  ),
+                  DropDownButton(
+                    closeAfterClick: false,
+                    buttonBuilder: (_, __) {
+                      return Button(
+                        onPressed: __,
+                        child: Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 4.0,
+                          ),
+                          child: Wrap(
+                            spacing: 8.0,
+                            children: [
+                              const Icon(
+                                FluentIcons.chevron_down_med,
+                              ),
+                              Text(
+                                alertTypeToStrData[controller.resultAlertData.type]!,
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                    items: AlertType.values.map<MenuFlyoutItem>((type) {
+                      return MenuFlyoutItem(
+                        text: Text(
+                          alertTypeToStrData[type]!,
+                        ),
+                        onPressed: () => controller.changeResultType(type),
+                      );
+                    }).toList(),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      top: 32.0,
+                      bottom: 16.0,
+                      left: 8.0,
+                      right: 8.0,
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            'Rules',
+                            style: typography.subtitle,
+                          ),
+                        ),
+                        // Replaced with dropdown menu above
+                        //
+                        // IconButton(
+                        //   icon: const Icon(FluentIcons.add),
+                        //   onPressed: controller.addRule,
+                        // ),
+                      ],
+                    ),
+                  ),
+                  DropDownButton(
+                    closeAfterClick: false,
+                    buttonBuilder: (_, __) {
+                      return Button(
+                        onPressed: __,
+                        child: Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 4.0,
+                          ),
+                          child: const Wrap(
+                            spacing: 8.0,
+                            children: [
+                              Icon(
+                                FluentIcons.chevron_down_med,
+                              ),
+                              Text(
+                                'Select rule',
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                    items: RuleType.values.map<MenuFlyoutItem>((type) {
+                      return MenuFlyoutItem(
+                        text: Text(
+                          ruleTypeToStrData[type]!,
+                        ),
+                        onPressed: () => controller.addRule(type),
+                      );
+                    }).toList(),
+                  ),
+                  // AutoSuggestBox(
+                  //   placeholder: 'Add Exists Rule',
+                  //   items: List.generate(
+                  //     5,
+                  //     (_) => AutoSuggestBoxItem(
+                  //       value: _,
+                  //       label: 'label $_',
+                  //     ),
+                  //   ),
+                  // ),
+                  ...List.generate(
+                    controller.resultAlertData.sensorRuleList.length,
+                    (index) {
+                      SensorRule data = controller.resultAlertData.sensorRuleList.elementAt(index);
+                      final TextEditingController valueTextEditingController = TextEditingController()..text = data.value.toString();
+                      final FocusNode focusNode = FocusNode();
+                      return NotificationRuleTable(
+                        index: index,
+                        sensorRule: data,
+                        focusNode: focusNode,
+                        valueEditingController: valueTextEditingController,
+                        onDeleteCallback: () => controller.deleteRuleByIndex(index),
+                        onEditingComplete: () {
+                          focusNode.unfocus();
+                          controller.changeRuleValueByIndex(
+                            index,
+                            valueTextEditingController.text,
+                          );
+                        },
+                        onTapOutside: (event) {
+                          focusNode.unfocus();
+                          controller.changeRuleValueByIndex(
+                            index,
+                            valueTextEditingController.text,
+                          );
+                        },
+                      );
+                    },
+                  ).reversed,
+                ],
               ),
-              children: [
-                TextBox(
-                  controller: controller.messageEditingController,
-                  onEditingComplete: controller.changeResultMessage,
-                  placeholder: 'Notification text',
-                ),
-                TextBox(
-                  controller: controller.descriptionEditingController,
-                  onEditingComplete: controller.changeResultDescription,
-                  placeholder: 'Notification description',
-                ),
-                DropDownButton(
-                  closeAfterClick: false,
-                  buttonBuilder: (_, __) {
-                    return Button(
-                      onPressed: __,
-                      child: Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 4.0,
-                        ),
-                        child: Wrap(
-                          spacing: 8.0,
-                          children: [
-                            const Icon(
-                              FluentIcons.chevron_down_med,
-                            ),
-                            Text(
-                              alertTypeToStrData[controller.resultAlertData.type]!,
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                  items: AlertType.values.map<MenuFlyoutItem>((type) {
-                    return MenuFlyoutItem(
-                      text: Text(
-                        alertTypeToStrData[type]!,
-                      ),
-                      onPressed: () => controller.changeResultType(type),
-                    );
-                  }).toList(),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: 32.0,
-                    bottom: 16.0,
-                    left: 8.0,
-                    right: 8.0,
-                  ),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          'Rules',
-                          style: typography.subtitle,
-                        ),
-                      ),
-                      // Replaced with dropdown menu above
-                      //
-                      // IconButton(
-                      //   icon: const Icon(FluentIcons.add),
-                      //   onPressed: controller.addRule,
-                      // ),
-                    ],
-                  ),
-                ),
-                DropDownButton(
-                  closeAfterClick: false,
-                  buttonBuilder: (_, __) {
-                    return Button(
-                      onPressed: __,
-                      child: Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 4.0,
-                        ),
-                        child: const Wrap(
-                          spacing: 8.0,
-                          children: [
-                            Icon(
-                              FluentIcons.chevron_down_med,
-                            ),
-                            Text(
-                              'Select rule',
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                  items: RuleType.values.map<MenuFlyoutItem>((type) {
-                    return MenuFlyoutItem(
-                      text: Text(
-                        ruleTypeToStrData[type]!,
-                      ),
-                      onPressed: () => controller.addRule(type),
-                    );
-                  }).toList(),
-                ),
-                // AutoSuggestBox(
-                //   placeholder: 'Add Exists Rule',
-                //   items: List.generate(
-                //     5,
-                //     (_) => AutoSuggestBoxItem(
-                //       value: _,
-                //       label: 'label $_',
-                //     ),
-                //   ),
-                // ),
-                ...List.generate(
-                  controller.resultAlertData.sensorRuleList.length,
-                  (index) {
-                    SensorRule data = controller.resultAlertData.sensorRuleList.elementAt(index);
-                    final TextEditingController valueTextEditingController = TextEditingController()..text = data.value.toString();
-
-                    return NotificationRuleTable(
-                      index: index,
-                      sensorRule: data,
-                      valueEditingController: valueTextEditingController,
-                      onDeleteCallback: () => controller.deleteRuleByIndex(index),
-                      onEditingComplete: () => controller.changeRuleValueByIndex(index, valueTextEditingController.text),
-                    );
-                  },
-                ).reversed,
-              ],
-            ),
-          );
-        },
-      ),
-    ),
+            );
+          },
+        ),
+      );
+    },
   );
 }

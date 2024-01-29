@@ -7,16 +7,20 @@ class NotificationRuleTable extends StatelessWidget {
   final int index;
   final SensorRule sensorRule;
   final TextEditingController valueEditingController;
+  final FocusNode focusNode;
   final Function()? onDeleteCallback;
   final Function()? onEditingComplete;
+  final Function(PointerDownEvent event)? onTapOutside;
 
   const NotificationRuleTable({
     super.key,
     required this.sensorRule,
     required this.index,
     required this.valueEditingController,
+    required this.focusNode,
     this.onDeleteCallback,
     this.onEditingComplete,
+    this.onTapOutside,
   });
 
   @override
@@ -80,6 +84,7 @@ class NotificationRuleTable extends StatelessWidget {
                     TextBox(
                       controller: valueEditingController,
                       onEditingComplete: onEditingComplete,
+                      onTapOutside: onTapOutside,
                       keyboardType: TextInputType.number,
                       inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9.]'))],
                       maxLines: 1,

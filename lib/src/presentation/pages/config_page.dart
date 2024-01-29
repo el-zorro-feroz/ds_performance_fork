@@ -35,7 +35,7 @@ class ConfigPage extends StatelessWidget {
     }
 
     return FutureBuilder(
-      future: controller.getConfigData(id),
+      future: Future.value([controller.getConfigData(id)]),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return const Center(child: ProgressRing());
@@ -44,14 +44,13 @@ class ConfigPage extends StatelessWidget {
         if (snapshot.hasError) {
           return Center(child: Text('Error: ${snapshot.error}'));
         }
-
         final TabController tabController = services<TabController>();
-        final tabs = buildTabs(snapshot.data.tabList);
+        final tabs = buildTabs(snapshot.data!.first.tabList);
 
         return ScaffoldPage(
           header: PageHeader(
             title: Text(
-              'Configuration ${snapshot.data.title}',
+              'Configuration ${snapshot.data!.first.title}',
             ),
           ),
           content: TabView(

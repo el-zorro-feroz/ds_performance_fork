@@ -228,9 +228,13 @@ class ConfigRepositoryImpl implements ConfigRepository {
     try {
       final Config config = params.config;
       final String configId = config.id;
+      late final String configTitle;
 
       if (params.title != null && params.title != '' && params.config.title != params.title) {
         await datasource.updateConfigs(id: configId, title: params.title!);
+        configTitle = params.title!;
+      } else {
+        configTitle = config.title;
       }
 
       // // Проверяем были ли внесены изменения
@@ -441,29 +445,43 @@ class ConfigRepositoryImpl implements ConfigRepository {
                     );
                   }
                   // Возвращаем сенсор с измененным списком уведомлений
-                  sensorList.add(
-                    SensorInfo(
-                      id: newSensor.id,
-                      title: newSensor.title,
-                      details: newSensor.details,
-                      sensorType: newSensor.sensorType,
-                      sensorHistoryList: const [],
-                      alerts: alertList,
-                    ),
+                  final sensor = SensorInfo(
+                    id: newSensor.id,
+                    title: newSensor.title,
+                    details: newSensor.details,
+                    sensorType: newSensor.sensorType,
+                    sensorHistoryList: const [],
+                    alerts: newSensor.alerts,
                   );
+                  sensorList.add(sensor);
+                  for (var tab in tabList) {
+                    for (var tabSensor in tab.sensorInfoList) {
+                      if (tabSensor.id == sensor.id) {
+                        tab.sensorInfoList.removeWhere((tabSensor) => tabSensor.id == sensor.id);
+                        tab.sensorInfoList.add(sensor);
+                      }
+                    }
+                  }
 
                   // Если список уведомлений сенсора не изменился, то возвращаем сенсор
                 } else {
-                  sensorList.add(
-                    SensorInfo(
-                      id: newSensor.id,
-                      title: newSensor.title,
-                      details: newSensor.details,
-                      sensorType: newSensor.sensorType,
-                      sensorHistoryList: const [],
-                      alerts: newSensor.alerts,
-                    ),
+                  final sensor = SensorInfo(
+                    id: newSensor.id,
+                    title: newSensor.title,
+                    details: newSensor.details,
+                    sensorType: newSensor.sensorType,
+                    sensorHistoryList: const [],
+                    alerts: newSensor.alerts,
                   );
+                  sensorList.add(sensor);
+                  for (var tab in tabList) {
+                    for (var tabSensor in tab.sensorInfoList) {
+                      if (tabSensor.id == sensor.id) {
+                        tab.sensorInfoList.removeWhere((tabSensor) => tabSensor.id == sensor.id);
+                        tab.sensorInfoList.add(sensor);
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -476,6 +494,7 @@ class ConfigRepositoryImpl implements ConfigRepository {
             }
           }
         }
+
         // Добавляем новые сенсоры в конфиг
         for (SensorInfo sensor in toInsertSensorList) {
           final String sensorId = await datasource.insertSensors(
@@ -540,10 +559,11 @@ class ConfigRepositoryImpl implements ConfigRepository {
         }
 
         //!
+
         return Right(
           Config(
             id: configId,
-            title: config.title,
+            title: configTitle,
             tabList: tabList,
             sensorList: sensorList,
           ),

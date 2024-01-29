@@ -1,6 +1,5 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:sensors_monitoring/core/services/services.dart';
-import 'package:sensors_monitoring/src/presentation/controllers/config_controller.dart';
 import 'package:sensors_monitoring/src/presentation/controllers/tab_controller.dart';
 import 'package:sensors_monitoring/src/presentation/widgets/sensor_page/sensor_card.dart';
 import 'package:sensors_monitoring/src/domain/entities/tab.dart' as config_tab show Tab;

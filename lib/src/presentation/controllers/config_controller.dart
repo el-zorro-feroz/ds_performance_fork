@@ -81,7 +81,6 @@ class ConfigController with ChangeNotifier {
       configs.insert(configIndex, config);
     }
     services<TabController>().active = -1;
-    services<TabController>().notifyListeners();
 
     notifyListeners();
   }

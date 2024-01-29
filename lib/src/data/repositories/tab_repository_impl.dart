@@ -1,10 +1,8 @@
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
 import 'package:sensors_monitoring/core/failure/failure.dart';
-import 'package:sensors_monitoring/core/services/services.dart';
 import 'package:sensors_monitoring/src/data/datasources/common_datasource.dart';
 import 'package:sensors_monitoring/src/data/models/tabs_model.dart';
-import 'package:sensors_monitoring/src/domain/entities/config.dart';
 import 'package:sensors_monitoring/src/domain/entities/tab.dart';
 import 'package:sensors_monitoring/src/domain/repositories/tab_repository.dart';
 import 'package:sensors_monitoring/src/domain/usecases/tab/add_tab_usecase.dart';

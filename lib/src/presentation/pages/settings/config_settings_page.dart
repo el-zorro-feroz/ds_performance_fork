@@ -33,7 +33,8 @@ class ConfigSettingsPage extends StatelessWidget {
           return const Center(child: ProgressRing());
         }
         final focusNode = FocusNode();
-        final sensorFocusNode = FocusNode();
+        final sensorTitleFocusNode = FocusNode();
+        final sensorDetailsFocusNode = FocusNode();
         return ScaffoldPage.scrollable(
           header: PageHeader(
             title: Text(
@@ -143,14 +144,14 @@ class ConfigSettingsPage extends StatelessWidget {
                       ),
                       header: TextBox(
                         controller: controller.getSensorTitleControllerByIndex(sensorIndex: sensorIndex),
-                        focusNode: sensorFocusNode,
+                        focusNode: sensorTitleFocusNode,
                         placeholder: sensorInfo.title.isEmpty ? 'Sensor Title' : sensorInfo.title,
                         onEditingComplete: () {
-                          sensorFocusNode.unfocus();
+                          sensorTitleFocusNode.unfocus();
                           controller.changeSensorTitleByIndex(sensorIndex: sensorIndex);
                         },
                         onTapOutside: (event) {
-                          sensorFocusNode.unfocus();
+                          sensorTitleFocusNode.unfocus();
                           controller.changeSensorTitleByIndex(sensorIndex: sensorIndex);
                         },
                       ),
@@ -158,7 +159,17 @@ class ConfigSettingsPage extends StatelessWidget {
                         runSpacing: 8.0,
                         children: [
                           TextBox(
-                            placeholder: sensorInfo.details,
+                            controller: controller.getSensorDetailsControllerByIndex(sensorIndex: sensorIndex),
+                            focusNode: sensorDetailsFocusNode,
+                            placeholder: sensorInfo.details.isEmpty ? 'Sensor details' : sensorInfo.details,
+                            onEditingComplete: () {
+                              sensorDetailsFocusNode.unfocus();
+                              controller.changeSensorDetailsByIndex(sensorIndex: sensorIndex);
+                            },
+                            onTapOutside: (event) {
+                              sensorDetailsFocusNode.unfocus();
+                              controller.changeSensorDetailsByIndex(sensorIndex: sensorIndex);
+                            },
                           ),
                           DropDownButton(
                             buttonBuilder: (_, __) {
@@ -274,7 +285,6 @@ class SensorAlertSetting extends StatelessWidget {
     final Typography typography = FluentTheme.of(context).typography;
 
     final SensorAlertSettingData settingData = SensorAlertSettingData.getSettingData(alert.type);
-
     return ListTile(
       leading: Container(
         padding: const EdgeInsets.symmetric(
