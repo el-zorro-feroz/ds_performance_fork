@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 /// Responsible to store user [message] and possible [StackTrace] on fails.
-class Failure extends Equatable {
+final class Failure extends Equatable {
   /// Creates an instance of [Failure]
   const Failure({
     required this.message,
