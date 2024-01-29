@@ -1,6 +1,9 @@
+import 'package:dartz/dartz.dart';
 import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:postgres/postgres.dart';
+import 'package:sensors_monitoring/core/failure/failure.dart';
+import 'package:sensors_monitoring/core/types/fail_or.dart';
 
 /// Simple connector to postgres database which handle this connection
 @Singleton()
@@ -49,5 +52,14 @@ class PostgresServer with ChangeNotifier {
     } finally {
       notifyListeners();
     }
+  }
+
+  /// Execute [function] callback if there is connection to database
+  FFailOr<dynamic> execute(FFailOr<dynamic> function) {
+    if (!isConnected) {
+      return const Left(Failure(message: 'Database connection was lost'));
+    }
+
+    return function;
   }
 }
