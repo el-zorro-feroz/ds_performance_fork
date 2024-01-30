@@ -1,5 +1,5 @@
 /// Available rule types for alert system.
-enum RuleTypeEnum {
+enum RuleType {
   /// Used to set up minimum value limits for rules.
   minimum,
 

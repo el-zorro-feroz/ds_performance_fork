@@ -1,5 +1,5 @@
 /// Available alert types for sensor alert system.
-enum AlertTypeEnum {
+enum AlertType {
   /// Used for notification purposes,
   /// e.g. low temperature increase.
   info,

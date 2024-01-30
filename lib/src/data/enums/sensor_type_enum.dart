@@ -1,5 +1,5 @@
 /// Available sensor types in system.
-enum SensorTypeEnum {
+enum SensorType {
   /// Used to display humidity on the sensor.
   humidity,
 
