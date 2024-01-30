@@ -55,11 +55,11 @@ class PostgresServer with ChangeNotifier {
   }
 
   /// Execute [function] callback if there is connection to database
-  FFailOr<dynamic> execute(FFailOr<dynamic> function) {
+  FFailOr<T> execute<T>(FFailOr<T> Function(Connection) function) {
     if (!isConnected) {
       return const Left(Failure(message: 'Database connection was lost'));
     }
 
-    return function;
+    return function(connection!);
   }
 }
