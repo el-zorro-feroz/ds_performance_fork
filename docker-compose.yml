@@ -1,0 +1,44 @@
+# This compose file creates a workspace with a pre-installed 
+# flutter image (See [Dockerfile] description) and postgress databases.
+
+version: '3.8'
+
+services:
+  flutter:
+    image: flutter:3.16.0 # Build this image from [Dockerfile]    
+    depends_on:
+      - postgres
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL="postgresql://postgres:password@postgres:5432/database"
+    volumes:
+      - .:/project
+    command: /bin/sh -c "while sleep 1000; do :; done"
+
+  postgres:
+    image: postgres
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d database"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=database
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - PGDATA="/var/lib/postgresql/data/pgdata"
+    volumes:
+      - database:/var/lib/postgresql/data
+    deploy:
+          resources:
+            limits:
+              cpus: '1'
+              memory: 4G
+  
+volumes:
+  database:

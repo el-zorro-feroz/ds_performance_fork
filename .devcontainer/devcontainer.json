@@ -1,0 +1,25 @@
+{
+    "name": "master",
+    "service": "flutter",
+    "workspaceFolder": "/project",
+    "dockerComposeFile": "../docker-compose.yml",
+    "forwardPorts": [3000, 5432],
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "Dart-Code.flutter"
+            ],
+            "settings": {
+                "dart.lineLength": 256,
+                "[dart]": {
+                    "editor.formatOnSave": true,
+                    "editor.formatOnType": true,
+                    "editor.selectionHighlight": false,
+                    "editor.suggestSelection": "first",
+                    "editor.tabCompletion": "onlySnippets",
+                    "editor.wordBasedSuggestions": "off"
+                }
+            }
+        }
+    }
+}
