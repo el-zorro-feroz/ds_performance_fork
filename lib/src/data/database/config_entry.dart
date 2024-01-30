@@ -58,7 +58,7 @@ class ConfigEntry extends Equatable {
           try {
             final result = await session.execute(
               r'INSERT INTO Configs VALUES ($1, $2)',
-              parameters: [_id, _title],
+              parameters: props,
             );
 
             if (result.affectedRows < 1) {
