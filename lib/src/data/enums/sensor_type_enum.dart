@@ -1,3 +1,5 @@
+/// TODO(freezed): convert [RuleType] to freezed object
+
 /// Available sensor types in system.
 enum SensorType {
   /// Used to display humidity on the sensor.

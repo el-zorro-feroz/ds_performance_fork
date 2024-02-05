@@ -1,3 +1,5 @@
+/// TODO(freezed): convert [RuleType] to freezed object
+
 /// Available rule types for alert system.
 enum RuleType {
   /// Used to set up minimum value limits for rules.
